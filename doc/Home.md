@@ -446,9 +446,7 @@ When serving async request with no body HTTP 204 must be returned.
 #!JSON
 {
     "name":"DevPipe",
-    "size":12,
     "value":"<prefix>/devices/sys_tg/test/1/pipes/DevPipe/value",
-    "time":123456789,
     "_links":{
             "_parent":"<prefix>/devices/sys_tg/test/1",
             "_self":"<prefix>/devices/sys_tg/test/1/pipes/DevPipe"
@@ -461,6 +459,8 @@ When serving async request with no body HTTP 204 must be returned.
 #!JSON
 {
     "name":"DevPipeBlob",
+    "size":12,
+    "timestamp":123456789,
     "data":[
             {
                 "name":"DevPipeBlobValue1",
