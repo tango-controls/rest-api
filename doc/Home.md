@@ -435,8 +435,7 @@ When serving async request with no body HTTP 204 must be returned.
 |                |           |
 |----------------|-----------|---------------------------------------------------
 | `GET /devices/{device.name}/pipes` | JSONArray | - displays device pipes
-| `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - displays device pipe
-| `GET /devices/{device.name}/pipes/{pipe}/value` | JSONObject | - read device pipe
+| `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
 | `PUT /devices/{device.name}/pipes/{pipe}?value={object}[&async=true]` | JSONObject|NULL | - write device pipe
 
 `GET /devices/{device.name}/pipes` returns an array of objects shown below
@@ -454,7 +453,7 @@ When serving async request with no body HTTP 204 must be returned.
 }
 ```
 
-`GET /devices/sys_tg/test/1/pipes/DevPipe/value`:
+`GET /devices/sys_tg/test/1/pipes/DevPipe`:
 ```
 #!JSON
 {
