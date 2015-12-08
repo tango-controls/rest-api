@@ -444,37 +444,24 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 #!JSON
 {
-    "name":"DevPipe",
-    "value":"<prefix>/devices/sys_tg/test/1/pipes/DevPipe/value",
-    "_links":{
-            "_parent":"<prefix>/devices/sys_tg/test/1",
-            "_self":"<prefix>/devices/sys_tg/test/1/pipes/DevPipe"
-        }
-}
-```
-
-`GET /devices/sys_tg/test/1/pipes/DevPipe`:
-```
-#!JSON
-{
     "name":"DevPipeBlob",
     "size":12,
     "timestamp":123456789,
     "data":[
             {
                 "name":"DevPipeBlobValue1",
-                "value":"Hello Tango!"
+                "value":["Hello Tango!"]
             },
             {
                 "name":"DevPipeBlobValue2",
-                "value":123
+                "value":[123]
             },
             {
                 "name":"DevPipeBlobValue3",
-                "value":{
+                "value":[{
                         "name":"DevPipeBlobValueInnerBlob",
                         "data":[...]
-                    }
+                    }]
             }
         ]
 }
