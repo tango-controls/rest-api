@@ -403,7 +403,7 @@ When serving async request with no body HTTP 204 must be returned.
 |-------------------------------------------------------------------------|------------|---------------------------------------
 | `GET    /devices/{device.name}/properties`                            | JSONArray | – lists all properties of the device
 | `GET    /devices/{device.name}/properties/{property}`                            | JSONObject | – returns property value
-| `PUT    /devices/{device.name}/properties/{property}?values={value}[?async=true]` | JSONObject | – writes new value for the property
+| `PUT    /devices/{device.name}/properties/{property}?value={value1}&value={value2}&...[?async=true]` | JSONObject | – writes new value for the property
 | `PUT    /devices/{device.name}/properties?{prop1}={value}&{prop2}={value}[?async=true]` | JSONArray | – writes new value for the specified properties, not specified are deleted
 | `POST   /devices/{device.name}/properties/{property}?values={value}[?async=true]`| JSONObject | – creates a new property
 | `POST   /devices/{device.name}/properties?{prop1}={value}&{prop2}={value}[?async=true]`| JSONArray | – creates a new property
