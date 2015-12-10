@@ -473,12 +473,12 @@ Any response can be supplied with a filter parameter:
 
 |                |           |
 |----------------|-----------|---------------------------------------------------
-| `GET /{any}?filter={fld1},{fld2},...[=!{fld1},!{fld2},!...]` | Depends on the response type: JSONArray or JSONObject | - response contains only required fields (or inverse)
+| `GET /{any}?filter={fld1}&filter={fld2}&...[filter=!{fld1}&filter=!{fld2}&...]` | Depends on the response type: JSONArray or JSONObject | - response contains only required fields (or inverse)
 
 
 This one shows only _name_ and _server_ fields;
 
-`GET /devices/sys/tg_test/1?filter=name,server`:
+`GET /devices/sys/tg_test/1?filter=name&filter=server`:
 ```
 #!JSON
 {
@@ -512,7 +512,7 @@ This one shows only _name_ and _server_ fields;
 
 This one shows everything except _info_ and _properties_ fields:
 
-`GET /devices/sys/tg_test/1/attributes?filter=!info,!properties`:
+`GET /devices/sys/tg_test/1/attributes?filter=!info&filter=!properties`:
 ```
 #!JSON
 [
