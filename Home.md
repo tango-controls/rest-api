@@ -1,6 +1,8 @@
 [TOC]
 
-# Tango REST API RC1
+# Tango REST API RC2
+
+_NOTE:_ this is spec version RC2 for RC1 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc1`
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
