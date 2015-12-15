@@ -451,7 +451,7 @@ When serving async request with no body HTTP 204 must be returned.
     "timestamp":123456789,
     "data":[
             {
-                "name":"DevPipeBlobValue1",
+                "name":"DevPipeBlobValue1",                
                 "value":["Hello Tango!"]
             },
             {
@@ -468,6 +468,37 @@ When serving async request with no body HTTP 204 must be returned.
         ]
 }
 ```
+
+For writing type information is required for each PipeBlobDataElement:
+
+`PUT /devices/sys_tg/test/1/pipes/DevPipe`:
+```
+#!JSON
+{
+    "name":"DevPipeBlob",
+    "data":[
+            {
+                "name":"DevPipeBlobValue1",                
+                "type": "DevString",
+                "value":["Hello Tango!"]
+            },
+            {
+                "name":"DevPipeBlobValue2",
+                "type":"DevUShort",
+                "value":[123]
+            },
+            {
+                "name":"DevPipeBlobValue3",
+                "type":"DevPipeBlob",
+                "value":[{
+                        "name":"DevPipeBlobValueInnerBlob",
+                        "data":[...]
+                    }]
+            }
+        ]
+}
+```
+
 
 ## Filters:
 
