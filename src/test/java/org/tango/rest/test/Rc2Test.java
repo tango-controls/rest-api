@@ -15,6 +15,14 @@ public class Rc2Test extends Rc1Test {
     }
 
     @Test
+    @Override
+    public void testAttribute() {
+        //TODO
+        fail();
+    }
+
+
+    @Test
     public void testPutAttributeProperty(){
         //TODO
         fail();
