@@ -12,7 +12,10 @@ added 1 changesets with 2 changes to 2 files
 updating to branch default
 2 files updated, 0 files merged, 0 files removed, 0 files unresolved
 $> cd tango-rest-api
-$> mvn clean test -Dtango.rest.url=http://localhost:8080/hzgcttest/rest -Dtango.rest.auth.method=basic -Dtango.rest.user={user} -Dtango.rest.password={password}
+$> mvn clean test \
+    -Dtango.rest.url=http://localhost:8080/hzgcttest/rest \
+    -Dtango.rest.auth.method=basic \
+    -Dtango.rest.user={user} -Dtango.rest.password={password}
 
 [INFO] Scanning for projects…
 […]
