@@ -318,12 +318,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
         "name": "string_scalar"
         "value": "Hi!",
         "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
-        }
+        "timestamp": 123456789
     },
     {
         "errors":[
@@ -391,7 +386,6 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 
 ```
 #!JSON
-
 [
     {"prop1":["value1"]}.
     {"prop2":["value2"]}
@@ -412,6 +406,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 |---------------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/commands`                                | JSONArray  | – displays all commands of the device
 | `GET /devices/{device.name}/commands/{command}`                      | JSONObject | – displays command's data
+| `GET /devices/{device.name}/commands/{command}/history`              | JSONArray  | – displays command's history
 | `PUT /devices/{device.name}/commands/{command}[?input={value}][&async=true]` | JSONObject/NULL | – executes a command of the device; if not async returns specified JSONObject, i.e. blocks until finished, otherwise – returns immediately with empty response. NULL = HTTP 204
 
 Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
@@ -423,6 +418,7 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
 #!JSON
 {
   "name":"DevString",
+  "history":"<prefix>/devices/sys/tg_test/1/commands/DevString/history",
   "info":{
     "level":"OPERATOR",
     "cmd_tag":0,
@@ -465,6 +461,37 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
             "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
         }
 }
+```
+
+`GET /devices/sys/tg_test/1/commands/DevString/history`:
+```
+#!JSON
+[
+    {
+        "name":"DevString",
+        "output":"Hi!",
+        "timestamp":123456789
+    },
+    {
+        "errors":[
+            {       
+                "reason":"TangoProxyException",
+                "description":"sys/tg_test/1 proxy has throw an exception",
+                "severity":"ERR",
+                "origin":"DeviceProxy#executeCommand sys/tg_test/1/DevString"
+            },
+            {       
+                "reason":"",
+                "description":"",
+                "severity":"PANIC",
+                "origin":""
+            }
+        ],   
+        "quality": "FAILURE",
+        "timestamp": 123456789
+    },
+    ...
+]
 ```
 
 
