@@ -231,6 +231,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "name":"long_scalar_w",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+  "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
   "_links":{
     "_device":"<prefix>/devices/sys/tg_test/1",
@@ -303,6 +304,48 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
+
+#### history:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/{attribute}/history`                            | JSONArray  | – displays the attribute's history
+
+```
+#!JSON
+[
+    {
+        "name": "string_scalar"
+        "value": "Hi!",
+        "quality": "VALID",
+        "timestamp": 123456789,
+        "_links":{
+            "_device":"<prefix>/devices/sys/tg_test/1"
+            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar",
+            "_self":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
+        }
+    },
+    {
+        "errors":[
+            {       
+                "reason":"TangoProxyException",
+                "description":"sys/tg_test/1 proxy has throw an exception",
+                "severity":"ERR",
+                "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
+            },
+            {       
+                "reason":"",
+                "description":"",
+                "severity":"PANIC",
+                "origin":""
+            }
+        ],   
+        "quality": "FAILURE",
+        "timestamp": 123456789
+     },
+     ...
+]
+```
 
 #### info:
 
