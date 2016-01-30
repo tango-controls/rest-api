@@ -387,7 +387,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 ```
 #!JSON
 [
-    {"prop1":["value1"]}.
+    {"prop1":["value1"]},
     {"prop2":["value2"]}
 ]
 ```
