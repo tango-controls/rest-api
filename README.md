@@ -1,4 +1,4 @@
-# How to run this tests suite #
+# How to run the tests suite #
 
 ```
 #!BASH
