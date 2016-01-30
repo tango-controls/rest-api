@@ -250,7 +250,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
       "level":"OPERATOR",
       "extensions":[],
   },
-  "properties":[],
+  "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
   "_links":{
     "_device":"<prefix>/devices/sys/tg_test/1",
     "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
@@ -322,6 +322,27 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
+
+#### info:
+
+#### properties:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/{attribute}/properties`                               | JSONArray  | – displays the attribute's properties
+| `GET /devices/{device.name}/attributes/{attribute}/properties/{prop}`                        | JSONObject | – returns value of the property
+| `PUT /devices/{device.name}/attributes/{attribute}/properties/{prop}?value={val}[&async=true]`            | JSONObject/NULL | – returns attribute value. Last-Modified = read timestamp from the Tango
+| `DELETE /devices/{device.name}/attributes/{attribute}/properties/{prop}`                     | NULL  | – deletes attribute's property
+
+```
+#!JSON
+
+[
+    {"prop1":["value1"]}.
+    {"prop2":["value2"]}
+]
+```
+
 
 ### Device attributes events:
 
