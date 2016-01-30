@@ -29,11 +29,15 @@ import static org.junit.Assert.assertNull;
  * @since 17.12.2015
  */
 public class Rc1Test {
-    private static String url;
-    private static String auth;
-    private static String user;
-    private static String password;
-    private static String token;
+    protected static String url;
+    protected static String auth;
+    protected static String user;
+    protected static String password;
+    protected static String token;
+
+    protected String getVersion(){
+        return "rc1";
+    }
 
     @BeforeClass
     public static void beforeClass(){
@@ -69,12 +73,12 @@ public class Rc1Test {
     public void testVersion(){
         Map<String,String> result = client.target(url).request().get(HashMap.class);
 
-        assertTrue(result.containsKey("rc1"));
+        assertTrue(result.containsKey(getVersion()));
     }
 
     @Test
     public void testTangoTestIsPresent(){
-        List<NamedEntity> result = client.target(url + "/rc1/devices").request().get(new GenericType<List<NamedEntity>>(){});
+        List<NamedEntity> result = client.target(url + "/"+getVersion()+"/devices").request().get(new GenericType<List<NamedEntity>>(){});
 
         assertTrue(Iterables.tryFind(result, new Predicate<NamedEntity>() {
             @Override
@@ -87,7 +91,7 @@ public class Rc1Test {
     @Test
     public void testTangoTestInfo(){
         //if it does not fail with deserialization exception response confronts API spec
-        Device result = client.target(url + "/rc1/devices/sys/tg_test/1").request().get(Device.class);
+        Device result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1").request().get(Device.class);
 
         //just make sure we have all we need for further tests
         assertTrue(Iterables.tryFind(result.attributes, new Predicate<NamedEntity>() {
@@ -119,7 +123,7 @@ public class Rc1Test {
     @Test
     public void testAttribute(){
         //again if this one does not fail test passes
-        Attribute attribute = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/long_scalar_w")
+        Attribute attribute = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/long_scalar_w")
                 .request().get(Attribute.class);
 
         assertNotNull(attribute);
@@ -128,7 +132,7 @@ public class Rc1Test {
 
     @Test
     public void testWriteReadAttribute(){
-        AttributeValue<Integer> result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/long_scalar_w?value=123456")
+        AttributeValue<Integer> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/long_scalar_w?value=123456")
                 .request().put(null, new GenericType<AttributeValue<Integer>>() {
                 });
 
@@ -137,7 +141,7 @@ public class Rc1Test {
 
     @Test
     public void testWriteAttributeAsync(){
-        AttributeValue<Integer> result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/long_scalar_w?value=123456&async=true")
+        AttributeValue<Integer> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/long_scalar_w?value=123456&async=true")
                 .request().put(null, new GenericType<AttributeValue<Integer>>() {
                 });
 
@@ -146,7 +150,7 @@ public class Rc1Test {
 
     @Test
     public void testWriteReadSpectrum(){
-        AttributeValue<double[]> result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/double_spectrum?value=3.14,2.87,1.44")
+        AttributeValue<double[]> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/double_spectrum?value=3.14,2.87,1.44")
                 .request().put(null, new GenericType<AttributeValue<double[]>>() {
                 });
 
@@ -156,7 +160,7 @@ public class Rc1Test {
     @Test
     public void testCommand(){
         //if parsed w/o exception consider test has passed
-        Command cmd = client.target(url + "/rc1/devices/sys/tg_test/1/commands/DevString")
+        Command cmd = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/commands/DevString")
                 .request().get(Command.class);
 
 
@@ -165,7 +169,7 @@ public class Rc1Test {
 
     @Test
     public void testExecuteCommand(){
-        CommandResult<String,String> result = client.target(url + "/rc1/devices/sys/tg_test/1/commands/DevString?input=Hello World!!!")
+        CommandResult<String,String> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/commands/DevString?input=Hello World!!!")
                 .request()
                 .put(null, new GenericType<CommandResult<String, String>>() {
                 });
@@ -181,7 +185,7 @@ public class Rc1Test {
 
     @Test
     public void testPartiotioning(){
-        List<Map<String,Object>> result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes?range=5-10").request().get(new GenericType<List<Map<String,Object>>>(){});
+        List<Map<String,Object>> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes?range=5-10").request().get(new GenericType<List<Map<String,Object>>>(){});
 
         assertTrue(result.size() == 6);
         assertTrue(Iterables.tryFind(result, new Predicate<Map<String,Object>>() {
@@ -195,7 +199,7 @@ public class Rc1Test {
 
     @Test
     public void testFiltering(){
-        Attribute result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/long_scalar_w?filter=name")
+        Attribute result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/long_scalar_w?filter=name")
                 .request().get(Attribute.class);
 
 
@@ -208,7 +212,7 @@ public class Rc1Test {
 
     @Test
     public void testFilteringInverted(){
-        Attribute result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/long_scalar_w?filter=!name")
+        Attribute result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/long_scalar_w?filter=!name")
                 .request().get(Attribute.class);
 
         assertNull(result.name);
@@ -217,7 +221,7 @@ public class Rc1Test {
 
     @Test
     public void testNoValue(){
-        Response<AttributeValue<?>> result = client.target(url + "/rc1/devices/sys/tg_test/1/attributes/no_value/value")
+        Response<AttributeValue<?>> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/no_value/value")
                 .request().get(new GenericType<Response<AttributeValue<?>>>(){});
 
         assertNull(result.argout);
