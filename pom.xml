@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.tango</groupId>
             <artifactId>rest-api-client</artifactId>
-            <version>rc1-0.3</version>
+            <version>rc2-0.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

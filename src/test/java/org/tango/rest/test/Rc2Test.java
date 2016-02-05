@@ -13,6 +13,7 @@ import org.tango.rest.response.Response;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +128,7 @@ public class Rc2Test {
                 .request().get(Attribute.class);
 
         assertNotNull(attribute);
-        assertEquals("SCALAR", attribute.info.data_format);
+        assertEquals("long_scalar_w", attribute.name);
     }
 
     @Test
@@ -206,8 +207,7 @@ public class Rc2Test {
         assertNotNull(result);
         assertEquals("long_scalar_w", result.name);
         assertNull(result.value);
-        assertEquals("long_scalar_w", result.info.name);
-        assertNull(result.info.format);
+        assertNull(result.info);
     }
 
     @Test
@@ -227,5 +227,30 @@ public class Rc2Test {
         assertNull(result.argout);
         assertTrue(result.errors.length == 1);
         assertTrue(result.errors[0].description.contains("API_AttrValueNotSet"));
+    }
+
+    @Test
+    public void testAttributeInfo(){
+        AttributeInfo result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/double_scalar/info")
+                .request().get(AttributeInfo.class);
+
+        assertNotNull(result);
+        assertEquals("double_scalar", result.name);
+        assertEquals("READ_WRITE", result.writable);
+        assertEquals("SCALAR", result.data_format);
+        assertEquals("OPERATOR", result.level);
+    }
+
+    @Test
+    public void testAttributeInfoPut(){
+        AttributeInfo info = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/double_scalar/info")
+                .request().get(AttributeInfo.class);
+
+        info.max_alarm = "1000";
+
+        AttributeInfo result = client.target(url + "/" + getVersion() + "/devices/sys/tg_test/1/attributes/double_scalar/info")
+                .request().put(Entity.entity(info, MediaType.APPLICATION_JSON_TYPE), AttributeInfo.class);
+
+        assertEquals("1000", result.max_alarm);
     }
 }
