@@ -1,8 +1,8 @@
 [TOC]
 
-# Tango REST API RC2
+# Tango REST API RC3
 
-__NOTE__: this is spec of version RC2 for RC1 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc1`
+__NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
@@ -231,6 +231,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "name":"long_scalar_w",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+  "info_ex":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info_ex",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
   "_links":{
@@ -348,6 +349,10 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
 | `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
+| `GET /devices/{device.name}/attributes/{attribute}/info_ex`                               | JSONObject  | – displays the attribute's info
+| `PUT /devices/{device.name}/attributes/{attribute}/info_ex[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
+
+`GET /devices/{device.name}/attributes/{attribute}/info`:
 
 ```
 #!JSON
@@ -374,6 +379,70 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
   }
 ```
 
+`GET /devices/{device.name}/attributes/{attribute}/info_ex`:
+
+```
+#!json
+{
+  "name": "float",
+  "writable": "READ",
+  "data_format": "SCALAR",
+  "data_type": 4,
+  "max_dim_x": 1,
+  "max_dim_y": 0,
+  "description": "No description",
+  "label": "float",
+  "unit": "No unit",
+  "standard_unit": "No standard unit",
+  "display_unit": "No display unit",
+  "format": "%6.2f",
+  "min_value": "Not specified",
+  "max_value": "Not specified",
+  "min_alarm": "Not specified",
+  "max_alarm": "Not specified",
+  "writable_attr_name": "None",
+  "level": "OPERATOR",
+  "extensions": [],
+  "alarms": {
+    "min_alarm": "Not specified",
+    "max_alarm": "Not specified",
+    "min_warning": "Not specified",
+    "max_warning": "Not specified",
+    "delta_t": "Not specified",
+    "delta_val": "Not specified",
+    "extensions": []
+  },
+  "events": {
+    "ch_event": {
+      "rel_change": "Not specified",
+      "abs_change": "Not specified",
+      "extensions": []
+    },
+    "per_event": {
+      "period": "100",
+      "extensions": [],
+      "tangoObj": {
+        "period": "100",
+        "extensions": []
+      }
+    },
+    "arch_event": {
+      "rel_change": "Not specified",
+      "abs_change": "Not specified",
+      "period": "Not specified",
+      "extensions": []
+    }
+  },
+  "sys_extensions": [],
+  "isMemorized": false,
+  "isSetAtInit": true,
+  "memorized": "NOT_MEMORIZED",
+  "root_attr_name": "Not specified",
+  "enum_label": [
+    "Not specified"
+  ]
+}
+```
 
 #### properties:
 
