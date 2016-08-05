@@ -414,40 +414,11 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
 | `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
-| `GET /devices/{device.name}/attributes/{attribute}/info_ex`                               | JSONObject  | – displays the attribute's info
-| `PUT /devices/{device.name}/attributes/{attribute}/info_ex[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
 
 `GET /devices/{device.name}/attributes/{attribute}/info`:
 
 ```
 #!JSON
-{
-      "writable":"READ_WRITE",
-      "data_format":"SCALAR",
-      "data_type":"DevLong64",
-      "max_dim_x":1,
-      "max_dim_y":0,
-      "description":"No description",
-      "label":"long_scalar_w",
-      "unit":"No unit",
-      "standard_unit":"No standard unit",
-      "display_unit":"No display unit",
-      "format":"%d",
-      "min_value":"Not specified",
-      "max_value":"Not specified",
-      "min_alarm":"Not specified",
-      "max_alarm":"Not specified",
-      "writable_attr_name":"None",
-      "level":"OPERATOR",
-      "extensions":[],
-      "_links":[...]
-  }
-```
-
-`GET /devices/{device.name}/attributes/{attribute}/info_ex`:
-
-```
-#!json
 {
   "name": "float",
   "writable": "READ",
@@ -508,6 +479,8 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
   ]
 }
 ```
+
+__IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from Tango API 
 
 #### properties:
 
