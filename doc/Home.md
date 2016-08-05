@@ -32,7 +32,7 @@ POST returns the URI and the id of the newly created instance.
 
 # URL example driven specification:
 
-All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation may or may not add this to the hrefs. 
+All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation shall not add this to the hrefs, it is client's responsibility. 
 
 For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/tango_host/tango_port`, or omit it completely. So `<prefix>/devices/sys/tg_test/1/attributes` (or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/rc3/tango_host/tango_port/devices/sys/tg_test/1/attributes`, where _tango_host_ is a Tango host name, e.g. _hzgxenvtest_; _tango_port_ is a Tango database port number, e.g. _10000_.
 
