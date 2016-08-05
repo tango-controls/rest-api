@@ -1,8 +1,8 @@
 [TOC]
 
-# Tango REST API RC3-SNAPSHOT
+# Tango REST API RC3
 
-__NOTE__: this is spec of version RC3-SNAPSHOT for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
+__NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
@@ -32,14 +32,11 @@ POST returns the URI and the id of the newly created instance.
 
 # URL example driven specification:
 
-All URLs in this section omit prefix part: `http://host[:port]/tango_host[_port]/rest`*). A valid example of a prefix:
-`http://hzgcttest:8080/hzgcttest1/rest` - here _hzgcttest:8080_ is the host where implementation server is deployed;
-_hzgcttest1_ refers to TANGO_HOST in this case implementation and user may assume TANGO_HOST=hzgcttest1:10000, this defines which Tango database
-is effectively exported via this API.
+All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation may or may not add this to the hrefs. 
 
-URL prefix must follow snake_case. Other parts of the URL are equivalent to case used in Tango. 
+For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/tango_host/tango_port`, or omit it completely. So `<prefix>/devices/sys/tg_test/1/attributes` (or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/rc3/tango_host/tango_port/devices/sys/tg_test/1/attributes`, where _tango_host_ is a Tango host name, e.g. _hzgxenvtest_; _tango_port_ is a Tango database port number, e.g. _10000_.
 
-*) - here and below [_url_part_] – optional part of the URL
+_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
 
 ## API version and Security
 
@@ -48,17 +45,17 @@ _api_version_ follows URL prefix and defines which version of this API supports 
 Example:
 
 
-`http://hzgcttest:8080/hzgcttest/rest` =>
+`http://hzgcttest:8080/tango/rest` =>
 ```
 #!JSON
 {
-    "rc1":"http://hzgcttest:8080/hzgcttest/rest/rc1",
-    "mtango-1.0.1":"http://hzgcttest:8080/hzgcttest/rest/mtango-1.0.1",
-    "mtango-1.0.2":"http://hzgcttest:8080/hzgcttest/rest/mtango-1.0.2"
+    "rc3":"http://hzgcttest:8080/tango/rest/rc3",
+    "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
+    "mtango-1.0.2":"http://hzgcttest:8080/tango/rest/mtango-1.0.2"
 }
 ```
 
-`http://hzgcttest:8080/hzgcttest/rest/non_existing_version` => `HTTP 404`
+`http://hzgcttest:8080/tango/rest/non_existing_version` => `HTTP 404`
 
 All resources under _api_version_ must be protected and require an authentication (specification allows non-protected resources but this is strictly not recommended).
 
@@ -69,11 +66,11 @@ API implementation must support 2 authentication methods:
 
 When protected by Basic:
 
-`http://hzgcttest:8080/hzgcttest/rest/rc1` =>
+`http://hzgcttest:8080/tango/rest/rc3` =>
 ```
 #!JSON
 {
-    "devices":"http://hzgcttest:8080/hzgcttest/rest/rc1/devices",
+    "localhost:10000":"/tango/rest/rc3/localhost/10000",
     "x-auth-method":"basic"
 }
 ```
@@ -87,7 +84,7 @@ In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
 ```
 #!JSON
 {
-    "devices":"http://hzgcttest:8080/hzgcttest/rest/rc1/devices",
+    "localhost:10000":"/tango/rest/rc3/localhost/10000",
     "x-auth-method":"oauth2",
     "x-auth-resource":"https://hzgcttest:8080/hzgcttest/oauth2/authorize"
 }
@@ -101,9 +98,30 @@ _x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
-API version in the following sections is considered to be a part of the URL prefix, i.e. _<prefix>_ = `http://host[:port]/tango_host[_port]/rest/api_version`
+## Tango host:port (database)
 
-In some example URLs _<prefix>_ is omitted at all, so `GET /devices[?wildcard={wildcard}]` effectively means `GET http://host[:port]/tango_host[_port]/rest/api_version/devices[?wildcard={wildcard}]`
+|                                         |            |
+|-----------------------------------------|------------|--------------------------
+|`GET /tango/rest/rc3/tango_host/tango_port`     | JSONArray  | – corresponding Tango database info 
+
+_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
+
+```
+#!json
+
+{
+    "host": "hzgxenvtest",
+    "port": 10000,
+    "name": "sys/DatabaseDs/2",
+    "info": [..],
+    "devices" : "<prefix>/devices"
+}
+
+```
+
+__IMPLEMENTATION NOTE:__ the database to which implementation connects at start may be configured.
+
+__IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango_host:tango_port/sys/DatabaseDs/2/DbInfo command via standard Tango API
 
 ## Devices:
 
