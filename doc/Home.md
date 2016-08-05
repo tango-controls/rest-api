@@ -102,7 +102,7 @@ __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that ea
 
 |                                         |            |
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc3/tango_host/tango_port`     | JSONArray  | – corresponding Tango database info 
+|`GET /tango/rest/rc3/tango_host/tango_port`     | JSONObject  | – corresponding Tango database info 
 
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
@@ -252,6 +252,7 @@ Examples:
 | `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
 | `PUT /devices/{device.name}/attributes/{attribute}?value={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
 | `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `GET /devices/{device.name}/attributes?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes. Last-Modified = write timestamp from the Tango.
 
 Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w__:
 
@@ -291,6 +292,37 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     }
 }
 ```
+
+`GET /devices/sys/tg_test/1/attributes?attr=long_scalar_w&attr=string_scalar`:
+```
+#!json
+[
+    {
+        "name": "long_scalar_w"
+        "value": 12345,
+        "quality": "VALID",
+        "timestamp": 123456789,
+        "_links":{
+            "_device":"<prefix>/devices/sys/tg_test/1"
+            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
+            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
+        }
+    },
+    {
+        "name": "string_scalar"
+        "value": "Hello World!!!",
+        "quality": "VALID",
+        "timestamp": 123456789,
+        "_links":{
+            "_device":"<prefix>/devices/sys/tg_test/1"
+            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
+            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
+        }
+    }
+]
+```
+
+
 
 `PUT /devices/sys/tg_test/1/attributes/long_scalar_w?value=42`:
 ```
