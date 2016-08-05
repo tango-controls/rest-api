@@ -113,7 +113,22 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
     "host": "hzgxenvtest",
     "port": 10000,
     "name": "sys/DatabaseDs/2",
-    "info": [..],
+    "info": [
+            "TANGO Database sys/database/2",
+            "",	  
+            "Running since 2016-06-30 13:21:32",
+            "",	  
+            "Devices defined  = 58",
+            "Devices exported  = 18",
+            "Device servers defined  = 26",
+            "Device servers exported  = 9",
+            "",	  
+            "Device properties defined  = 40 [History lgth = 247]",
+            "Class properties defined  = 76 [History lgth = 144]",
+            "Device attribute properties defined  = 327 [History lgth = 490]",
+            "Class attribute properties defined  = 0 [History lgth = 0]",
+            "Object properties defined  = 0 [History lgth = 0]"
+        ],
     "devices" : "<prefix>/devices"
 }
 
