@@ -541,11 +541,9 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 | `GET /devices/{device.name}/commands`                                | JSONArray  | – displays all commands of the device
 | `GET /devices/{device.name}/commands/{command}`                      | JSONObject | – displays command's data
 | `GET /devices/{device.name}/commands/{command}/history`              | JSONArray  | – displays command's history
-| `PUT /devices/{device.name}/commands/{command}[?input={value}][&async=true]` | JSONObject/NULL | – executes a command of the device; if not async returns specified JSONObject, i.e. blocks until finished, otherwise – returns immediately with empty response. NULL = HTTP 204
+| `PUT /devices/{device.name}/commands/{command}[?async=true]` | JSONObject/NULL | – executes a command of the device; if not async returns specified JSONObject, i.e. blocks until finished, otherwise – returns immediately with empty response. NULL = HTTP 204
 
-Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
-
-`GET /devices/sys/tg_test/1/commands` -  returns an array of objects defined below:
+`GET /devices/sys/tg_test/1/commands` -  returns an array of objects defined below*):
 
 `GET /devices/sys/tg_test/1/commands/DevString`:
 ```
@@ -568,12 +566,13 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
 }
 ```
 
+*) Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__
+
 `PUT /devices/sys/tg_test/1/commands/DevVoid`:
 ```
 #!JSON
 {
     "name":"DevVoid",
-    "input":null,
     "output":null,
     "_links":{
             "_parent":"<prefix>/devices/sys/tg_test/1",
@@ -583,12 +582,15 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
 ```
 
 
-`PUT /devices/sys/tg_test/1/commands/DevString?input=Hi!`:
+```
+PUT /devices/sys/tg_test/1/commands/DevString
+- - - 
+"Hi!"
+```
 ```
 #!JSON
 {
     "name":"DevString",
-    "input":"Hi!",
     "output":"Hi!",
     "_links":{
             "_parent":"<prefix>/devices/sys/tg_test/1",
@@ -596,6 +598,30 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
         }
 }
 ```
+
+```
+PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr
+- - - 
+{
+    "dvalue":[3.14, 2.87],
+    "svalue":["Hello", "World", "!!!"]    
+}
+```
+```
+#!JSON
+{
+    "name":"DevVarDoubleStringArr",
+    "output":{
+                 "dvalue":[3.14, 2.87],
+                 "svalue":["Hello", "World", "!!!"]    
+             },
+    "_links":{
+            "_parent":"<prefix>/devices/sys/tg_test/1",
+            "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
+        }
+}
+```
+
 
 `GET /devices/sys/tg_test/1/commands/DevString/history`:
 ```
@@ -675,7 +701,7 @@ When serving async request with no body HTTP 204 must be returned.
 |----------------|-----------|---------------------------------------------------
 | `GET /devices/{device.name}/pipes` | JSONArray | - displays device pipes
 | `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
-| `PUT /devices/{device.name}/pipes/{pipe}?value={object}[&async=true]` | JSONObject|NULL | - write device pipe
+| `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
 
 `GET /devices/{device.name}/pipes` returns an array of objects shown below
 
@@ -708,9 +734,9 @@ When serving async request with no body HTTP 204 must be returned.
 
 For writing type information is required for each PipeBlobDataElement:
 
-`PUT /devices/sys_tg/test/1/pipes/DevPipe`:
 ```
-#!JSON
+PUT /devices/sys_tg/test/1/pipes/DevPipe`
+- - -
 {
     "name":"DevPipeBlob",
     "data":[
