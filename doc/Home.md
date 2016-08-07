@@ -258,7 +258,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 | `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
 | `PUT /devices/{device.name}/attributes/{attribute}/value?v={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
 | `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
-| `GET /devices/{device.name}/attributes?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
+| `GET /devices/{device.name}/attributes/value?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
 
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w/value`:
@@ -277,12 +277,12 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 }
 ```
 
-`GET /devices/sys/tg_test/1/attributes?attr=long_scalar_w&attr=string_scalar`:
+`GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar`:
 ```
 #!json
 [
     {
-        "name": "long_scalar_w"
+        "name": "long_scalar_w",
         "value": 12345,
         "quality": "VALID",
         "timestamp": 123456789,
@@ -293,7 +293,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
         }
     },
     {
-        "name": "string_scalar"
+        "name": "string_scalar",
         "value": "Hello World!!!",
         "quality": "VALID",
         "timestamp": 123456789,
