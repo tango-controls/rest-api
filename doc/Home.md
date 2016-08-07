@@ -541,10 +541,8 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 }
 ```
 
-
+`PUT /devices/sys/tg_test/1/commands/DevString`:
 ```
-PUT /devices/sys/tg_test/1/commands/DevString
-- - - 
 "Hi!"
 ```
 ```
@@ -559,9 +557,9 @@ PUT /devices/sys/tg_test/1/commands/DevString
 }
 ```
 
+`PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr`:
 ```
-PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr
-- - - 
+#!json
 {
     "dvalue":[3.14, 2.87],
     "svalue":["Hello", "World", "!!!"]    
@@ -694,9 +692,9 @@ When serving async request with no body HTTP 204 must be returned.
 
 For writing type information is required for each PipeBlobDataElement:
 
+`PUT /devices/sys_tg/test/1/pipes/DevPipe`
 ```
-PUT /devices/sys_tg/test/1/pipes/DevPipe`
-- - -
+#!json
 {
     "name":"DevPipeBlob",
     "data":[
@@ -840,6 +838,8 @@ Here *_prev* in *_links* is __null__ because the first range were returned.
 If the entire collection fits into range response is the same as there is no _range_ parameter (HTTP 200 - OK; no additional info in response's header; no special element in the collections)
 
 ## Failure:
+
+`HTTP 500`
 
 ```
 #!JSON
