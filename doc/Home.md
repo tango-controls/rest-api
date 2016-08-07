@@ -195,33 +195,10 @@ Examples:
         "is_taco":false
     },
     "state":"<prefix>/devices/sys/tg_test/1/state",
-    "attributes":[
-                    {
-                        "name": "string_scalar"
-                        "href":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar"
-                    },
-                    {
-                        "name": "long_scalar_w"
-                        "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
-                    }
-                ],
-    "commands":[
-                   {
-                       "name":"DevString",
-                       "href":"<prefix>/devices/sys/tg_test/1/commands/DevString"
-                   },
-                   {
-                       "name":"DevLong",
-                       "href":"<prefix>/devices/sys/tg_test/1/commands/DevLong"
-                   }
-               ],
-    "pipes":[
-                {
-                    "name":"DevPipe",
-                    "href":"<prefix>/devices/sys/tg_test/1/pipes/DevPipe"
-                }
-            ],
-    "properties":[],
+    "attributes":"<prefix>/devices/sys/tg_test/1/attributes",
+    "commands":"<prefix>/devices/sys/tg_test/1/commands",
+    "pipes":"<prefix>/devices/sys/tg_test/1/pipes",
+    "properties":"<prefix>/devices/sys/tg_test/1/properties",
     "_links":{
             "_parent":"<prefix>/devices"
             "_self":"<prefix>/devices/sys/tg_test/1"
