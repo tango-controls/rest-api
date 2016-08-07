@@ -306,7 +306,8 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value
 - - - 
 42
-```:
+```
+
 ```
 #!JSON
 {
