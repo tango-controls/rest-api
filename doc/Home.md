@@ -268,12 +268,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     "name": "long_scalar_w",
     "value": 12345,
     "quality": "VALID",
-    "timestamp": 123456789,
-    "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1"
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-    }
+    "timestamp": 123456789
 }
 ```
 
@@ -285,23 +280,13 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
         "name": "long_scalar_w",
         "value": 12345,
         "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-        }
+        "timestamp": 123456789
     },
     {
         "name": "string_scalar",
         "value": "Hello World!!!",
         "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-        }
+        "timestamp": 123456789
     }
 ]
 ```
@@ -316,12 +301,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     "name": "long_scalar_w",
     "value": 42,
     "quality": "VALID",
-    "timestamp": 123456789,
-    "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1"
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-    }
+    "timestamp": 123456789
 }
 ```
 
@@ -333,23 +313,13 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
         "name": "long_scalar_w",
         "value": 42,
         "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-        }
+        "timestamp": 123456789
     },
     {
         "name": "string_scalar",
         "value": "Hi!",
         "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
-        }
+        "timestamp": 123456789
     }
 ]
 ```
