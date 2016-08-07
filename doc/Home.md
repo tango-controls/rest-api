@@ -615,11 +615,6 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 
 ### Device properties:
 
-POST create an instance of collection by the URI of this collection.
-POST returns the URI and the id of the newly created instance in the http header
-
-PUT is used systematically to make a full update. Any attributes not specified will be deleted (or reset by default). Use PATCH to avoid this behaviour.
-
 When serving async request with no body HTTP 204 must be returned.
 
 |                                                                         |            |
@@ -638,8 +633,8 @@ When serving async request with no body HTTP 204 must be returned.
 #!JSON
 [
      {
-         “name”: “myProp”, 
-         “values”: [“myPropValue”]
+         "name": "myProp", 
+         "values": ["myPropValue"]
      }
 ]
 ```
@@ -648,9 +643,21 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 #!JSON
 {
-    “name”: “myProp”, 
-    “values”: [“myPropValue”]
+    "name": "myProp", 
+    "values": ["myPropValue"]
 }
+```
+
+`PUT /devices/sys/tg_test/1/properties?myProp="Hello"&myProp="World"&myProp="!!!"`:
+```
+#!JSON
+[
+  {
+    "name": "myProp", 
+    "values": ["Hello","World","!!!"]
+  },
+  ..
+]
 ```
 
 ### Device pipes
