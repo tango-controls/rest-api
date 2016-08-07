@@ -226,11 +226,7 @@ Examples:
 |                                                                                        |            |
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/attributes`                                           | JSONArray  | – displays device's attributes in array
-| `GET /devices/{device.name}/attributes/{attribute}`                                          | JSONObject | – displays the attribute's info
-| `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
-| `PUT /devices/{device.name}/attributes/{attribute}/value?v={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
-| `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
-| `GET /devices/{device.name}/attributes?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
+| `GET /devices/{device.name}/attributes/{attribute}`                                          | JSONObject | – displays the attribute
 
 Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w__:
 
@@ -253,6 +249,16 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   }
 }
 ```
+
+
+#### value:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
+| `PUT /devices/{device.name}/attributes/{attribute}/value?v={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `GET /devices/{device.name}/attributes?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
 
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w/value`:
@@ -350,42 +356,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
 
-#### history:
 
-|                                                                                        |            |
-|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
-| `GET /devices/{device.name}/attributes/{attribute}/history`                            | JSONArray  | – displays the attribute's history
-
-```
-#!JSON
-[
-    {
-        "name": "string_scalar"
-        "value": "Hi!",
-        "quality": "VALID",
-        "timestamp": 123456789
-    },
-    {
-        "errors":[
-            {       
-                "reason":"TangoProxyException",
-                "description":"sys/tg_test/1 proxy has throw an exception",
-                "severity":"ERR",
-                "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
-            },
-            {       
-                "reason":"",
-                "description":"",
-                "severity":"PANIC",
-                "origin":""
-            }
-        ],   
-        "quality": "FAILURE",
-        "timestamp": 123456789
-     },
-     ...
-]
-```
 
 #### info:
 
@@ -460,6 +431,43 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 ```
 
 __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from Tango API 
+
+#### history:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/{attribute}/history`                            | JSONArray  | – displays the attribute's history
+
+```
+#!JSON
+[
+    {
+        "name": "string_scalar"
+        "value": "Hi!",
+        "quality": "VALID",
+        "timestamp": 123456789
+    },
+    {
+        "errors":[
+            {       
+                "reason":"TangoProxyException",
+                "description":"sys/tg_test/1 proxy has throw an exception",
+                "severity":"ERR",
+                "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
+            },
+            {       
+                "reason":"",
+                "description":"",
+                "severity":"PANIC",
+                "origin":""
+            }
+        ],   
+        "quality": "FAILURE",
+        "timestamp": 123456789
+     },
+     ...
+]
+```
 
 #### properties:
 
