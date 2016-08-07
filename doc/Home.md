@@ -228,7 +228,7 @@ Examples:
 | `GET /devices/{device.name}/attributes`                                           | JSONArray  | – displays device's attributes in array
 | `GET /devices/{device.name}/attributes/{attribute}`                                          | JSONObject | – displays the attribute's info
 | `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
-| `PUT /devices/{device.name}/attributes/{attribute}/value[?async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `PUT /devices/{device.name}/attributes/{attribute}/value?v={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
 | `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
 | `GET /devices/{device.name}/attributes?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
 
@@ -302,11 +302,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 
 
-```
-PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value
-- - - 
-42
-```
+`PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42`:
 
 ```
 #!JSON
