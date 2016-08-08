@@ -344,7 +344,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
   "name": "float",
   "writable": "READ",
   "data_format": "SCALAR",
-  "data_type": 4,
+  "data_type": "DevFloat",
   "max_dim_x": 1,
   "max_dim_y": 0,
   "description": "No description",
