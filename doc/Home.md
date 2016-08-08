@@ -36,7 +36,7 @@ All URLs in this section omit protocol//host:port part: `http://host:port`. An i
 
 For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/hosts/tango_host/tango_port`, or omit it completely. So `<prefix>/devices/sys/tg_test/1/attributes` (or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/rc3/tango_host/tango_port/devices/sys/tg_test/1/attributes`, where _tango_host_ is a Tango host name, e.g. _hzgxenvtest_; _tango_port_ is a Tango database port number, e.g. _10000_.
 
-_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same with implementation host. _localhost_ can be replaced with the host name, e.g. _hzgxenvtest_. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
+_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
 
 ## API version and Security
 
@@ -107,13 +107,14 @@ __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that ea
 
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
+`GET /tango/rest/rc3/hosts/hzgxenvtest/10000`:
 ```
 #!json
 
 {
     "host": "hzgxenvtest",
     "port": 10000,
-    "name": "sys/DatabaseDs/2",
+    "name": "sys/Database/2",
     "info": [
             "TANGO Database sys/database/2",
             "",	  
