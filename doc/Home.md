@@ -332,6 +332,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 
 |                                                                                        |            |
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/info?attr={attr1}&attr={attr2}`                 | JSONArray   | – displays attribute infos
 | `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
 | `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
 
