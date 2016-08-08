@@ -267,7 +267,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 {
     "name": "long_scalar_w",
     "value": 12345,
-    "quality": "VALID",
+    "quality": "ATTR_VALID",
     "timestamp": 123456789
 }
 ```
@@ -279,13 +279,13 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     {
         "name": "long_scalar_w",
         "value": 12345,
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     },
     {
         "name": "string_scalar",
         "value": "Hello World!!!",
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     }
 ]
@@ -300,7 +300,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 {
     "name": "long_scalar_w",
     "value": 42,
-    "quality": "VALID",
+    "quality": "ATTR_VALID",
     "timestamp": 123456789
 }
 ```
@@ -312,13 +312,13 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     {
         "name": "long_scalar_w",
         "value": 42,
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     },
     {
         "name": "string_scalar",
         "value": "Hi!",
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     }
 ]
@@ -415,7 +415,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
     {
         "name": "string_scalar"
         "value": "Hi!",
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     },
     {
