@@ -632,7 +632,16 @@ When serving async request with no body HTTP 204 must be returned.
 | `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
 | `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
 
-`GET /devices/{device.name}/pipes` returns an array of objects shown below
+`GET /devices/{device.name}/pipes`:
+```
+#!json
+[
+    {   
+        "name": "DevPipe",
+        "href": "<prefix>/devices/{device.name}/pipes/DevPipe"
+    }
+]
+```
 
 `GET /devices/sys_tg/test/1/pipes/DevPipe`:
 ```
