@@ -503,12 +503,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ```
 #!JSON
 {
-    "name":"DevVoid",
-    "output":null,
-    "_links":{
-            "_parent":"<prefix>/devices/sys/tg_test/1",
-            "_self":"<prefix>/devices/sys/tg_test/1/commands/DevVoid"
-        }
+    "name":"DevVoid"
 }
 ```
 
@@ -520,15 +515,11 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 #!JSON
 {
     "name":"DevString",
-    "output":"Hi!",
-    "_links":{
-            "_parent":"<prefix>/devices/sys/tg_test/1",
-            "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
-        }
+    "output":"Hi!"
 }
 ```
 
-`PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr`:
+`PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr`
 ```
 #!json
 {
@@ -536,6 +527,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
     "svalue":["Hello", "World", "!!!"]    
 }
 ```
+=>
 ```
 #!JSON
 {
