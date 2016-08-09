@@ -1,8 +1,8 @@
 [TOC]
 
-# Tango REST API RC2
+# Tango REST API RC3
 
-__NOTE__: this is spec of version RC2 for RC1 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc1`
+__NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
@@ -32,14 +32,11 @@ POST returns the URI and the id of the newly created instance.
 
 # URL example driven specification:
 
-All URLs in this section omit prefix part: `http://host[:port]/tango_host[_port]/rest`*). A valid example of a prefix:
-`http://hzgcttest:8080/hzgcttest1/rest` - here _hzgcttest:8080_ is the host where implementation server is deployed;
-_hzgcttest1_ refers to TANGO_HOST in this case implementation and user may assume TANGO_HOST=hzgcttest1:10000, this defines which Tango database
-is effectively exported via this API.
+All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation may or may not add this to the hrefs. 
 
-URL prefix must follow snake_case. Other parts of the URL are equivalent to case used in Tango. 
+For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/hosts/tango_host/tango_port`, or omit it completely. So `<prefix>/devices/sys/tg_test/1/attributes` (or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/rc3/tango_host/tango_port/devices/sys/tg_test/1/attributes`, where _tango_host_ is a Tango host name, e.g. _hzgxenvtest_; _tango_port_ is a Tango database port number, e.g. _10000_.
 
-*) - here and below [_url_part_] – optional part of the URL
+_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
 
 ## API version and Security
 
@@ -48,17 +45,17 @@ _api_version_ follows URL prefix and defines which version of this API supports 
 Example:
 
 
-`http://hzgcttest:8080/hzgcttest/rest` =>
+`http://hzgcttest:8080/tango/rest` =>
 ```
 #!JSON
 {
-    "rc1":"http://hzgcttest:8080/hzgcttest/rest/rc1",
-    "mtango-1.0.1":"http://hzgcttest:8080/hzgcttest/rest/mtango-1.0.1",
-    "mtango-1.0.2":"http://hzgcttest:8080/hzgcttest/rest/mtango-1.0.2"
+    "rc3":"http://hzgcttest:8080/tango/rest/rc3",
+    "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
+    "mtango-1.0.2":"http://hzgcttest:8080/tango/rest/mtango-1.0.2"
 }
 ```
 
-`http://hzgcttest:8080/hzgcttest/rest/non_existing_version` => `HTTP 404`
+`GET /tango/rest/non_existing_version` => `HTTP 404`
 
 All resources under _api_version_ must be protected and require an authentication (specification allows non-protected resources but this is strictly not recommended).
 
@@ -69,11 +66,11 @@ API implementation must support 2 authentication methods:
 
 When protected by Basic:
 
-`http://hzgcttest:8080/hzgcttest/rest/rc1` =>
+`http://hzgcttest:8080/tango/rest/rc3` =>
 ```
 #!JSON
 {
-    "devices":"http://hzgcttest:8080/hzgcttest/rest/rc1/devices",
+    "hosts":"/tango/rest/rc3/hosts",
     "x-auth-method":"basic"
 }
 ```
@@ -87,7 +84,7 @@ In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
 ```
 #!JSON
 {
-    "devices":"http://hzgcttest:8080/hzgcttest/rest/rc1/devices",
+    "hosts":"/tango/rest/rc3/hosts",
     "x-auth-method":"oauth2",
     "x-auth-resource":"https://hzgcttest:8080/hzgcttest/oauth2/authorize"
 }
@@ -95,15 +92,53 @@ In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
 
 Client uses _x-auth-resource_ to get access_token following the standard OAuth2 authentication procedure. This token is then provided
 with each request to the protected resources either in Authentication request header:`Authorization: token access_token` or as a parameter:
-`http://hzgcttest:8080/hzgcttest/rest/rc1/devices?token={access_token}`.
+`GET /tango/rest/rc3/hosts?token={access_token}`.
 
 _x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
-API version in the following sections is considered to be a part of the URL prefix, i.e. _<prefix>_ = `http://host[:port]/tango_host[_port]/rest/api_version`
+## Tango host:port (database)
 
-In some example URLs _<prefix>_ is omitted at all, so `GET /devices[?wildcard={wildcard}]` effectively means `GET http://host[:port]/tango_host[_port]/rest/api_version/devices[?wildcard={wildcard}]`
+|                                         |            |
+|-----------------------------------------|------------|--------------------------
+|`GET /tango/rest/rc3/hosts`     | JSONArray  | – tango hosts available through this API 
+|`GET /tango/rest/rc3/hosts/{tango_host}/{tango_port}`  |   JSONObject   |  -- corresponding Tango database info  
+
+_tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
+
+`GET /tango/rest/rc3/hosts/hzgxenvtest/10000`:
+```
+#!json
+
+{
+    "host": "hzgxenvtest",
+    "port": 10000,
+    "name": "sys/Database/2",
+    "info": [
+            "TANGO Database sys/database/2",
+            "",	  
+            "Running since 2016-06-30 13:21:32",
+            "",	  
+            "Devices defined  = 58",
+            "Devices exported  = 18",
+            "Device servers defined  = 26",
+            "Device servers exported  = 9",
+            "",	  
+            "Device properties defined  = 40 [History lgth = 247]",
+            "Class properties defined  = 76 [History lgth = 144]",
+            "Device attribute properties defined  = 327 [History lgth = 490]",
+            "Class attribute properties defined  = 0 [History lgth = 0]",
+            "Object properties defined  = 0 [History lgth = 0]"
+        ],
+    "devices" : "<prefix>/devices"
+}
+
+```
+
+__IMPLEMENTATION NOTE:__ the database to which implementation connects at start may be configured.
+
+__IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango_host:tango_port/sys/DatabaseDs/2/DbInfo command via standard Tango API
 
 ## Devices:
 
@@ -161,33 +196,10 @@ Examples:
         "is_taco":false
     },
     "state":"<prefix>/devices/sys/tg_test/1/state",
-    "attributes":[
-                    {
-                        "name": "string_scalar"
-                        "href":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar"
-                    },
-                    {
-                        "name": "long_scalar_w"
-                        "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
-                    }
-                ],
-    "commands":[
-                   {
-                       "name":"DevString",
-                       "href":"<prefix>/devices/sys/tg_test/1/commands/DevString"
-                   },
-                   {
-                       "name":"DevLong",
-                       "href":"<prefix>/devices/sys/tg_test/1/commands/DevLong"
-                   }
-               ],
-    "pipes":[
-                {
-                    "name":"DevPipe",
-                    "href":"<prefix>/devices/sys/tg_test/1/pipes/DevPipe"
-                }
-            ],
-    "properties":[],
+    "attributes":"<prefix>/devices/sys/tg_test/1/attributes",
+    "commands":"<prefix>/devices/sys/tg_test/1/commands",
+    "pipes":"<prefix>/devices/sys/tg_test/1/pipes",
+    "properties":"<prefix>/devices/sys/tg_test/1/properties",
     "_links":{
             "_parent":"<prefix>/devices"
             "_self":"<prefix>/devices/sys/tg_test/1"
@@ -215,10 +227,7 @@ Examples:
 |                                                                                        |            |
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/attributes`                                           | JSONArray  | – displays device's attributes in array
-| `GET /devices/{device.name}/attributes/{attribute}`                                          | JSONObject | – displays the attribute's info
-| `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
-| `PUT /devices/{device.name}/attributes/{attribute}?value={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
-| `PUT /devices/{device.name}/attributes?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `GET /devices/{device.name}/attributes/{attribute}`                                          | JSONObject | – displays the attribute
 
 Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w__:
 
@@ -231,6 +240,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "name":"long_scalar_w",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+  "info_ex":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info_ex",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
   "_links":{
@@ -242,68 +252,157 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```
 
 
+#### value:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/{attribute}/value`                                    | JSONObject | – returns attribute value. Last-Modified = read timestamp from the Tango
+| `PUT /devices/{device.name}/attributes/{attribute}/value?v={value}[&async=true]`               | JSONObject/NULL | – returns value after it is being written, i.e. synchronous write&read; empty response if async=true; argument can be passed in request's body. Last-Modified = write timestamp from the Tango. NULL = HTTP 204
+| `PUT /devices/{device.name}/attributes/value?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. NULL = HTTP 204
+| `GET /devices/{device.name}/attributes/value?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
+
+
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w/value`:
 ```
 #!JSON
 {
-    "name": "long_scalar_w"
+    "name": "long_scalar_w",
     "value": 12345,
-    "quality": "VALID",
-    "timestamp": 123456789,
-    "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1"
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-    }
+    "quality": "ATTR_VALID",
+    "timestamp": 123456789
 }
 ```
 
-`PUT /devices/sys/tg_test/1/attributes/long_scalar_w?value=42`:
+`GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar`:
+```
+#!json
+[
+    {
+        "name": "long_scalar_w",
+        "value": 12345,
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
+    },
+    {
+        "name": "string_scalar",
+        "value": "Hello World!!!",
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
+    }
+]
+```
+
+
+
+`PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42`:
+
 ```
 #!JSON
 {
-    "name": "long_scalar_w"
+    "name": "long_scalar_w",
     "value": 42,
-    "quality": "VALID",
-    "timestamp": 123456789,
-    "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1"
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-    }
+    "quality": "ATTR_VALID",
+    "timestamp": 123456789
 }
 ```
 
-`PUT /devices/sys/tg_test/1/attributes?long_scalar_w=42&string_scalar=Hi!`:
+`PUT /devices/sys/tg_test/1/attributes/value?long_scalar_w=42&string_scalar=Hi!`:
 ```
 #!JSON
 [
     {
-        "name": "long_scalar_w"
+        "name": "long_scalar_w",
         "value": 42,
-        "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-        }
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
     },
     {
-        "name": "string_scalar"
+        "name": "string_scalar",
         "value": "Hi!",
-        "quality": "VALID",
-        "timestamp": 123456789,
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
-        }
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
     }
 ]
 ```
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
+
+
+
+#### info:
+
+|                                                                                        |            |
+|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
+| `GET /devices/{device.name}/attributes/info?attr={attr1}&attr={attr2}`                 | JSONArray   | – displays attribute infos
+| `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
+| `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
+
+`GET /devices/{device.name}/attributes/{attribute}/info`:
+
+```
+#!JSON
+{
+  "name": "float",
+  "writable": "READ",
+  "data_format": "SCALAR",
+  "data_type": "DevFloat",
+  "max_dim_x": 1,
+  "max_dim_y": 0,
+  "description": "No description",
+  "label": "float",
+  "unit": "No unit",
+  "standard_unit": "No standard unit",
+  "display_unit": "No display unit",
+  "format": "%6.2f",
+  "min_value": "Not specified",
+  "max_value": "Not specified",
+  "min_alarm": "Not specified",
+  "max_alarm": "Not specified",
+  "writable_attr_name": "None",
+  "level": "OPERATOR",
+  "extensions": [],
+  "alarms": {
+    "min_alarm": "Not specified",
+    "max_alarm": "Not specified",
+    "min_warning": "Not specified",
+    "max_warning": "Not specified",
+    "delta_t": "Not specified",
+    "delta_val": "Not specified",
+    "extensions": []
+  },
+  "events": {
+    "ch_event": {
+      "rel_change": "Not specified",
+      "abs_change": "Not specified",
+      "extensions": []
+    },
+    "per_event": {
+      "period": "100",
+      "extensions": [],
+      "tangoObj": {
+        "period": "100",
+        "extensions": []
+      }
+    },
+    "arch_event": {
+      "rel_change": "Not specified",
+      "abs_change": "Not specified",
+      "period": "Not specified",
+      "extensions": []
+    }
+  },
+  "sys_extensions": [],
+  "isMemorized": false,
+  "isSetAtInit": true,
+  "memorized": "NOT_MEMORIZED",
+  "root_attr_name": "Not specified",
+  "enum_label": [
+    "Not specified"
+  ]
+}
+```
+
+__IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from Tango API 
 
 #### history:
 
@@ -317,7 +416,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
     {
         "name": "string_scalar"
         "value": "Hi!",
-        "quality": "VALID",
+        "quality": "ATTR_VALID",
         "timestamp": 123456789
     },
     {
@@ -341,39 +440,6 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
      ...
 ]
 ```
-
-#### info:
-
-|                                                                                        |            |
-|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
-| `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
-| `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
-
-```
-#!JSON
-{
-      "writable":"READ_WRITE",
-      "data_format":"SCALAR",
-      "data_type":"DevLong64",
-      "max_dim_x":1,
-      "max_dim_y":0,
-      "description":"No description",
-      "label":"long_scalar_w",
-      "unit":"No unit",
-      "standard_unit":"No standard unit",
-      "display_unit":"No display unit",
-      "format":"%d",
-      "min_value":"Not specified",
-      "max_value":"Not specified",
-      "min_alarm":"Not specified",
-      "max_alarm":"Not specified",
-      "writable_attr_name":"None",
-      "level":"OPERATOR",
-      "extensions":[],
-      "_links":[...]
-  }
-```
-
 
 #### properties:
 
@@ -407,11 +473,9 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 | `GET /devices/{device.name}/commands`                                | JSONArray  | – displays all commands of the device
 | `GET /devices/{device.name}/commands/{command}`                      | JSONObject | – displays command's data
 | `GET /devices/{device.name}/commands/{command}/history`              | JSONArray  | – displays command's history
-| `PUT /devices/{device.name}/commands/{command}[?input={value}][&async=true]` | JSONObject/NULL | – executes a command of the device; if not async returns specified JSONObject, i.e. blocks until finished, otherwise – returns immediately with empty response. NULL = HTTP 204
+| `PUT /devices/{device.name}/commands/{command}[?async=true]` | JSONObject/NULL | – executes a command of the device; if not async returns specified JSONObject, i.e. blocks until finished, otherwise – returns immediately with empty response. NULL = HTTP 204
 
-Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
-
-`GET /devices/sys/tg_test/1/commands` -  returns an array of objects defined below:
+`GET /devices/sys/tg_test/1/commands` -  returns an array of objects defined below*):
 
 `GET /devices/sys/tg_test/1/commands/DevString`:
 ```
@@ -434,34 +498,52 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
 }
 ```
 
+*) Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__
+
 `PUT /devices/sys/tg_test/1/commands/DevVoid`:
 ```
 #!JSON
 {
-    "name":"DevVoid",
-    "input":null,
-    "output":null,
-    "_links":{
-            "_parent":"<prefix>/devices/sys/tg_test/1",
-            "_self":"<prefix>/devices/sys/tg_test/1/commands/DevVoid"
-        }
+    "name":"DevVoid"
 }
 ```
 
-
-`PUT /devices/sys/tg_test/1/commands/DevString?input=Hi!`:
+`PUT /devices/sys/tg_test/1/commands/DevString`:
+```
+"Hi!"
+```
 ```
 #!JSON
 {
     "name":"DevString",
-    "input":"Hi!",
-    "output":"Hi!",
+    "output":"Hi!"
+}
+```
+
+`PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr`
+```
+#!json
+{
+    "dvalue":[3.14, 2.87],
+    "svalue":["Hello", "World", "!!!"]    
+}
+```
+=>
+```
+#!JSON
+{
+    "name":"DevVarDoubleStringArr",
+    "output":{
+                 "dvalue":[3.14, 2.87],
+                 "svalue":["Hello", "World", "!!!"]    
+             },
     "_links":{
             "_parent":"<prefix>/devices/sys/tg_test/1",
             "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
         }
 }
 ```
+
 
 `GET /devices/sys/tg_test/1/commands/DevString/history`:
 ```
@@ -497,11 +579,6 @@ Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__:
 
 ### Device properties:
 
-POST create an instance of collection by the URI of this collection.
-POST returns the URI and the id of the newly created instance in the http header
-
-PUT is used systematically to make a full update. Any attributes not specified will be deleted (or reset by default). Use PATCH to avoid this behaviour.
-
 When serving async request with no body HTTP 204 must be returned.
 
 |                                                                         |            |
@@ -520,8 +597,8 @@ When serving async request with no body HTTP 204 must be returned.
 #!JSON
 [
      {
-         “name”: “myProp”, 
-         “values”: [“myPropValue”]
+         "name": "myProp", 
+         "values": ["myPropValue"]
      }
 ]
 ```
@@ -530,9 +607,21 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 #!JSON
 {
-    “name”: “myProp”, 
-    “values”: [“myPropValue”]
+    "name": "myProp", 
+    "values": ["myPropValue"]
 }
+```
+
+`PUT /devices/sys/tg_test/1/properties?myProp="Hello"&myProp="World"&myProp="!!!"`:
+```
+#!JSON
+[
+  {
+    "name": "myProp", 
+    "values": ["Hello","World","!!!"]
+  },
+  ..
+]
 ```
 
 ### Device pipes
@@ -541,9 +630,18 @@ When serving async request with no body HTTP 204 must be returned.
 |----------------|-----------|---------------------------------------------------
 | `GET /devices/{device.name}/pipes` | JSONArray | - displays device pipes
 | `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
-| `PUT /devices/{device.name}/pipes/{pipe}?value={object}[&async=true]` | JSONObject|NULL | - write device pipe
+| `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
 
-`GET /devices/{device.name}/pipes` returns an array of objects shown below
+`GET /devices/{device.name}/pipes`:
+```
+#!json
+[
+    {   
+        "name": "DevPipe",
+        "href": "<prefix>/devices/{device.name}/pipes/DevPipe"
+    }
+]
+```
 
 `GET /devices/sys_tg/test/1/pipes/DevPipe`:
 ```
@@ -574,9 +672,9 @@ When serving async request with no body HTTP 204 must be returned.
 
 For writing type information is required for each PipeBlobDataElement:
 
-`PUT /devices/sys_tg/test/1/pipes/DevPipe`:
+`PUT /devices/sys_tg/test/1/pipes/DevPipe`
 ```
-#!JSON
+#!json
 {
     "name":"DevPipeBlob",
     "data":[
@@ -720,6 +818,8 @@ Here *_prev* in *_links* is __null__ because the first range were returned.
 If the entire collection fits into range response is the same as there is no _range_ parameter (HTTP 200 - OK; no additional info in response's header; no special element in the collections)
 
 ## Failure:
+
+`HTTP 500`
 
 ```
 #!JSON
