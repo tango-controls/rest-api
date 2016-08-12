@@ -819,8 +819,6 @@ If the entire collection fits into range response is the same as there is no _ra
 
 ## Failure:
 
-`HTTP 500`
-
 ```
 #!JSON
 {
