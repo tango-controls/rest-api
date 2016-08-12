@@ -862,6 +862,10 @@ __IMPLEMENTATION NOTE:__ any exception that can be handled on the server side mu
 2. Implementation must provide Expires response header value related requests (attribute value read)
 3. Implementation must export configuration for all caches, i.e. how long keep read value
 
+# Implementation references:
+
+1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtango/wiki/Home#markdown-header-getting-started-with-mtangorestserver)
+
 
 # References
 
