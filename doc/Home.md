@@ -240,7 +240,6 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "name":"long_scalar_w",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
-  "info_ex":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info_ex",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
   "_links":{
