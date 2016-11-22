@@ -1,3 +1,11 @@
+[![Documentation Status](https://readthedocs.org/projects/tango-rest-api/badge/?version=latest)](http://tango-rest-api.readthedocs.io/en/latest/?badge=latest)
+
+This project is the effort to define a standard REST API for [Tango controls](http://www.tango-controls.org).
+
+REST API is requested by the community and discussed in [this forum thread](http://www.tango-controls.org/community/forum/c/general/development/tango-feature-request-4-defining-a-standard-tango-rest-api/)
+
+
+
 # How to run the tests suite #
 
 ```
