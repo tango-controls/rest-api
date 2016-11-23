@@ -1,5 +1,3 @@
-[TOC]
-
 # Tango REST API RC3
 
 __NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
@@ -46,8 +44,7 @@ Example:
 
 
 `http://hzgcttest:8080/tango/rest` =>
-```
-#!JSON
+```JSON
 {
     "rc3":"http://hzgcttest:8080/tango/rest/rc3",
     "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
@@ -67,8 +64,7 @@ API implementation must support 2 authentication methods:
 When protected by Basic:
 
 `http://hzgcttest:8080/tango/rest/rc3` =>
-```
-#!JSON
+```JSON
 {
     "hosts":"/tango/rest/rc3/hosts",
     "x-auth-method":"basic"
@@ -81,8 +77,7 @@ In case of _basic_ any unauthorized request to any protected resource under _res
 and follow the standard Web Basic Authorization mechanism.
 
 In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
-```
-#!JSON
+```JSON
 {
     "hosts":"/tango/rest/rc3/hosts",
     "x-auth-method":"oauth2",
@@ -108,8 +103,7 @@ __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that ea
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
 `GET /tango/rest/rc3/hosts/hzgxenvtest/10000`:
-```
-#!json
+```json
 
 {
     "host": "hzgxenvtest",
@@ -151,8 +145,7 @@ __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango
 __OR__
 
 `GET /devices?wildcard=sys*/*/1`:
-```
-#!JSON
+```JSON
 [
     {
         "name":"sys/tg_test/1",
@@ -178,8 +171,7 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 Examples:
 
 `GET /devices/sys/tg_test/1`:
-```
-#!JSON
+```JSON
 {
     "name":"sys/tg_test/1",
     "info":{
@@ -208,8 +200,7 @@ Examples:
 ```
 
 `GET /devices/sys/tg_test/1/state`:
-```
-#!JSON
+```JSON
 {
     "state":"ON",
     "status":"Device is in ON state.",
@@ -234,8 +225,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 `GET /devices/sys/tg_test/1/attributes` - returns an array of objects defined below:
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w`:
-```
-#!JSON
+```JSON
 {
   "name":"long_scalar_w",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
@@ -262,8 +252,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w/value`:
-```
-#!JSON
+```JSON
 {
     "name": "long_scalar_w",
     "value": 12345,
@@ -273,8 +262,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```
 
 `GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar`:
-```
-#!json
+```json
 [
     {
         "name": "long_scalar_w",
@@ -295,8 +283,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 `PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42`:
 
-```
-#!JSON
+```JSON
 {
     "name": "long_scalar_w",
     "value": 42,
@@ -306,8 +293,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```
 
 `PUT /devices/sys/tg_test/1/attributes/value?long_scalar_w=42&string_scalar=Hi!`:
-```
-#!JSON
+```JSON
 [
     {
         "name": "long_scalar_w",
@@ -338,8 +324,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 
 `GET /devices/{device.name}/attributes/{attribute}/info`:
 
-```
-#!JSON
+```JSON
 {
   "name": "float",
   "writable": "READ",
@@ -409,8 +394,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `GET /devices/{device.name}/attributes/{attribute}/history`                            | JSONArray  | – displays the attribute's history
 
-```
-#!JSON
+```JSON
 [
     {
         "name": "string_scalar"
@@ -449,8 +433,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 | `PUT /devices/{device.name}/attributes/{attribute}/properties/{prop}?value={val}[&async=true]`            | JSONObject/NULL | – returns attribute value. Last-Modified = read timestamp from the Tango
 | `DELETE /devices/{device.name}/attributes/{attribute}/properties/{prop}`                     | NULL  | – deletes attribute's property
 
-```
-#!JSON
+```JSON
 [
     {"prop1":["value1"]},
     {"prop2":["value2"]}
@@ -477,8 +460,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 `GET /devices/sys/tg_test/1/commands` -  returns an array of objects defined below*):
 
 `GET /devices/sys/tg_test/1/commands/DevString`:
-```
-#!JSON
+```JSON
 {
   "name":"DevString",
   "history":"<prefix>/devices/sys/tg_test/1/commands/DevString/history",
@@ -500,8 +482,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 *) Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__
 
 `PUT /devices/sys/tg_test/1/commands/DevVoid`:
-```
-#!JSON
+```JSON
 {
     "name":"DevVoid"
 }
@@ -511,8 +492,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ```
 "Hi!"
 ```
-```
-#!JSON
+```JSON
 {
     "name":"DevString",
     "output":"Hi!"
@@ -520,16 +500,14 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ```
 
 `PUT /devices/sys/tg_test/1/commands/DevVarDoubleStringArr`
-```
-#!json
+```json
 {
     "dvalue":[3.14, 2.87],
     "svalue":["Hello", "World", "!!!"]    
 }
 ```
 =>
-```
-#!JSON
+```JSON
 {
     "name":"DevVarDoubleStringArr",
     "output":{
@@ -545,8 +523,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 
 
 `GET /devices/sys/tg_test/1/commands/DevString/history`:
-```
-#!JSON
+```JSON
 [
     {
         "name":"DevString",
@@ -592,8 +569,7 @@ When serving async request with no body HTTP 204 must be returned.
 
 
 `GET /devices/{device.name}/properties`:
-```
-#!JSON
+```JSON
 [
      {
          "name": "myProp", 
@@ -603,8 +579,7 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 
 `GET /devices/sys/tg_test/1/properties/myProp`:
-```
-#!JSON
+```JSON
 {
     "name": "myProp", 
     "values": ["myPropValue"]
@@ -612,8 +587,7 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 
 `PUT /devices/sys/tg_test/1/properties?myProp="Hello"&myProp="World"&myProp="!!!"`:
-```
-#!JSON
+```JSON
 [
   {
     "name": "myProp", 
@@ -632,8 +606,7 @@ When serving async request with no body HTTP 204 must be returned.
 | `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
 
 `GET /devices/{device.name}/pipes`:
-```
-#!json
+```json
 [
     {   
         "name": "DevPipe",
@@ -643,8 +616,7 @@ When serving async request with no body HTTP 204 must be returned.
 ```
 
 `GET /devices/sys_tg/test/1/pipes/DevPipe`:
-```
-#!JSON
+```JSON
 {
     "name":"DevPipeBlob",
     "size":12,
@@ -672,8 +644,7 @@ When serving async request with no body HTTP 204 must be returned.
 For writing type information is required for each PipeBlobDataElement:
 
 `PUT /devices/sys_tg/test/1/pipes/DevPipe`
-```
-#!json
+```json
 {
     "name":"DevPipeBlob",
     "data":[
@@ -712,8 +683,7 @@ Any response can be supplied with a filter parameter:
 This one shows only _name_ and _server_ fields;
 
 `GET /devices/sys/tg_test/1?filter=name&filter=server`:
-```
-#!JSON
+```JSON
 {
     "name":"sys/tg_test/1",
     "info":{
@@ -746,8 +716,7 @@ This one shows only _name_ and _server_ fields;
 This one shows everything except _info_ and _properties_ fields:
 
 `GET /devices/sys/tg_test/1/attributes?filter=!info&filter=!properties`:
-```
-#!JSON
+```JSON
 [
     {
         "name": "long_scalar_w"
@@ -793,8 +762,7 @@ The HTTP header should return some useful information:
 
 This information is also available in a dedicated item in the collection:
 
-```
-#!JSON
+```JSON
 [
     ...,
     {
@@ -818,8 +786,7 @@ If the entire collection fits into range response is the same as there is no _ra
 
 ## Failure:
 
-```
-#!JSON
+```JSON
 {
     "errors":[
         {       
