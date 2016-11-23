@@ -1,3 +1,5 @@
+[TOC]
+
 # Tango REST API RC3
 
 __NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
