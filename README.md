@@ -8,8 +8,7 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 # How to run the tests suite #
 
-```
-#!BASH
+```BASH
 $> hg clone https://bitbucket.org/Ingvord/tango-rest-api 
 destination directory: tango-rest-api
 requesting all changes
