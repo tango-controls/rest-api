@@ -1,3 +1,5 @@
+[![logo](http://www.tango-controls.org/static/tango/img/logo_tangocontrols.png)](http://www.tango-controls.org)
+
 [![Documentation Status](https://readthedocs.org/projects/tango-rest-api/badge/?version=latest)](http://tango-rest-api.readthedocs.io/en/latest/?badge=latest)
 
 This project is the effort to define a standard REST API for [Tango controls](http://www.tango-controls.org).
