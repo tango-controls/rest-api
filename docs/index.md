@@ -314,6 +314,32 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
 
+#### plain value:
+
+`GET /devices/sys/tg_test/1/attributes/long_scalar/value/plain`:
+```JSON
+12345
+```
+
+`GET /devices/sys/tg_test/1/attributes/double_scalar/value/plain`:
+```JSON
+3.14
+```
+
+`GET /devices/sys/tg_test/1/attributes/string_scalar/value/plain`:
+```JSON
+"Hello World!!!"
+```
+
+`GET /devices/sys/tg_test/1/attributes/double_spectrum/value/plain`:
+```JSON
+[3.14, 2.87]
+```
+
+`GET /devices/sys/tg_test/1/attributes/image/value/plain`:
+```JSON
+"data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//"
+```
 
 
 #### info:
