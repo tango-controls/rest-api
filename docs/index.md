@@ -1,8 +1,6 @@
 [TOC]
 
-# Tango REST API RC3
-
-__NOTE__: this is spec of version RC3 for RC2 clone this wiki and update to revision rc1: `hg clone ... & hg up -r rc2`
+# Tango REST API RC4
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
@@ -48,7 +46,7 @@ Example:
 `http://hzgcttest:8080/tango/rest` =>
 ```JSON
 {
-    "rc3":"http://hzgcttest:8080/tango/rest/rc3",
+    "rc4":"http://hzgcttest:8080/tango/rest/rc4",
     "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
     "mtango-1.0.2":"http://hzgcttest:8080/tango/rest/mtango-1.0.2"
 }
@@ -336,7 +334,11 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 [3.14, 2.87]
 ```
 
-`GET /devices/sys/tg_test/1/attributes/image/value/plain`:
+#### image
+
+For image attributes image value type returns image embedded into response:
+
+`GET /devices/sys/tg_test/1/attributes/image-attr/value/image`:
 ```JSON
 "data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//"
 ```
