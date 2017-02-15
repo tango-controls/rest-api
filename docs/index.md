@@ -250,6 +250,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 | `PUT /devices/{device.name}/attributes/value?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. NULL = HTTP 204
 | `GET /devices/{device.name}/attributes/value?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
 
+Scalar:
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar_w/value`:
 ```JSON
@@ -260,6 +261,37 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     "timestamp": 123456789
 }
 ```
+
+Spectrum:
+
+`GET /devices/sys/tg_test/1/attributes/double_spectrum_ro/value`:
+```JSON
+{
+    "name": "double_spectrum_ro",
+    "value": [213,228,207,115,227,137,54,...],
+    "quality": "ATTR_VALID",
+    "timestamp": 123456789
+}
+```
+
+Image:
+
+`GET /devices/sys/tg_test/1/attributes/ushort_image_ro/value`:
+```JSON
+{
+    "name": "ushort_image_ro",
+    "value": {
+       "data":[213,228,207,115,227,137,54,...],
+       "width": 251,
+       "height": 251
+    },
+    "quality": "ATTR_VALID",
+    "timestamp": 123456789
+}
+```
+
+
+Read multiple attributes:
 
 `GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar`:
 ```json
@@ -279,7 +311,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ]
 ```
 
-
+Write scalar attribute:
 
 `PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42`:
 
@@ -291,6 +323,8 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
     "timestamp": 123456789
 }
 ```
+
+Write multiple scalar attributes:
 
 `PUT /devices/sys/tg_test/1/attributes/value?long_scalar_w=42&string_scalar=Hi!`:
 ```JSON
@@ -314,6 +348,8 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 
 #### plain value:
 
+Responses with plain value, i.e. no JSON structure:
+
 `GET /devices/sys/tg_test/1/attributes/long_scalar/value/plain`:
 ```JSON
 12345
@@ -334,7 +370,7 @@ __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timest
 [3.14, 2.87]
 ```
 
-#### image
+#### image:
 
 For image attributes image value type returns image embedded into response:
 
