@@ -8,7 +8,7 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 # Implementations:
 
-1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtango/wiki/Home#markdown-header-getting-started-with-mtangorestserver)
+1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home)
 
 # How to run the tests suite #
 
