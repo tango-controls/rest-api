@@ -274,6 +274,18 @@ Spectrum:
 }
 ```
 
+Enum:
+
+`GET /devices/sys/tg_test/1/attributes/enum/value`:
+```JSON
+{
+    "name": "enum",
+    "value": "Label 1",
+    "quality": "ATTR_VALID",
+    "timestamp": 123456789
+}
+```
+
 Image:
 
 `GET /devices/sys/tg_test/1/attributes/ushort_image_ro/value`:
