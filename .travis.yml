@@ -28,7 +28,7 @@ before_script:
 script:
   - >
     mvn test
-    -Dtango.rest.url=http://localhost:10001/tango/rest/rc4/tango-cs/10000
+    -Dtango.rest.url=http://localhost:10001/tango/rest
     -Dtango.rest.auth.method=basic
     -Dtango.rest.user=tango-cs
     -Dtango.rest.password=tango
