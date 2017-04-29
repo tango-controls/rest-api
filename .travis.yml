@@ -3,9 +3,8 @@ sudo: false
 language: java
 
 env:
-  DOCKER_COMPOSE_VERSION: 1.12.0
   matrix:
-    - MTANGOREST_VERSION=rc4-1.4
+    - MTANGOREST_VERSION=rc4-1.4 DOCKER_COMPOSE_VERSION=1.12.0
 
 notifications:
   email: false
