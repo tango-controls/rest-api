@@ -8,7 +8,7 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 # Implementations:
 
-1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home)
+1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home) [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
 
 # How to run the tests suite #
 
