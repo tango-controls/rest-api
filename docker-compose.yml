@@ -3,7 +3,7 @@ services:
   tango-db:
     image: tangocs/mysql:9.2.2
     ports:
-     - "3306:3306"
+     - "9999:3306"
     environment:
      - MYSQL_ROOT_PASSWORD=root
   tango-cs:
