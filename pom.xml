@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tango</groupId>
-    <artifactId>rest-test-suite</artifactId>
-    <version>rc1-0.1-SNAPSHOT</version>
+    <groupId>org.tango-controls</groupId>
+    <artifactId>rest-test-suite-rc4</artifactId>
+    <version>0.1-SNAPSHOT</version>
     <description>A compatibility test suite for Tango REST API implementations</description>
 
     <developers>
@@ -26,8 +26,8 @@
         </dependency>
         <dependency>
             <groupId>org.tango</groupId>
-            <artifactId>rest-api-client</artifactId>
-            <version>rc2-0.2</version>
+            <artifactId>rest-api-rc4</artifactId>
+            <version>0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

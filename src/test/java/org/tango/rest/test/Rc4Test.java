@@ -1,20 +1,20 @@
 package org.tango.rest.test;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
-import org.tango.rest.response.Response;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,48 +22,65 @@ import java.util.Map;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 /**
  * @author Igor Khokhriakov <igor.khokhriakov@hzg.de>
  * @since 17.12.2015
  */
-public class Rc2Test {
+public class Rc4Test {
     protected static String url;
+    protected static URI uri;
+    protected static String tango_host;
+    protected static String tango_port;
     protected static String auth;
     protected static String user;
     protected static String password;
     protected static String token;
+    protected static URI devicesUri;
+    private Client client;
 
-    protected String getVersion(){
-        return "rc2";
+    protected static String getVersion() {
+        return "rc4";
     }
 
     @BeforeClass
     public static void beforeClass(){
         url = System.getProperty("tango.rest.url");
-        if(url == null) throw new IllegalArgumentException("tango.rest.url is not defined! Rerun using `mvn test -Dtango.rest.url={url}`");
+        Preconditions.checkNotNull(url, "tango.rest.url is not defined! Rerun using `mvn test -Dtango.rest.url={url}`");
+        uri = URI.create(url);
+
+        tango_host = System.getProperty("tango.host");
+        Preconditions.checkNotNull(tango_host, "tango.host is not defined! Rerun using `mvn test -Dtango.host={TANGO_HOST}`");
+
+        tango_port = System.getProperty("tango.port");
+        Preconditions.checkNotNull(tango_port, "tango.port is not defined! Rerun using `mvn test -Dtango.port=10000`");
 
         auth = System.getProperty("tango.rest.auth.method");
-        if(auth == null) throw new IllegalArgumentException("tango.rest.auth.method is not defined! Rerun using `mvn test -Dtango.rest.auth.method={auth}`. Auth = basic|oauth");
-
-        if(auth.equalsIgnoreCase("oauth")) throw new IllegalArgumentException("oauth authentication method is not yet implemented!");
+        Preconditions.checkNotNull(auth, "tango.rest.auth.method is not defined! Rerun using `mvn test -Dtango.rest.auth.method={auth}`. Auth = basic|oauth");
 
         switch (auth){
             case "basic":
                 user = System.getProperty("tango.rest.user");
+                Preconditions.checkNotNull(user,
+                        "tango.rest.user is not defined! Rerun using `mvn test -Dtango.rest.user={user}`");
                 password = System.getProperty("tango.rest.password");
+                Preconditions.checkNotNull(password,
+                        "tango.rest.password is not defined! Rerun using `mvn test -Dtango.rest.password={password}`");
                 break;
             case "oauth":
                 token = System.getProperty("tango.rest.oauth.token");
+                Preconditions.checkNotNull(password,
+                        "tango.rest.oauth.token is not defined! Rerun using `mvn test -Dtango.rest.oauth.token={token}`");
                 break;
             default:
-                throw new IllegalArgumentException("tango.rest.auth must either basic or oauth!");
+                throw new IllegalStateException("tango.rest.auth must be either basic or oauth!");
         }
-    }
 
-    private Client client;
+        devicesUri = UriBuilder.fromUri(uri).path(getVersion()).path("hosts").path(tango_host).path(tango_port).path("devices").build();
+    }
 
     @Before
     public void before(){
@@ -79,44 +96,13 @@ public class Rc2Test {
 
     @Test
     public void testTangoTestIsPresent(){
-        List<NamedEntity> result = client.target(url + "/"+getVersion()+"/devices").request().get(new GenericType<List<NamedEntity>>(){});
+        List<NamedEntity> result = client.target(devicesUri).request().get(new GenericType<List<NamedEntity>>() {
+        });
 
         assertTrue(Iterables.tryFind(result, new Predicate<NamedEntity>() {
             @Override
             public boolean apply(NamedEntity input) {
                 return input.name.equals("sys/tg_test/1");
-            }
-        }).isPresent());
-    }
-
-    @Test
-    public void testTangoTestInfo(){
-        //if it does not fail with deserialization exception response confronts API spec
-        Device result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1").request().get(Device.class);
-
-        //just make sure we have all we need for further tests
-        assertTrue(Iterables.tryFind(result.attributes, new Predicate<NamedEntity>() {
-            @Override
-            public boolean apply(NamedEntity input) {
-                return input.name.equals("long_scalar_w");
-            }
-        }).isPresent());
-        assertTrue(Iterables.tryFind(result.attributes, new Predicate<NamedEntity>() {
-            @Override
-            public boolean apply(NamedEntity input) {
-                return input.name.equals("double_spectrum");
-            }
-        }).isPresent());
-        assertTrue(Iterables.tryFind(result.attributes, new Predicate<NamedEntity>() {
-            @Override
-            public boolean apply(NamedEntity input) {
-                return input.name.equals("no_value");
-            }
-        }).isPresent());
-        assertTrue(Iterables.tryFind(result.commands, new Predicate<NamedEntity>() {
-            @Override
-            public boolean apply(NamedEntity input) {
-                return input.name.equals("DevString");
             }
         }).isPresent());
     }
@@ -129,6 +115,33 @@ public class Rc2Test {
 
         assertNotNull(attribute);
         assertEquals("long_scalar_w", attribute.name);
+    }
+
+    @Test
+    public void testTangoTestInfo() {
+        //if it does not fail with deserialization exception response confronts API spec
+        URI deviceUri = devicesUri.resolve("sys/tg_test/1");
+        Device result = client.target(deviceUri).request().get(Device.class);
+
+        //just make sure we have all we need for further tests
+        assertEquals("sys/tg_test/1", result.name);
+        assertEquals(deviceUri.resolve("attributes").toString(), result.attributes);
+        assertEquals(deviceUri.resolve("commands").toString(), result.commands);
+        assertEquals(deviceUri.resolve("pipes").toString(), result.pipes);
+        assertEquals(deviceUri.resolve("properties").toString(), result.properties);
+        assertEquals(deviceUri.resolve("state").toString(), result.state);
+
+        DeviceInfo info = result.info;
+        assertNotNull(info.ior);
+        assertFalse(info.is_taco);
+        assertTrue(info.exported);
+        assertNotNull(info.last_exported);
+        assertNotNull(info.last_unexported);
+        assertEquals("sys/tg_test/1", info.name);
+        assertEquals("TangoTest", info.classname);
+        assertNotNull(info.version);
+        assertNotNull(info.server);
+        assertNotNull(info.hostname);
     }
 
     @Test
@@ -221,12 +234,10 @@ public class Rc2Test {
 
     @Test
     public void testNoValue(){
-        Response<AttributeValue<?>> result = client.target(url + "/"+getVersion()+"/devices/sys/tg_test/1/attributes/no_value/value")
-                .request().get(new GenericType<Response<AttributeValue<?>>>(){});
-
-        assertNull(result.argout);
-        assertTrue(result.errors.length == 1);
-        assertTrue(result.errors[0].description.contains("API_AttrValueNotSet"));
+        AttributeValue<?> result = client.target(url + "/" + getVersion() + "/devices/sys/tg_test/1/attributes/no_value/value")
+                .request().get(new GenericType<AttributeValue<?>>() {
+                });
+        //TODO
     }
 
     @Test

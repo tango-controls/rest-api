@@ -24,7 +24,9 @@ updating to branch default
 2 files updated, 0 files merged, 0 files removed, 0 files unresolved
 $> cd rest-api
 $> mvn clean test \
-    -Dtango.rest.url=http://localhost:8080/hzgcttest/rest \
+    -Dtango.rest.url=http://localhost:8080/tango/rest \
+    -Dtango.host=tango-cs \
+    -Dtango.port=10000 \
     -Dtango.rest.auth.method=basic \
     -Dtango.rest.user={user} -Dtango.rest.password={password}
 
