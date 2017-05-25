@@ -4,7 +4,7 @@ language: java
 
 env:
   matrix:
-    - MTANGOREST_VERSION=rc4-1.4 DOCKER_COMPOSE_VERSION=1.12.0
+    - MTANGOREST_VERSION=rc4-1.5 DOCKER_COMPOSE_VERSION=1.12.0
 
 notifications:
   email: false
@@ -29,6 +29,8 @@ script:
   - >
     mvn test
     -Dtango.rest.url=http://localhost:10001/tango/rest
+    -Dtango.host=tango-cs
+    -Dtango.port=10000
     -Dtango.rest.auth.method=basic
     -Dtango.rest.user=tango-cs
     -Dtango.rest.password=tango
