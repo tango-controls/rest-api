@@ -21,7 +21,7 @@ services:
     depends_on:
      - tango-db
   tango-rest:
-     image: hzgde/mtangorest.docker:rc4
+     image: hzgde/mtangorest.docker:rc4-1.6
      ports:
       - "10001:10001"
      environment:
