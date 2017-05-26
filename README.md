@@ -8,9 +8,20 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 This repository provides Java reference implementation which can be used for server/client development using Java:
 
-TODO bintray download
+ [ ![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
 
-TODO maven snippet
+OR 
+
+use maven:
+
+```xml
+<!-- pom.xml -->
+<dependency> 
+  <groupId>org.tango-controls</groupId> 
+  <artifactId>rest-api-rc4</artifactId> 
+  <version>LATEST</version>
+</dependency>
+```
 
 # Implementations:
 
