@@ -15,7 +15,7 @@ public class AttributeInfo {
     public String writable;
     public String data_format;
     //    public boolean isMemorized;
-    public int data_type;
+    public String data_type;
     public int max_dim_x;
     public int max_dim_y;
     public String description;

@@ -4,9 +4,12 @@ package org.tango.rest.entities;
  * @author Igor Khokhriakov <igor.khokhriakov@hzg.de>
  * @since 17.12.2015
  */
-public class CommandResult<I, O> {
-    public String name;
-    public I input;
-    public O output;
-    public Object _links;
+public class CommandResult<OutputType> {
+    public final String name;
+    public final OutputType output;
+
+    public CommandResult(String name, OutputType output) {
+        this.name = name;
+        this.output = output;
+    }
 }

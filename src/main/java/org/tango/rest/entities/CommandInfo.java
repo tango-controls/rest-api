@@ -11,8 +11,8 @@ public class CommandInfo {
     public String cmd_name;
     public String level;
     public String cmd_tag;
-    public int in_type;
-    public int out_type;
+    public String in_type;
+    public String out_type;
     public String in_type_desc;
     public String out_type_desc;
 }
