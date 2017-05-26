@@ -4,7 +4,7 @@
 
     <groupId>org.tango-controls</groupId>
     <artifactId>rest-api-rc4</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
     <description>Tango REST API Java reference implementation</description>
 
     <properties>
