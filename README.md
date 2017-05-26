@@ -2,26 +2,15 @@
 
 [![Documentation Status](https://readthedocs.org/projects/tango-rest-api/badge/?version=latest)](http://tango-rest-api.readthedocs.io/en/latest/?badge=latest)
 
+[![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
+
 This project is the effort to define a standard REST API for [Tango controls](http://www.tango-controls.org).
 
 REST API is requested by the community and discussed in [this forum thread](http://www.tango-controls.org/community/forum/c/general/development/tango-feature-request-4-defining-a-standard-tango-rest-api/)
 
-This repository provides Java reference implementation which can be used for server/client development using Java:
+Please read about Tango REST API in the Tango documentation: [link](http://tango-controls.readthedocs.io/en/latest/development/advanced/rest-api.html)
 
- [ ![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
-
-OR 
-
-use maven:
-
-```xml
-<!-- pom.xml -->
-<dependency> 
-  <groupId>org.tango-controls</groupId> 
-  <artifactId>rest-api-rc4</artifactId> 
-  <version>LATEST</version>
-</dependency>
-```
+This repository provides Java reference implementation which can be used for server/client development using Java.
 
 # Implementations:
 
