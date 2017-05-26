@@ -197,9 +197,11 @@ public class Rc4Test {
     public void testExecuteCommand(){
         URI uri = UriBuilder.fromUri(devicesUri).path(SYS_TG_TEST_1).path("commands").path("DevString").build();
 
-        CommandResult<String, String> result = client.target(uri)
+        CommandResult<String> result = client.target(uri)
                 .request()
-                .put(Entity.entity("Hello World!!!", MediaType.TEXT_PLAIN_TYPE), new GenericType<CommandResult<String, String>>() {
+                .put(
+                        Entity.entity("Hello World!!!", MediaType.TEXT_PLAIN_TYPE),
+                        new GenericType<CommandResult<String>>() {
                 });
 
         assertEquals("Hello World!!!", result.output);
