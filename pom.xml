@@ -88,7 +88,7 @@
         <dependency>
             <groupId>org.tango</groupId>
             <artifactId>ezTangORB</artifactId>
-            <version>LATEST</version>
+            <version>RELEASE</version>
         </dependency>
     </dependencies>
 
