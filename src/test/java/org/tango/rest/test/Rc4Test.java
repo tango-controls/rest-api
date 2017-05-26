@@ -273,8 +273,8 @@ public class Rc4Test {
 
         assertNotNull(result);
         assertEquals("long_scalar_w", result.name);
-        assertEquals("READ_WRITE", result.writable);
-        assertEquals("SPECTRUM", result.data_format);
+        assertEquals("WRITE", result.writable);
+        assertEquals("SCALAR", result.data_format);
         assertEquals("OPERATOR", result.level);
     }
 

@@ -5,9 +5,18 @@ package org.tango.rest.entities;
  * @since 17.12.2015
  */
 public class CommandResult<OutputType> {
-    public final String name;
-    public final OutputType output;
+    public String name;
+    public OutputType output;
 
+    public CommandResult() {
+    }
+
+    /**
+     * Convenient constructor
+     *
+     * @param name
+     * @param output
+     */
     public CommandResult(String name, OutputType output) {
         this.name = name;
         this.output = output;
