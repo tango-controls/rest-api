@@ -6,6 +6,12 @@ This project is the effort to define a standard REST API for [Tango controls](ht
 
 REST API is requested by the community and discussed in [this forum thread](http://www.tango-controls.org/community/forum/c/general/development/tango-feature-request-4-defining-a-standard-tango-rest-api/)
 
+This repository provides Java reference implementation which can be used for server/client development using Java:
+
+TODO bintray download
+
+TODO maven snippet
+
 # Implementations:
 
 1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home) [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
