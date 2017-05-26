@@ -34,3 +34,4 @@ script:
     -Dtango.rest.auth.method=basic
     -Dtango.rest.user=tango-cs
     -Dtango.rest.password=tango
+    -Ptest-suite
