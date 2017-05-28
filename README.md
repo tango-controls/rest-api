@@ -15,6 +15,7 @@ This repository provides Java reference implementation which can be used for ser
 # Implementations:
 
 1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home) [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
+2. [RestDS](http://tangodevel.jinr.ru/git/tango/web/RestDS) [TODO badge]
 
 # How to run the tests suite #
 
