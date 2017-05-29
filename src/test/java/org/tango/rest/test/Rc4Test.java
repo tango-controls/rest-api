@@ -285,13 +285,13 @@ public class Rc4Test {
         AttributeInfo info = client.target(uri)
                 .request().get(AttributeInfo.class);
 
-        info.max_alarm = "1000";
+        info.alarms.max_alarm = "1000";
         info.events.ch_event.rel_change = "100";
 
         AttributeInfo result = client.target(uri)
                 .request().put(Entity.entity(info, MediaType.APPLICATION_JSON_TYPE), AttributeInfo.class);
 
-        assertEquals("1000", result.max_alarm);
+        assertEquals("1000", result.alarms.max_alarm);
         assertEquals("100", result.events.ch_event.rel_change);
     }
 }
