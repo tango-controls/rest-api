@@ -19,4 +19,15 @@ public class AttributeValue<T> {
         this.quality = quality;
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() +
+                "[" +
+                "name=" + name +
+                ",value=" + value +
+                ",quality=" + quality +
+                ",timestamp=" + timestamp +
+                "]";
+    }
 }
