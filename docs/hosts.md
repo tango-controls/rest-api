@@ -1,6 +1,6 @@
 ## Tango host:port (database)
 
-|                                         |            |
+| URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
 |`GET /tango/rest/rc3/hosts`     | JSONArray  | – tango hosts available through this API 
 |`GET /tango/rest/rc3/hosts/{tango_host}/{tango_port}`  |   JSONObject   |  -- corresponding Tango database info  
@@ -41,7 +41,7 @@ __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango
 
 ## Devices:
 
-|                                         |            |
+| URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
 |`GET /devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 

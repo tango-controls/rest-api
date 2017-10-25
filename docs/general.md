@@ -55,13 +55,13 @@ _x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
-## Filters:
+## Filters
 
 Any response can be supplied with a filter parameter:
 
-|                |           |
-|----------------|-----------|---------------------------------------------------
-| `GET /{any}?filter={fld1}&filter={fld2}&...[filter=!{fld1}&filter=!{fld2}&...]` | Depends on the response type: JSONArray or JSONObject | - response contains only required fields (or inverse)
+ URL                |   Response  | Desc
+------------------- | ----------- | ---------------------------------------------------
+`GET /{any}?filter={fld1}&filter={fld2}&...[filter=!{fld1}&filter=!{fld2}&...]` | Depends on the response type: JSONArray or JSONObject | - response contains only required fields (or inverse)
 
 
 This one shows only _name_ and _server_ fields;
@@ -124,11 +124,11 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-## Pages:
+## Pages
 
-|                |           |
-|----------------|-----------|---------------------------------------------------
-| `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
+  URL           |  Response | Desc
+----------------|-----------|---------------------------------------------------
+ `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
 
 For instance, `GET /device?range=0-25` will display only the first 25 devices
 
@@ -168,7 +168,7 @@ Here *_prev* in *_links* is __null__ because the first range were returned.
 
 If the entire collection fits into range response is the same as there is no _range_ parameter (HTTP 200 - OK; no additional info in response's header; no special element in the collections)
 
-## Failure:
+## Failure
 
 ```JSON
 {
@@ -192,29 +192,3 @@ If the entire collection fits into range response is the same as there is no _ra
 ```
 
 __IMPLEMENTATION NOTE:__ any exception that can be handled on the server side must be handled, i.e. a proper JSONObject must be returned.
-
-# Implementation remarks:
-
-1. Implement async where possible (almost any PUT, POST and DELETE methods)
-2. All constants and magic numbers in responses, i.e. data type, data format, writable, level must be replaced with their string representation
-3. Image attributes must be handled on the server side, i.e. server safes image as jpeg (or tiff) and sends URL or embeds this image into response.
-4. API must be allowed only for authorized users.
-5. Optionally provide integration with TangoAccessControl
-6. Optional shortcuts may be implemented to reduce data transfer
-7. Provide access to _set_attribute_config()_ via admin panel
-8. PUT attribute can be implemented as _write_read_ call.
-
-# Implementation recommendations:
-
-1. Implementation must cache Tango proxy objects
-2. Implementation must provide Expires response header value related requests (attribute value read)
-3. Implementation must export configuration for all caches, i.e. how long keep read value
-
-# Implementation references:
-
-1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtango/wiki/Home#markdown-header-getting-started-with-mtangorestserver)
-
-
-# References
-
-[1] [Brian Mulloy, Web API Design. Crafting Interfaces that Developers Love](https://pages.apigee.com/rs/apigee/images/api-design-ebook-2012-03.pdf)
