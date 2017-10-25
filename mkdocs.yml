@@ -7,3 +7,4 @@ pages:
 - Home: index.md
 - General: general.md
 - Tango hosts and devices: hosts.md
+- Device: device.md
