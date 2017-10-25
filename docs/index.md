@@ -28,7 +28,7 @@ DELETE | DELETE | - | Delete instance. 200 OK
 POST create an instance of collection by the URI of this collection.
 POST returns the URI and the id of the newly created instance.
 
-# URL example driven specification:
+# URL example driven specification
 
 All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation may or may not add this to the hrefs. 
 
@@ -36,7 +36,7 @@ For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/h
 
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
 
-# Implementation remarks:
+# Implementation remarks
 
 1. Implement async where possible (almost any PUT, POST and DELETE methods)
 2. All constants and magic numbers in responses, i.e. data type, data format, writable, level must be replaced with their string representation
@@ -47,13 +47,13 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
 7. Provide access to _set_attribute_config()_ via admin panel
 8. PUT attribute can be implemented as _write_read_ call.
 
-# Implementation recommendations:
+# Implementation recommendations
 
 1. Implementation must cache Tango proxy objects
 2. Implementation must provide Expires response header value related requests (attribute value read)
 3. Implementation must export configuration for all caches, i.e. how long keep read value
 
-# Implementation references:
+# Implementation references
 
 1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtango/wiki/Home#markdown-header-getting-started-with-mtangorestserver)
 
