@@ -2,7 +2,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/tango-rest-api/badge/?version=latest)](http://tango-rest-api.readthedocs.io/en/latest/?badge=latest)
 
-[![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
+
 
 This project is the effort to define a standard REST API for [Tango controls](http://www.tango-controls.org).
 
@@ -10,12 +10,14 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 Please read about Tango REST API in the Tango documentation: [link](http://tango-controls.readthedocs.io/en/latest/development/advanced/rest-api.html)
 
-This repository provides Java reference implementation which can be used for server/client development using Java.
+This repository provides Java reference implementation which can be used for server/client development using Java:
+
+[![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
 
 # Implementations:
 
-1. [mTangoREST.server](https://bitbucket.org/hzgwpn/mtangorest.server/wiki/Home) Compatibility tests run result: [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
-2. [RestDS](http://tangodevel.jinr.ru/git/tango/web/RestDS) [TODO badge]
+1. Java: [mTangoREST.server](https://github.com/ingvord/mtangorest.server) Compatibility tests run result: [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
+2. C++: [RestDS](http://tangodevel.jinr.ru/git/tango/web/RestDS) [TODO badge]
 
 # How to run the tests suite #
 
