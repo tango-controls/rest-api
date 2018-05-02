@@ -14,6 +14,8 @@ This repository provides Java reference implementation which can be used for ser
 
 [![Download](https://api.bintray.com/packages/tango-controls/maven/RestApi/images/download.svg) ](https://bintray.com/tango-controls/maven/RestApi/_latestVersion)
 
+This is __NOT A SERVER__ to setup Tango REST API server choose on of the implementations below:
+
 # Implementations:
 
 1. Java: [mTangoREST.server](https://github.com/ingvord/mtangorest.server) Compatibility tests run result: [![Build Status](https://travis-ci.org/tango-controls/rest-api.svg)](https://travis-ci.org/tango-controls/rest-api)
