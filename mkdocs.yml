@@ -1,1 +1,10 @@
 site_name: Tango REST API specification
+repo_url: https://github.com/tango-controls/rest-api
+
+theme: readthedocs
+
+pages:
+- Home: index.md
+- General: general.md
+- Tango hosts and devices: hosts.md
+- Device: device.md

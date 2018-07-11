@@ -4,7 +4,7 @@
 
     <groupId>org.tango-controls</groupId>
     <artifactId>rest-api-rc4</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <description>Tango REST API Java reference implementation</description>
 
     <properties>
@@ -32,7 +32,7 @@
     <developers>
         <developer>
             <id>ingvord</id>
-            <name>Igor khokhriakov</name>
+            <name>Igor Khokhriakov</name>
             <email>mail@ingvord.ru</email>
             <roles>
                 <role>Maintainer</role>
