@@ -390,7 +390,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
     "out_type":"DevString",
     "in_type_desc":"-",
     "out_type_desc":"-"
-  }
+  },
   "_links":{
               "_parent":"<prefix>/devices/sys/tg_test/1",
               "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
@@ -529,6 +529,13 @@ When serving async request with no body HTTP 204 must be returned.
 [
     {   
         "name": "DevPipe",
+        "info":{
+            "description" : "",
+            "label": "",
+            "DispLevel": "level",
+            "PipeWriteType": "writeType",
+            "extensions":[]
+        },
         "href": "<prefix>/devices/{device.name}/pipes/DevPipe"
     }
 ]
@@ -539,7 +546,7 @@ When serving async request with no body HTTP 204 must be returned.
 {
     "name":"DevPipeBlob",
     "size":12,
-    "timestamp":123456789,
+    "timestamp":123456789,    
     "data":[
             {
                 "name":"DevPipeBlobValue1",                
