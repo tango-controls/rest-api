@@ -129,6 +129,6 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 
 ## Devices tree 
 
-`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}/tree[?f={devices filter}]`  
+`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}/devices/tree[?f={devices filter}]`  
   
 -- same as `hosts/tree?v={tango_host}:{tango_port}[&f={devices filter}]` by for particular Tango host
