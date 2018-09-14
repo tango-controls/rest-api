@@ -13,6 +13,7 @@ Examples:
 ```JSON
 {
     "name":"sys/tg_test/1",
+    "alias": "test_device",
     "info":{
         "last_exported":"7th July 2014 at 11:47:47",
         "last_unexported":"?",
