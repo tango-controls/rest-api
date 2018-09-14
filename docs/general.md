@@ -172,6 +172,8 @@ If the entire collection fits into range response is the same as there is no _ra
 
 ## Failure
 
+Any error should return status code __400__ (BadRequest). Except few cases: see below.
+
 ```JSON
 {
     "errors":[
@@ -194,3 +196,21 @@ If the entire collection fits into range response is the same as there is no _ra
 ```
 
 __IMPLEMENTATION NOTE:__ any exception that can be handled on the server side must be handled, i.e. a proper JSONObject must be returned.
+
+### 404
+
+Resource does not exist e.g. `GET devices/x/y/z` should return status code 404 if `x/y/z` is not defined in th Tango db.
+
+### 408
+
+In case tango request failed with CORBA.TIMEOUT exception
+
+### 500
+
+Tango REST server crashes - indicates bug in the REST server
+
+### 503
+
+In case of event subscription REST server returns 503 if upstream server does not respond within specified timeout. May indicate that there is no event though i.e. is not a failure.
+
+__IMPLEMENTATION NOTE:__ server should not log any error except 500 when it is a server's failure. 
