@@ -132,3 +132,60 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 `GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}/devices/tree[?f={devices filter}]`  
   
 -- same as `hosts/tree?v={tango_host}:{tango_port}[&f={devices filter}]` by for particular Tango host
+
+## Attributes
+
+`GET /attributes?wildcard=sys*/*/1/*`:
+
+```json
+[
+    {
+      "name":"long_scalar_w",
+      "device": "sys/tg_test/1",
+      "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
+      "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+      "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
+      "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
+      "_links":{
+        "_device":"<prefix>/devices/sys/tg_test/1",
+        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
+        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info"
+      }
+    },
+    {
+      "name":"double_scalar_w",
+      "device": "sys/tg_test/1",
+      "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
+      "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+      "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
+      "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
+      "_links":{
+        "_device":"<prefix>/devices/sys/tg_test/1",
+        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
+        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info"
+      }
+    },
+    ...
+]
+```
+
+`PUT /attributes[?async=true]`
+
+PUT body:
+```json
+[
+  {
+    "attr":"sys/tg_test/1/long_scalar_w",
+    "value":1234
+  },
+  {
+    "attr":"sys/tg_test/2/double_scalar_w",
+    "value":3.14
+  },
+  ...
+]
+```
+
+If not _async_ returns array as in [device/attributes write multiple scalar attributes](../device/#write-multpile-scalar-attributes)
+
+

@@ -68,6 +68,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 ```JSON
 {
   "name":"long_scalar_w",
+  "device": "sys/tg_test/1",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
