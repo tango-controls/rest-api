@@ -186,6 +186,6 @@ PUT body:
 ]
 ```
 
-If not _async_ returns array as in [device/attributes write multiple scalar attributes](../device/#write-multpile-scalar-attributes)
+If not _async_ returns array as in [device/attributes write multiple scalar attributes](device.md#write-multiple-scalar-attributes)
 
 
