@@ -104,23 +104,25 @@ __IMPLEMENTATION NOTE:__ this responseis based on sequential execution of TangoD
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+|`GET /hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 
-`GET /devices`:
+`GET /hosts/localhost/devices`:
 
 __OR__
 
-`GET /devices?wildcard=sys*/*/1`:
+`GET /hosts/localhost/devices?wildcard=sys*/*/1`:
 ```JSON
 [
     {
         "name":"sys/tg_test/1",
+        "alias":"test_device",
         "href":"<prefix>/devices/sys/tg_test/1"
     },
     {
         "name":"sys/tg_test/2",
+        "alias":null,//maybe skipped
         "href":"<prefix>/devices/sys/tg_test/2"
-    }
+    },
     ...
 ]
 ```
@@ -133,36 +135,29 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
   
 -- same as `hosts/tree?v={tango_host}:{tango_port}[&f={devices filter}]` by for particular Tango host
 
-## Attributes
+# Attributes
 
-`GET /attributes?wildcard=sys*/*/1/*`:
+| URL                                     | Response   | Desc
+|-----------------------------------------|------------|--------------------------
+| `GET /attributes?wildcard=*[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
 
+`GET /attributes?wildcard=localhost[:10000]/sys/*/1/*` 
 ```json
 [
     {
       "name":"long_scalar_w",
       "device": "sys/tg_test/1",
-      "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
-      "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
-      "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
-      "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
-      "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1",
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info"
+      "host": "localhost:10000",
+     "_links":{
+        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
       }
     },
     {
       "name":"double_scalar_w",
       "device": "sys/tg_test/1",
-      "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
-      "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
-      "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
-      "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
+      "host":"localhost:10000",
       "_links":{
-        "_device":"<prefix>/devices/sys/tg_test/1",
-        "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info"
+        "_self":"<prefix>/devices/sys/tg_test/1/attributes/double_scalar_w"
       }
     },
     ...
@@ -175,11 +170,11 @@ PUT body:
 ```json
 [
   {
-    "attr":"sys/tg_test/1/long_scalar_w",
+    "attr":"localhost:10000/sys/tg_test/1/long_scalar_w",
     "value":1234
   },
   {
-    "attr":"sys/tg_test/2/double_scalar_w",
+    "attr":"hzgxenvtest:10000/sys/tg_test/2/double_scalar_w",
     "value":3.14
   },
   ...
@@ -188,4 +183,135 @@ PUT body:
 
 If not _async_ returns array as in [device/attributes write multiple scalar attributes](device.md#write-multiple-scalar-attributes)
 
+## Attributes info
 
+`GET /attributes/info?wildcard=localhost:10000/sys*/*/1/*`:
+
+An array of infos as in [attribute info](device.md#info:)
+
+## Attributes history
+
+`GET /attributes/history?wildcard=localhost:10000/sys*/*/1/*`:
+
+```json
+[
+  [
+      {
+          "attribute": "localhost:10000/sys/tg_tes/1/string_scalar",
+          "value": "Hi!",
+          "quality": "ATTR_VALID",
+          "timestamp": 123456789
+      },
+      {
+          "errors":[
+              {       
+                  "reason":"TangoProxyException",
+                  "description":"sys/tg_test/1 proxy has throw an exception",
+                  "severity":"ERR",
+                  "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
+              },
+              {       
+                  "reason":"",
+                  "description":"",
+                  "severity":"PANIC",
+                  "origin":""
+              }
+          ],   
+          "quality": "FAILURE",
+          "timestamp": 123456789
+       },
+       ...
+  ],
+  ...
+]
+```
+
+# Commands
+
+| URL                                     | Response   | Desc
+|-----------------------------------------|------------|--------------------------
+| `GET /commands?wildcard=*[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
+
+`GET /commands?wildcard=localhost/sys/*/*/Dev*`
+
+```json
+[
+    {
+      "name":"DevString",
+      "device":"sys/tg_test/1",
+      "history":"<prefix>/devices/sys/tg_test/1/commands/devstring/history",
+      "info":{
+        "level":"OPERATOR",
+        "cmd_tag":0,
+        "in_type":"DevString",
+        "out_type":"DevString",
+        "in_type_desc":"-",
+        "out_type_desc":"-"
+      },
+      "_links":{
+                  "_parent":"<prefix>/devices/sys/tg_test/1",
+                  "_self":"<prefix>/devices/sys/tg_test/1/commands/devstring"
+              }
+    },
+    {
+      "name":"DevDouble",
+      "device":"sys/tg_test/1",
+      "history":"<prefix>/devices/sys/tg_test/1/commands/devdouble/history",
+      "info":{
+        "level":"OPERATOR",
+        "cmd_tag":0,
+        "in_type":"DevDouble",
+        "out_type":"DevDouble",
+        "in_type_desc":"-",
+        "out_type_desc":"-"
+      },
+      "_links":{
+                  "_parent":"<prefix>/devices/sys/tg_test/1",
+                  "_self":"<prefix>/devices/sys/tg_test/1/commands/devdouble
+              }
+    },
+    ...
+]
+```
+
+`PUT /commands`
+
+PUT body:
+```json
+[
+  {
+    "command":"localhost:10000/sys/tg_test/1/DevString",
+    "input": "Hello World!!!"
+  },
+  {
+    "command":"localhost:10000/sys/tg_test/2/DevDouble",
+    "input": 3.14
+  },
+  ...
+]
+```
+
+Response:
+```json
+[
+  {
+    "command":"sys/tg_test/1/DevString",
+    "output": "Hello World!!!"
+  },
+  {
+    "command":"sys/tg_test/2/DevDouble",
+    "output": 3.14
+  },
+  ...
+]
+```
+
+If one of the command has failed an error is returned instead of output.
+
+# Pipes
+
+| URL                                     | Response   | Desc
+|-----------------------------------------|------------|--------------------------
+| `GET /pipes?wildcard=*[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+
+Same as for attributes or commands

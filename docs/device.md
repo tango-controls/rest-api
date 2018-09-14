@@ -316,7 +316,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ```JSON
 [
     {
-        "name": "string_scalar"
+        "name": "string_scalar",
         "value": "Hi!",
         "quality": "ATTR_VALID",
         "timestamp": 123456789
