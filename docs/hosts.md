@@ -149,14 +149,12 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
     {
       "name":"long_scalar_w",
       "device": "sys/tg_test/1",
-      "host": "localhost:10000",
-      "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
+      "host": "localhost:10000"
     },
     {
       "name":"double_scalar_w",
       "device": "sys/tg_test/2",
-      "host":"localhost:10000",
-      "href":"<prefix>/devices/sys/tg_test/2/attributes/double_scalar_w"
+      "host":"localhost:10000"
     },
     ...
 ]
@@ -231,8 +229,7 @@ If not _async_ returns array as in [device/attributes write multiple scalar attr
         "out_type":"DevString",
         "in_type_desc":"-",
         "out_type_desc":"-"
-      },
-      "href":"<prefix>/devices/sys/tg_test/1/commands/devstring"
+      }
     },
     {
       "name":"DevDouble",
@@ -246,8 +243,7 @@ If not _async_ returns array as in [device/attributes write multiple scalar attr
         "out_type":"DevDouble",
         "in_type_desc":"-",
         "out_type_desc":"-"
-      },
-      "href":"<prefix>/devices/sys/tg_test/1/commands/devdouble"
+      }
     },
     ...
 ]

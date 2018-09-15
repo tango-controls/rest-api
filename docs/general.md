@@ -57,6 +57,27 @@ _x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
+## Links
+
+Implementation SHOULD attach a number of links to a particular response. For instance most of the response types may include _self_ link:
+
+```
+HTTP response
+
+Link: <link>; rel="self"
+```
+
+as well as external relationship links:
+
+`GET /tango/rest/rc5/hosts/localhost`
+```
+HTTP response
+
+Link: </tango/rest/rc5/hosts>; rel="parent"
+```
+
+See [Link header](http://tools.ietf.org/html/rfc5988)
+
 ## Filters
 
 Any response can be supplied with a filter parameter:
@@ -86,16 +107,12 @@ This one shows only _name_ and _server_ fields;
                 ],
     "commands":[
                    {
-                       "name":"DevString",
+                       "name":"DevString"
                    },
                    {
-                       "name":"DevLong",
+                       "name":"DevLong"
                    }
-               ],
-    "_links":{
-            "_parent":"<prefix>/devices"
-            "_self":"<prefix>/devices/sys/tg_test/1"
-        }
+               ]
 }
 ```
 
@@ -105,22 +122,12 @@ This one shows everything except _info_ and _properties_ fields:
 ```JSON
 [
     {
-        "name": "long_scalar_w"
-        "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
-        "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
-        }
+        "name": "long_scalar_w",
+        "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value"
     },
     {
-        "name": "string_scalar"
-        "value":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value",
-         "_links":{
-            "_device":"<prefix>/devices/sys/tg_test/1"
-            "_parent":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar",
-            "_self":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
-        }
+        "name": "string_scalar",
+        "value":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value"
     }
 ]
 ```
@@ -128,15 +135,15 @@ This one shows everything except _info_ and _properties_ fields:
 
 ## Pages
 
-  URL           |  Response | Desc
-----------------|-----------|---------------------------------------------------
- `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
+|  URL           |  Response | Desc
+|----------------|-----------|---------------------------------------------------
+| `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
 
-For instance, `GET /device?range=0-25` will display only the first 25 devices
+For instance, `GET /devices?range=0-25` will display only the first 25 devices of a particular Tango host
 
-The HTTP answer is 206 - Partial Content.
-The HTTP header should return some useful information:
+The implementation MUST return corresponding HTTP headers:
 
+    HTTP 206 OK
     Content-Range: offset – limit / count
         offset: index of the first element
         limit : index of the last element
@@ -146,33 +153,9 @@ The HTTP header should return some useful information:
         max : maximum number of element per request
     Link: can return several URI to the previous and next range, the first and last range ...
 
-This information is also available in a dedicated item in the collection:
+## Errors
 
-```JSON
-[
-    ...,
-    {
-        "name":"partial_content",
-        "total":113,
-        "offset":0,
-        "limit":25,
-        "_links":{
-            "_prev":null,
-            "_next":"<prefix>/devices?range=26-50",
-            "_first":"<prefix>/devices?range=0-25",
-            "_last":"<prefix>/devices?range=101-113"
-        }
-    }
-]
-```
-
-Here *_prev* in *_links* is __null__ because the first range were returned.
-
-If the entire collection fits into range response is the same as there is no _range_ parameter (HTTP 200 - OK; no additional info in response's header; no special element in the collections)
-
-## Failure
-
-Any error should return status code __400__ (BadRequest). Except few cases: see below.
+Any error MUST return status code __400__ (BadRequest). Except few cases: see below.
 
 ```JSON
 {

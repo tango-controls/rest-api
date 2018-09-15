@@ -31,11 +31,7 @@ Examples:
     "attributes":"<prefix>/devices/sys/tg_test/1/attributes",
     "commands":"<prefix>/devices/sys/tg_test/1/commands",
     "pipes":"<prefix>/devices/sys/tg_test/1/pipes",
-    "properties":"<prefix>/devices/sys/tg_test/1/properties",
-    "_links":{
-            "_parent":"<prefix>/devices"
-            "_self":"<prefix>/devices/sys/tg_test/1"
-        }
+    "properties":"<prefix>/devices/sys/tg_test/1/properties"
 }
 ```
 
@@ -43,13 +39,7 @@ Examples:
 ```JSON
 {
     "state":"ON",
-    "status":"Device is in ON state.",
-    "_links":{
-        "_state":"<prefix>/devices/sys/tg_test/1/attributes/State",
-        "_status":"<prefix>/devices/sys/tg_test/1/attributes/Status",
-        "_parent":"<prefix>/devices/sys/tg_test/1",
-        "_self":"<prefix>/devices/sys/tg_test/1/state"
-    }
+    "status":"Device is in ON state."
 }
 ```
 
@@ -73,8 +63,7 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
-  "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
-  "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
+  "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties"
 }
 ```
 
@@ -390,8 +379,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
     "out_type":"DevString",
     "in_type_desc":"-",
     "out_type_desc":"-"
-  },
-  "href":"<prefix>/devices/sys/tg_test/1/commands/DevString"
+  }
 }
 ```
 
@@ -427,13 +415,9 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 {
     "name":"DevVarDoubleStringArr",
     "output":{
-                 "dvalue":[3.14, 2.87],
-                 "svalue":["Hello", "World", "!!!"]    
-             },
-    "_links":{
-            "_parent":"<prefix>/devices/sys/tg_test/1",
-            "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
-        }
+       "dvalue":[3.14, 2.87],
+       "svalue":["Hello", "World", "!!!"]    
+    }
 }
 ```
 
@@ -534,8 +518,7 @@ When serving async request with no body HTTP 204 must be returned.
             "DispLevel": "level",
             "PipeWriteType": "writeType",
             "extensions":[]
-        },
-        "href": "<prefix>/devices/{device.name}/pipes/DevPipe"
+        }
     }
 ]
 ```
