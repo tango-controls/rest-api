@@ -7,12 +7,10 @@ _api_version_ follows URL prefix and defines which version of this API supports 
 Example:
 
 
-`http://hzgcttest:8080/tango/rest` =>
+`GET /tango/rest` =>
 ```JSON
 {
-    "rc4":"http://hzgcttest:8080/tango/rest/rc4",
-    "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
-    "mtango-1.0.2":"http://hzgcttest:8080/tango/rest/mtango-1.0.2"
+    "rc5":"http://hzgcttest:8080/tango/rest/rc5"
 }
 ```
 
@@ -20,40 +18,23 @@ Example:
 
 All resources under _api_version_ must be protected and require an authentication (specification allows non-protected resources but this is strictly not recommended).
 
-API implementation must support 2 authentication methods:
+Implementation SHOULD implement some of the standard [WWW-Authenticate](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) types.
 
-* Basic Web authentication
-* OAuth2
+For instance, when protected by Basic:
 
-When protected by Basic:
-
-`http://hzgcttest:8080/tango/rest/rc3` =>
+`GET /tango/rest/rc5` =>
+```
+HTTP OK
+WWW-Authenticate: Basic realm="Tango-Controls Realm" 
+```
 ```JSON
 {
-    "hosts":"/tango/rest/rc3/hosts",
-    "x-auth-method":"basic"
+    "hosts":"/tango/rest/rc5/hosts"
 }
 ```
 
-_x-auth-method_ = basic|oauth2|none
-
-In case of _basic_ any unauthorized request to any protected resource under _rest/api_version_ must get _HTTP 401 Not Authorized_ response
+In case of _Basic_ any unauthorized request to any protected resource under _rest/api_version_ must get _HTTP 401 Not Authorized_ response
 and follow the standard Web Basic Authorization mechanism.
-
-In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
-```JSON
-{
-    "hosts":"/tango/rest/rc3/hosts",
-    "x-auth-method":"oauth2",
-    "x-auth-resource":"https://hzgcttest:8080/hzgcttest/oauth2/authorize"
-}
-```
-
-Client uses _x-auth-resource_ to get access_token following the standard OAuth2 authentication procedure. This token is then provided
-with each request to the protected resources either in Authentication request header:`Authorization: token access_token` or as a parameter:
-`GET /tango/rest/rc3/hosts?token={access_token}`.
-
-_x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
