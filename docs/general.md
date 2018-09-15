@@ -59,6 +59,8 @@ Link: </tango/rest/rc5/hosts>; rel="parent"
 
 See [Link header](http://tools.ietf.org/html/rfc5988)
 
+Implementation MUST prefer lower case urls in links e.g. `DevString` (command name) -> `devstring`.
+
 ## Filters
 
 Any response can be supplied with a filter parameter:
