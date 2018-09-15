@@ -141,40 +141,66 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 |-----------------------------------------|------------|--------------------------
 | `GET /attributes?wildcard=*[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
 
-`GET /attributes?wildcard=localhost[:10000]/sys/*/1/*` 
+`GET /attributes?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w` 
+
+
 ```json
 [
     {
       "name":"long_scalar_w",
       "device": "sys/tg_test/1",
       "host": "localhost:10000",
-     "_links":{
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
-      }
+      "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
     },
     {
       "name":"double_scalar_w",
-      "device": "sys/tg_test/1",
+      "device": "sys/tg_test/2",
       "host":"localhost:10000",
-      "_links":{
-        "_self":"<prefix>/devices/sys/tg_test/1/attributes/double_scalar_w"
-      }
+      "href":"<prefix>/devices/sys/tg_test/2/attributes/double_scalar_w"
     },
     ...
 ]
 ```
 
-`PUT /attributes[?async=true]`
+## read
 
-PUT body:
+`GET /attributes/value?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w`
+```json
+[
+    {
+        "name": "long_scalar_w",
+        "device": "sys/tg_test/1",
+        "host":"localhost:10000",
+        "value": 12345,
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
+    },
+    {
+        "name": "double_scalar_w",
+        "device": "sys/tg_test/2",
+        "host":"hzgxenvtest:10000",
+        "value": 3.14,
+        "quality": "ATTR_VALID",
+        "timestamp": 123456789
+    }
+]
+```
+
+## write
+
+`PUT /attributes[?async=true]`
 ```json
 [
   {
-    "attr":"localhost:10000/sys/tg_test/1/long_scalar_w",
+    "name":"long_scalar_w",
+    "device": "sys/tg_test/1",
+    "host":"localhost:10000",
     "value":1234
   },
   {
-    "attr":"hzgxenvtest:10000/sys/tg_test/2/double_scalar_w",
+    "name":"double_scalar_w",
+    "device": "sys/tg_test/2",
+    "host":"hzgxenvtest:10000",
     "value":3.14
   },
   ...
@@ -182,49 +208,6 @@ PUT body:
 ```
 
 If not _async_ returns array as in [device/attributes write multiple scalar attributes](device.md#write-multiple-scalar-attributes)
-
-## Attributes info
-
-`GET /attributes/info?wildcard=localhost:10000/sys*/*/1/*`:
-
-An array of infos as in [attribute info](device.md#info:)
-
-## Attributes history
-
-`GET /attributes/history?wildcard=localhost:10000/sys*/*/1/*`:
-
-```json
-[
-  [
-      {
-          "attribute": "localhost:10000/sys/tg_tes/1/string_scalar",
-          "value": "Hi!",
-          "quality": "ATTR_VALID",
-          "timestamp": 123456789
-      },
-      {
-          "errors":[
-              {       
-                  "reason":"TangoProxyException",
-                  "description":"sys/tg_test/1 proxy has throw an exception",
-                  "severity":"ERR",
-                  "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
-              },
-              {       
-                  "reason":"",
-                  "description":"",
-                  "severity":"PANIC",
-                  "origin":""
-              }
-          ],   
-          "quality": "FAILURE",
-          "timestamp": 123456789
-       },
-       ...
-  ],
-  ...
-]
-```
 
 # Commands
 
@@ -239,6 +222,7 @@ An array of infos as in [attribute info](device.md#info:)
     {
       "name":"DevString",
       "device":"sys/tg_test/1",
+      "host": "localhost:10000",
       "history":"<prefix>/devices/sys/tg_test/1/commands/devstring/history",
       "info":{
         "level":"OPERATOR",
@@ -248,14 +232,12 @@ An array of infos as in [attribute info](device.md#info:)
         "in_type_desc":"-",
         "out_type_desc":"-"
       },
-      "_links":{
-                  "_parent":"<prefix>/devices/sys/tg_test/1",
-                  "_self":"<prefix>/devices/sys/tg_test/1/commands/devstring"
-              }
+      "href":"<prefix>/devices/sys/tg_test/1/commands/devstring"
     },
     {
       "name":"DevDouble",
       "device":"sys/tg_test/1",
+      "host": "localhost:10000",
       "history":"<prefix>/devices/sys/tg_test/1/commands/devdouble/history",
       "info":{
         "level":"OPERATOR",
@@ -265,18 +247,13 @@ An array of infos as in [attribute info](device.md#info:)
         "in_type_desc":"-",
         "out_type_desc":"-"
       },
-      "_links":{
-                  "_parent":"<prefix>/devices/sys/tg_test/1",
-                  "_self":"<prefix>/devices/sys/tg_test/1/commands/devdouble
-              }
+      "href":"<prefix>/devices/sys/tg_test/1/commands/devdouble"
     },
     ...
 ]
 ```
 
 `PUT /commands`
-
-PUT body:
 ```json
 [
   {

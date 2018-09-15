@@ -69,15 +69,12 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 {
   "name":"long_scalar_w",
   "device": "sys/tg_test/1",
+  "host": "localhost:10000",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
   "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties",
-  "_links":{
-    "_device":"<prefix>/devices/sys/tg_test/1",
-    "_parent":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w",
-    "_self":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info"
-  }
+  "href":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w"
 }
 ```
 
@@ -383,6 +380,8 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ```JSON
 {
   "name":"DevString",
+  "device":"sys/tg_test/1",
+  "host":"localhost:10000",
   "history":"<prefix>/devices/sys/tg_test/1/commands/DevString/history",
   "info":{
     "level":"OPERATOR",
@@ -392,10 +391,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
     "in_type_desc":"-",
     "out_type_desc":"-"
   },
-  "_links":{
-              "_parent":"<prefix>/devices/sys/tg_test/1",
-              "_self":"<prefix>/devices/sys/tg_test/1/commands/DevString"
-          }
+  "href":"<prefix>/devices/sys/tg_test/1/commands/DevString"
 }
 ```
 
@@ -525,11 +521,13 @@ When serving async request with no body HTTP 204 must be returned.
 | `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
 | `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
 
-`GET /devices/{device.name}/pipes`:
+`GET /devices/sys/tg_test/1/pipes`:
 ```json
 [
     {   
         "name": "DevPipe",
+        "device":"sys/tg_test/1",
+        "host":"localhost:10000",
         "info":{
             "description" : "",
             "label": "",
