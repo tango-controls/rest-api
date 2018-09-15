@@ -185,26 +185,40 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
 
 __IMPLEMENTATION NOTE:__ Value related response's Last-Modified is set to timestamp from the remote Tango device.
 
+Depending on the provided HTTP request [Accept header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept) implementation MUST return corresponding data type:
+
 #### plain value
 
 Responses with plain value, i.e. no JSON structure:
 
-`GET /devices/sys/tg_test/1/attributes/long_scalar/value/plain`:
+```
+GET /devices/sys/tg_test/1/attributes/long_scalar/value
+Accept: text/plain
+```:
 ```JSON
 12345
 ```
 
-`GET /devices/sys/tg_test/1/attributes/double_scalar/value/plain`:
+```
+GET /devices/sys/tg_test/1/attributes/double_scalar/value
+Accept: text/plain
+```:
 ```JSON
 3.14
 ```
 
-`GET /devices/sys/tg_test/1/attributes/string_scalar/value/plain`:
+```
+GET /devices/sys/tg_test/1/attributes/string_scalar/value
+Accept: text/plain
+```:
 ```JSON
 "Hello World!!!"
 ```
 
-`GET /devices/sys/tg_test/1/attributes/double_spectrum/value/plain`:
+```
+GET /devices/sys/tg_test/1/attributes/double_spectrum/value
+Accept: text/plain
+```:
 ```JSON
 [3.14, 2.87]
 ```
@@ -213,7 +227,10 @@ Responses with plain value, i.e. no JSON structure:
 
 For image attributes image value type returns image embedded into response:
 
-`GET /devices/sys/tg_test/1/attributes/image-attr/value/image`:
+```
+GET /devices/sys/tg_test/1/attributes/image-attr/value
+Accept: image/jpeg
+```:
 ```JSON
 "data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//"
 ```
