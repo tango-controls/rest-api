@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <resteasy.version>3.1.2.Final</resteasy.version>
+        <resteasy.version>3.6.1.Final</resteasy.version>
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.2.3</logback.version>
     </properties>

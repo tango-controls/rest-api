@@ -1,5 +1,11 @@
 [TOC]
 
+## HTTP/2.0
+
+Since rc6 implementation must provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support only https scheme and MAY support http (HTTP/1.1).
+
+For proper https support implementation MUST be supplied with a valid SSL certificate (OpenSSL). For development a self-signed certificate will do the trick, but for production implementation SHOULD be supplied with properly signed certificate.
+
 ## API version and Security
 
 _api_version_ follows URL prefix and defines which version of this API supports current implementation.
@@ -10,7 +16,7 @@ Example:
 `GET /tango/rest` =>
 ```JSON
 {
-    "rc5":"http://hzgcttest:8080/tango/rest/rc5"
+    "rc6":"http://hzgcttest:8080/tango/rest/rc6"
 }
 ```
 
@@ -22,14 +28,14 @@ Implementation SHOULD implement some of the standard [WWW-Authenticate](https://
 
 For instance, when protected by Basic:
 
-`GET /tango/rest/rc5` =>
+`GET /tango/rest/rc6` =>
 ```
 HTTP OK
 WWW-Authenticate: Basic realm="Tango-Controls Realm" 
 ```
 ```JSON
 {
-    "hosts":"/tango/rest/rc5/hosts"
+    "hosts":"/tango/rest/rc6/hosts"
 }
 ```
 
@@ -50,11 +56,11 @@ Link: <link>; rel="self"
 
 as well as external relationship links:
 
-`GET /tango/rest/rc5/hosts/localhost`
+`GET /tango/rest/rc6/hosts/localhost`
 ```
 HTTP response
 
-Link: </tango/rest/rc5/hosts>; rel="parent"
+Link: </tango/rest/rc6/hosts>; rel="parent"
 ```
 
 See [Link header](http://tools.ietf.org/html/rfc5988)

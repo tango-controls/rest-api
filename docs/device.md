@@ -362,15 +362,6 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 ]
 ```
 
-
-### Device attributes events:
-
-| URL                                                                                        | Response           | Desc
-|----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
-| `GET /devices/{device.name}/attributes/{attribute}/change[/periodic][/user][?timeout=30000][?last=12345678]` | JSONObject:same as read | – subscribes to the specified event. Blocks till gets a notification from the device or timeout exceeds
-
-**IMPLEMENTATION REMARK:** In case client has specified a _last_ parameter in the request, the implementation replies with the first event that occurred after this timestamp. This means that the implementation must keep a buffer of events. 
-
 ### Device commands:
 
 | URL                                                                           | Response           | Desc

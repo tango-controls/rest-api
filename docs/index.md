@@ -1,6 +1,6 @@
 [TOC]
 
-# Tango REST API RC5
+# Tango REST API RC6
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
