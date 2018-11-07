@@ -36,6 +36,36 @@ For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/rc3/h
 
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. The database to which implementation connects at start can be specified via environmental variable, or any other way. 
 
+Examples are typically follow this pattern:
+
+`METHOD url[?params]`
+
+```
+Request body
+```
+
+```
+Response body
+```
+
+Examples may be supplied with headers if required. Headers pretend body block:
+
+`METHOD url[?params]`
+```
+Request headers
+```
+```
+Request body
+```
+
+```
+Response headers
+```
+```
+Response body
+```
+
+
 # Implementation remarks
 
 1. Implement async where possible (almost any PUT, POST and DELETE methods)

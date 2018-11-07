@@ -161,7 +161,7 @@ Represents single subscription
 
 #### fallback_to_polling
 
-If set to true implementation MUST perform client polling  
+If set to true implementation MUST perform client polling in case Tango event subscription has failed. Polling rate is specified for each event. See above examples.  
 
 ### Event stream
 
