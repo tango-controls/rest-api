@@ -8,6 +8,8 @@ Provides an entry point for subscriptions (Tango Controls event system)
 |-----------------------------------------|------------|--------------------------
 |`POST /tango/rest/rc6/subscriptions?event={event1}&event={event2}&...`             | JSONObject | – creates a new subscription  
 
+**Create a new subscription**
+
 `POST /tango/rest/rc6/subscriptions`
 
 
@@ -17,13 +19,52 @@ Provides an entry point for subscriptions (Tango Controls event system)
 }
 ```
 
-`POST /tango/rest/rc6/subscriptions?event=hzgxenvtest:10000/sys/tg_test/1/double_scalar/change`
+**Create a new subscription with events**
+
+`POST /tango/rest/rc6/subscriptions`
+
+```json
+{
+  "events":[
+      {
+        "host":"hzgxenvtest:10000",
+        "device":"sys/tg_test/1",
+        "attribute":"double_scalar",
+        "type":"change",
+        "rate":100
+      },
+      {
+        "host":"hzgxenvtest:10000",
+        "device":"sys/tg_test/1",
+        "attribute":"long_scalar",
+        "type":"periodic",
+        "rate":3000
+      }
+  ]
+}
+```
+
 
 ```json
 {
   "id":0,
   "events":[
-    "hzgxenvtest:10000/sys/tg_test/1/double_scalar/change"    
+      {
+        "id":0,
+        "host":"hzgxenvtest:10000",
+        "device":"sys/tg_test/1",
+        "attribute":"double_scalar",
+        "type":"change",
+        "rate":100
+      },
+      {
+        "id":1,
+        "host":"hzgxenvtest:10000",
+        "device":"sys/tg_test/1",
+        "attribute":"long_scalar",
+        "type":"periodic",
+        "rate":3000
+      }
   ]
 }
 ```
@@ -35,22 +76,92 @@ Represents single subscription
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
 |`GET /tango/rest/rc6/subscriptions/{id}`              | JSONObject  | – this subscription as JSON 
-|`PUT /tango/rest/rc6/subscriptions/{id}?event={event1}&event={event2}&...`  | JSONObject  | – this subscription as JSON
+|`PUT /tango/rest/rc6/subscriptions/{id}`              | JSONObject  | – this subscription as JSON
 |`GET /tango/rest/rc6/subscriptions/{id}/event-stream` | text/event-stream  | – events stream
 |`DELETE /tango/rest/rc6/subscriptions/{id}`           | NULL  | – closes events stream and cancels subscription
 
+**Get subscription**
 
 `GET /tango/rest/rc6/subscriptions/{id}`
 
 ```json
 {
   "id":0,
+  "fallback_to_polling": true,
   "events": [
-    "hzgxenvtest:10000/sys/tg_test/1/double_scalar/change",
-    "hzgxenvtest:10000/sys/tg_test/1/long_scalar/periodic"
+    {
+      "id":0,
+      "host":"hzgxenvtest:10000",
+      "device":"sys/tg_test/1",
+      "attribute":"double_scalar",
+      "type":"change",
+      "rate":100
+    },
+    {
+      "id":1,
+      "host":"hzgxenvtest:10000",
+      "device":"sys/tg_test/1",
+      "attribute":"long_scalar",
+      "type":"periodic",
+      "rate":3000
+    }
   ]
 }
 ```
+
+**Add new event to subscription**
+
+`PUT /tango/rest/rc6/subscriptions/0`
+
+```json
+{
+  "events": [
+    {
+      "host":"hzgxenvtest:10000",
+      "device":"sys/tg_test/1",
+      "attribute":"short_scalar",
+      "type":"change",
+      "rate":100
+    }
+  ]
+}
+```
+
+```json
+{
+  "id":0,
+  "fallback_to_polling": true,
+  "events": [
+    {
+      "id":2,
+      "host":"hzgxenvtest:10000",
+      "device":"sys/tg_test/1",
+      "attribute":"short_scalar",
+      "type":"change",
+      "rate":100
+    }
+  ]
+}
+```
+
+**Change event rate**
+
+`PUT /tango/rest/rc6/subscriptions/0`
+
+```json
+{
+  "events": [
+    {
+      "id":2,
+      "rate":1000
+    }
+  ]
+}
+```
+
+#### fallback_to_polling
+
+If set to true implementation MUST perform client polling  
 
 ### Event stream
 
@@ -58,7 +169,7 @@ Implementation MUST multiplex all events into a single subscription stream:
 
 ```
 id: <upstream event time>
-event: hzgxenvtest:10000/sys/tg_test/1/double_scalar/change 
+event: <event id> 
 data: <upstream event data as plain text e.g. 3.14>
 ```
 
@@ -70,11 +181,9 @@ event: error
 data: <event e.g. hzgxenvtest:10000/sys/tg_test/1/double_scalar/change>:<upstream error cause>
 ```
 
-
-
 ## Implementations notes
 
-1. Implementation MUST broadcast events from single upstream
+1. Implementation MUST broadcast events from a single upstream
 2. Implementation MUST un-subscribe when there is no client for a particular upstream
 3. Implementation MAY export reconnection timeout to the configuration
 4. Implementation MAY separate subscriptions by client/app/user
