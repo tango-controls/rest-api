@@ -87,7 +87,6 @@ Represents single subscription
 ```json
 {
   "id":0,
-  "fallback_to_polling": true,
   "events": [
     {
       "id":0,
@@ -130,7 +129,6 @@ Represents single subscription
 ```json
 {
   "id":0,
-  "fallback_to_polling": true,
   "events": [
     {
       "id":2,
@@ -161,7 +159,7 @@ Represents single subscription
 
 #### fallback_to_polling
 
-If set to true implementation MUST perform client polling in case Tango event subscription has failed. Polling rate is specified for each event. See above examples.  
+Implementation may provide *fallback_to_polling* configuration option via maintenance interface. If set to true implementation MUST perform client polling in case Tango event subscription has failed. Polling rate is specified for each event.  
 
 ### Event stream
 
