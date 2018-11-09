@@ -15,7 +15,9 @@ Provides an entry point for subscriptions (Tango Controls event system)
 
 ```json
 {
-  "id":0
+  "id": 0,
+  "events": [],
+  "failures": []
 }
 ```
 
@@ -24,48 +26,32 @@ Provides an entry point for subscriptions (Tango Controls event system)
 `POST /tango/rest/rc6/subscriptions`
 
 ```json
-{
-  "events":[
-      {
-        "host":"hzgxenvtest:10000",
-        "device":"sys/tg_test/1",
-        "attribute":"double_scalar",
-        "type":"change",
-        "rate":100
-      },
-      {
-        "host":"hzgxenvtest:10000",
-        "device":"sys/tg_test/1",
-        "attribute":"long_scalar",
-        "type":"periodic",
-        "rate":3000
-      }
-  ]
-}
+[
+  {
+     "host":"hzgxenvtest:10000",
+     "device":"sys/tg_test/1",
+     "attribute":"double_scalar",
+     "type":"change"
+   }
+]
 ```
 
 
 ```json
 {
-  "id":0,
-  "events":[
-      {
-        "id":0,
-        "host":"hzgxenvtest:10000",
-        "device":"sys/tg_test/1",
-        "attribute":"double_scalar",
-        "type":"change",
-        "rate":100
-      },
-      {
-        "id":1,
-        "host":"hzgxenvtest:10000",
-        "device":"sys/tg_test/1",
-        "attribute":"long_scalar",
-        "type":"periodic",
-        "rate":3000
+  "id": 0,
+  "events": [
+    {
+      "id": 1,
+      "target": {
+        "host": "hzgxenvtest:10000",
+        "device": "sys/tg_test/1",
+        "attribute": "double_scalar",
+        "type": "change"
       }
-  ]
+    }
+  ],
+  "failures": []
 }
 ```
 
@@ -82,29 +68,23 @@ Represents single subscription
 
 **Get subscription**
 
-`GET /tango/rest/rc6/subscriptions/{id}`
+`GET /tango/rest/rc6/subscriptions/0`
 
 ```json
 {
-  "id":0,
+  "id": 0,
   "events": [
     {
-      "id":0,
-      "host":"hzgxenvtest:10000",
-      "device":"sys/tg_test/1",
-      "attribute":"double_scalar",
-      "type":"change",
-      "rate":100
-    },
-    {
-      "id":1,
-      "host":"hzgxenvtest:10000",
-      "device":"sys/tg_test/1",
-      "attribute":"long_scalar",
-      "type":"periodic",
-      "rate":3000
+      "id": 1,
+      "target": {
+        "host": "hzgxenvtest:10000",
+        "device": "sys/tg_test/1",
+        "attribute": "double_scalar",
+        "type": "change"
+      }
     }
-  ]
+  ],
+  "failures": []
 }
 ```
 
@@ -113,53 +93,46 @@ Represents single subscription
 `PUT /tango/rest/rc6/subscriptions/0`
 
 ```json
-{
-  "events": [
-    {
-      "host":"hzgxenvtest:10000",
-      "device":"sys/tg_test/1",
-      "attribute":"short_scalar",
-      "type":"change",
-      "rate":100
-    }
-  ]
-}
+[
+  {
+    "host":"hzgxenvtest:10000",
+    "device":"sys/tg_test/1",
+    "attribute":"long_scalar",
+    "type":"periodic"
+  }
+]
 ```
 
 ```json
 {
-  "id":0,
+  "id": 0,
   "events": [
     {
-      "id":2,
-      "host":"hzgxenvtest:10000",
-      "device":"sys/tg_test/1",
-      "attribute":"short_scalar",
-      "type":"change",
-      "rate":100
-    }
-  ]
-}
-```
-
-**Change event rate**
-
-`PUT /tango/rest/rc6/subscriptions/0`
-
-```json
-{
-  "events": [
+      "id": 1,
+      "target": {
+        "host": "hzgxenvtest:10000",
+        "device": "sys/tg_test/1",
+        "attribute": "double_scalar",
+        "type": "change"
+      }
+    },
     {
-      "id":2,
-      "rate":1000
+      "id": 2,
+      "target": {
+        "host": "hzgxenvtest:10000",
+        "device": "sys/tg_test/1",
+        "attribute": "long_scalar",
+        "type": "periodic"
+      }
     }
-  ]
+  ],
+  "failures": []
 }
 ```
 
 #### fallback_to_polling
 
-Implementation may provide *fallback_to_polling* configuration option via maintenance interface. If set to true implementation MUST perform client polling in case Tango event subscription has failed. Polling rate is specified for each event.  
+Implementation may provide *fallback_to_polling* configuration option via maintenance interface. If set to true implementation MUST perform client polling in case Tango event subscription has failed. Polling rate MAY be exported as a configuration option.  
 
 ### Event stream
 
