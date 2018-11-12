@@ -6,7 +6,7 @@ Provides an entry point for subscriptions (Tango Controls event system)
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`POST /tango/rest/rc6/subscriptions?event={event1}&event={event2}&...`             | JSONObject | – creates a new subscription  
+|`POST /tango/rest/rc6/subscriptions`             | JSONObject | – creates a new subscription  
 
 **Create a new subscription**
 
@@ -88,6 +88,8 @@ Represents single subscription
 }
 ```
 
+**failures** array field contains subscription failures
+
 **Add new event to subscription**
 
 `PUT /tango/rest/rc6/subscriptions/0`
@@ -144,13 +146,22 @@ event: <event id>
 data: <upstream event data as plain text e.g. 3.14>
 ```
 
-In case of an error:
+In case of an upstream error:
 
 ```
 id: <upstream event time or server time when error has occured>
-event: error 
-data: <event e.g. hzgxenvtest:10000/sys/tg_test/1/double_scalar/change>:<upstream error cause>
+event: <event id> 
+data: error: <upstream error cause>
 ```
+
+In case of an server error:
+
+```
+id: <server time when error has occured>
+event: error 
+data: <server error cause>
+```
+
 
 ## Implementations notes
 
@@ -158,6 +169,7 @@ data: <event e.g. hzgxenvtest:10000/sys/tg_test/1/double_scalar/change>:<upstrea
 2. Implementation MUST un-subscribe when there is no client for a particular upstream
 3. Implementation MAY export reconnection timeout to the configuration
 4. Implementation MAY separate subscriptions by client/app/user
+5. Implementation MAY NOT implement errors broadcasting as client MUST assume that error event occurs only due to connection lose
 
 ## References
 
