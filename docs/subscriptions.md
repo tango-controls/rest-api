@@ -162,3 +162,7 @@ data: <event e.g. hzgxenvtest:10000/sys/tg_test/1/double_scalar/change>:<upstrea
 ## References
 
 [1] [Server sent events overview](https://www.w3schools.com/html/html5_serversentevents.asp)
+
+[2] [Server sent events overview from streamdata.io](https://streamdata.io/blog/server-sent-events/)
+
+[3] [Server sent events@MDN](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
