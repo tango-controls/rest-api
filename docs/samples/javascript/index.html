@@ -112,7 +112,7 @@
          * @param event
          */
         source.onerror = function (event) {
-            document.getElementById("error").innerHTML = event.data;
+            this.close();
         };
     });
 
