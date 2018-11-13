@@ -25,6 +25,8 @@
         headers["Authorization"] = "Basic " + btoa("tango-cs:tango");
     });
 </script>
+<!-- Below you will find two scripts that demonstrates Tango REST subscriptions API usage-->
+
 <!-- In this example client creates a subscription and opens an event-stream -->
 <script type="application/javascript">
     /**
@@ -114,6 +116,132 @@
         };
     });
 
+</script>
+<!-- More complex sample with tow dynamically added tango events-->
+<script type="application/javascript">
+    /**
+     * Tango REST entry point
+     *
+     * @type {string}
+     * @const
+     */
+    const kRestURL = "http://ec2-35-156-104-8.eu-central-1.compute.amazonaws.com:8080/tango/rest/rc4";
+
+    /**
+     * Create a subscription using POST request
+     *
+     * @type {Promise}
+     */
+    var subscriptionPromise = webix.ajax().post(kRestURL + "/subscriptions")
+    /**
+     * webix returns xhr wrapper that is used to extract JSON data
+     */
+        .then(value => value.json())
+        /**
+         * now open subscription's event-stream
+         */
+        .then(subscription => {
+            /**
+             * Create new EventSource. Due to CORS we need set withCredentials to true
+             *
+             * @type {EventSource}
+             * @see https://developer.mozilla.org/en-US/docs/Web/API/EventSource
+             */
+            var source = new EventSource(kRestURL + "/subscriptions/" + subscription.id + "/event-stream", {
+                withCredentials: true
+            });
+            /**
+             * EventSource.onerror handler. This one is invoked when event stream receives event with type=error
+             * or server is down
+             *
+             * @param event
+             */
+            source.onerror = function (event) {
+                this.close();
+            };
+
+            return webix.extend(subscription, {
+                source : source
+            })
+        })
+        /**
+         * POST request failure handler
+         */
+        .fail(() => {
+            document.getElementById("error").innerHTML = "Server does not respond";
+        });
+    /**
+     * PUT a Tango event into newly created subscription
+     */
+    subscriptionPromise.then(subscription => {
+        /**
+         * define request content type
+         */
+        return webix.ajax().headers({
+            "Content-Type": "application/json"
+        })
+        /**
+         * subscribe to tango://ip-172-31-30-179:10000/sys/tg_test/1/double_scalar/change event
+         */
+            .put(kRestURL + "/subscriptions/" + subscription.id, JSON.stringify([
+                {
+                    host: "ip-172-31-30-179:10000",
+                    device: "sys/tg_test/1",
+                    attribute: "double_scalar",
+                    type: "change"
+                }
+            ]))
+            /**
+             * extract JSON preserving source reference
+             */
+            .then(value => webix.extend(subscription, value.json(), true))
+            .then(subscription => {
+                /**
+                 * add event listener for each event in our subscription. We have only one buy now.
+                 */
+                subscription.events.forEach(event => {
+                    subscription.source.addEventListener(event.id, function (event) {
+                        /**
+                         * event.type -- same as subscription.events[0].id field
+                         * event.data -- data sent by upstream Tango server or error cause e.g. error: ...
+                         * event.lastEventId -- event's timestamp
+                         */
+                        document.getElementById(event.type).innerHTML = event.data + "@" + event.lastEventId;
+                    });
+                });
+            })
+    });
+
+    /**
+     * Subscribe to another event
+     */
+    subscriptionPromise.then(subscription => {
+        return webix.ajax().headers({
+            "Content-Type": "application/json"
+        })
+        /**
+         * subscribe to tango://ip-172-31-30-179:10000/sys/tg_test/1/long_scalar/change event
+         */
+            .put(kRestURL + "/subscriptions/" + subscription.id, JSON.stringify([
+                {
+                    host: "ip-172-31-30-179:10000",
+                    device: "sys/tg_test/1",
+                    attribute: "long_scalar",
+                    type: "change"
+                }
+            ]))
+            /**
+             * extract JSON preserving source reference
+             */
+            .then(value => webix.extend(subscription, value.json(), true))
+    })
+        .then(subscription => {
+            let eventId = subscription.events.filter(event => event.attribute === 'long_scalar')[0].id;
+
+            subscription.source.addEventListener(eventId, function(event){
+                document.getElementById(event.type).innerHTML = event.data + "@" + event.lastEventId;
+            });
+        })
 </script>
 </body>
 
