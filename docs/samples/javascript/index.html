@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE</title>
+</head>
+<body>
+<div id="1"></div>
+<div id="2"></div>
+<div id="3"></div>
+<div id="4"></div>
+<div id="5"></div>
+<div id="6"></div>
+<div id="error"></div>
+
+
+<!-- webix provides convenient ajax API -->
+<script type="text/javascript" src="https://cdn.webix.com/5.2/webix_debug.js"></script>
+
+
+<!-- CORS auth data -->
+<script type="application/javascript">
+    webix.attachEvent("onBeforeAjax", function (mode, url, params, x, headers) {
+        x.withCredentials = true;
+        headers["Authorization"] = "Basic " + btoa("tango-cs:tango");
+    });
+</script>
+<!-- In this example client creates a subscription and opens an event-stream -->
+<script type="application/javascript">
+    /**
+     * Tango REST entry point
+     *
+     * @type {string}
+     * @const
+     */
+    const kRestURL = "http://ec2-35-156-104-8.eu-central-1.compute.amazonaws.com:8080/tango/rest/rc4";
+
+    /**
+     * Create a subscription using POST request
+     *
+     * @type {Promise}
+     */
+    var subscriptionPromise = webix.ajax().post(kRestURL + "/subscriptions")
+                                    /**
+                                     * webix returns xhr wrapper that is used to extract JSON data
+                                     */
+                                    .then(value => value.json())
+                                    /**
+                                     * POST request failure handler
+                                     */
+                                    .fail(() => {
+                                        document.getElementById("error").innerHTML = "Server does not respond";
+                                    });
+    /**
+     * PUT a Tango event into newly created subscription
+     */
+    subscriptionPromise.then(subscription => {
+        /**
+         * define request content type
+         */
+        return webix.ajax().headers({
+            "Content-Type": "application/json"
+        })
+            /**
+             * subscribe to tango://ip-172-31-30-179:10000/sys/tg_test/1/double_scalar/change event
+             */
+            .put(kRestURL + "/subscriptions/" + subscription.id, JSON.stringify([
+                {
+                    host: "ip-172-31-30-179:10000",
+                    device: "sys/tg_test/1",
+                    attribute: "double_scalar",
+                    type: "change"
+                }
+            ]))
+            /**
+             * extract JSON
+             */
+            .then(value => value.json())
+    })
+    /**
+     * now open subscription's event-stream and add a listener to it
+     */
+    .then(subscription => {
+        /**
+         * Create new EventSource. Due to CORS we need set withCredentials to true
+         *
+         * @type {EventSource}
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/EventSource
+         */
+        var source = new EventSource(kRestURL + "/subscriptions/" + subscription.id + "/event-stream", {
+            withCredentials: true
+        });
+        /**
+         * add event listener for each event in our subscription. We have only one buy now.
+         */
+        subscription.events.forEach(event => {
+            source.addEventListener(event.id, function (event) {
+                /**
+                 * event.type -- same as subscription.events[0].id field
+                 * event.data -- data sent by upstream Tango server or error cause e.g. error: ...
+                 * event.lastEventId -- event's timestamp
+                 */
+                document.getElementById(event.type).innerHTML = event.data + "@" + event.lastEventId;
+            });
+        });
+        /**
+         * EventSource.onerror handler. This one is invoked when event stream receives event with type=error
+         * or server is down
+         *
+         * @param event
+         */
+        source.onerror = function (event) {
+            document.getElementById("error").innerHTML = event.data;
+        };
+    });
+
+</script>
+</body>
+
+</html>

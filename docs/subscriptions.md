@@ -171,6 +171,10 @@ data: <server error cause>
 4. Implementation MAY separate subscriptions by client/app/user
 5. Implementation MAY NOT implement errors broadcasting as client MUST assume that error event occurs only due to connection lose
 
+## Client samples
+
+Client code samples can be found following [this link](https://github.com/tango-controls/rest-api/tree/master/docs/samples)
+
 ## References
 
 [1] [Server sent events overview](https://www.w3schools.com/html/html5_serversentevents.asp)
