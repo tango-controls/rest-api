@@ -1,0 +1,13 @@
+TANGO_REST_URL=http://ec2-35-156-104-8.eu-central-1.compute.amazonaws.com:8080/tango/rest/rc4/subscriptions
+
+#subscriptions POST requires at least empty array as payload
+curl -X POST -H "Content-Type: application/json" -d '[]' -u "tango-cs:tango" $TANGO_REST_URL
+
+#id must be extracted from response
+$ID=1
+
+#subscription PUT requires an array of events
+curl -X PUT -H "Content-Type: application/json"  -d '[{"host":"ip-172-31-30-179:10000","device":"sys/tg_test/1","attribute":"double_scalar","type":"change"}]' -u "tango-cs:tango" $TANGO_REST_URL/$ID
+
+#open stream
+curl -u "tango-cs:tango" $TANGO_REST_URL/$ID/event-stream
