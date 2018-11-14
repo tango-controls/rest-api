@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.tango-controls</groupId>
-    <artifactId>rest-api-rc4</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <artifactId>rest-api-rc5</artifactId>
+    <version>0.1-SNAPSHOT</version>
     <description>Tango REST API Java reference implementation</description>
 
     <properties>
@@ -78,6 +78,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tango-controls</groupId>
+            <artifactId>JTangoCommons</artifactId>
+            <version>9.5.10.hzg</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

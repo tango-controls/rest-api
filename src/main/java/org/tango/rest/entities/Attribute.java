@@ -6,9 +6,10 @@ package org.tango.rest.entities;
  */
 public class Attribute {
     public String name;
+    public String device;
+    public String host;
     public String value;
     public String info;
     public String properties;
     public String history;
-    public Object _links;
 }

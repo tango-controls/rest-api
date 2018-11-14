@@ -8,15 +8,12 @@ package org.tango.rest.entities;
 public class DeviceState {
     public String state;
     public String status;
-    public Object _links;
 
-    public DeviceState(String state, String status) {
-        this(state, status, null);
+    public DeviceState() {
     }
 
-    public DeviceState(String state, String status, Object _links) {
+    public DeviceState(String state, String status) {
         this.state = state;
         this.status = status;
-        this._links = _links;
     }
 }

@@ -6,7 +6,8 @@ package org.tango.rest.entities;
  */
 public class Command {
     public String name;
+    public String device;
+    public String host;
     public CommandInfo info;
     public String history;
-    public Object _links;
 }

@@ -4,7 +4,6 @@
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc5/hosts`              | JSONArray  | – tango hosts available through this API 
 |`GET /tango/rest/rc5/hosts/tree?v={tango_host}:{tango_port}&[f={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
 |`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
   

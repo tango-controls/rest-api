@@ -10,5 +10,4 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class Property {
     public String name;
     public String[] values;
-    public Object _links;
 }

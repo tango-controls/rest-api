@@ -519,8 +519,9 @@ When serving async request with no body HTTP 204 must be returned.
 | URL               |  Response         | Desc
 |----------------|-----------|---------------------------------------------------
 | `GET /devices/{device.name}/pipes` | JSONArray | - displays device pipes
-| `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - read device pipe
-| `PUT /devices/{device.name}/pipes/{pipe}[?async=true]` | JSONObject|NULL | - write device pipe
+| `GET /devices/{device.name}/pipes/{pipe}` | JSONObject | - display single device pipe
+| `GET /devices/{device.name}/pipes/{pipe}/value` | JSONObject | - read device pipe
+| `PUT /devices/{device.name}/pipes/{pipe}/value[?async=true]` | JSONObject|NULL | - write device pipe
 
 `GET /devices/sys/tg_test/1/pipes`:
 ```json
@@ -529,6 +530,7 @@ When serving async request with no body HTTP 204 must be returned.
         "name": "DevPipe",
         "device":"sys/tg_test/1",
         "host":"localhost:10000",
+        "value":"<prefix>/DevPipe/value",
         "info":{
             "description" : "",
             "label": "",
@@ -540,7 +542,7 @@ When serving async request with no body HTTP 204 must be returned.
 ]
 ```
 
-`GET /devices/sys_tg/test/1/pipes/DevPipe`:
+`GET /devices/sys_tg/test/1/pipes/DevPipe/value`:
 ```JSON
 {
     "name":"DevPipeBlob",
@@ -568,7 +570,7 @@ When serving async request with no body HTTP 204 must be returned.
 
 For writing type information is required for each PipeBlobDataElement:
 
-`PUT /devices/sys_tg/test/1/pipes/DevPipe`
+`PUT /devices/sys_tg/test/1/pipes/DevPipe/value`
 ```json
 {
     "name":"DevPipeBlob",

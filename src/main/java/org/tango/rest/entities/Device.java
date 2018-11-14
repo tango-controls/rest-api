@@ -15,7 +15,6 @@ public class Device {
     public String pipes;
     public String properties;
     public String state;
-    public Object _links;
 
     public Device() {
     }
@@ -27,10 +26,6 @@ public class Device {
         this.commands = commands;
         this.pipes = pipes;
         this.properties = properties;
-        this._links = new Object() {
-            public String _self = href.toString();
-            public String _parent = href.resolve("../..").toString();
-        };
         this.state = href + "/state";
     }
 }
