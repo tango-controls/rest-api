@@ -1,6 +1,5 @@
 package org.tango.rest.test;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
@@ -9,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
+import org.tango.rest.tree.TangoContainer;
 
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
@@ -72,11 +72,12 @@ public class Rc5Test {
     @Test
     public void testDevicesTree(){
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri).path("tree");
-        List<TangoContainer<?>> result = client.target(uriBuilder.build()).request().get(new GenericType<List<TangoContainer<?>>>(){});
+        List<org.tango.rest.tree.TangoHost> result = client.target(uriBuilder.build()).request().get(new GenericType<List<org.tango.rest.tree.TangoHost>>(){});
 
-        //TODO
-        assertFalse(true);
+        assertFalse(result.isEmpty());
     }
+
+    //TODO tree -- wrong Tango host e.g. port, host
 
     @Test
     public void testAttributes(){
