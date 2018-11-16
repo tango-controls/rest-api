@@ -27,7 +27,7 @@ public class Context {
         Context result = new Context();
         result.url = System.getProperty("tango.rest.url");
         Preconditions.checkNotNull(result.url, "tango.rest.url is not defined! Rerun using `mvn test -Dtango.rest.url={url}`");
-        result.uri = URI.create(result.url);
+        result.uri = UriBuilder.fromUri(URI.create(result.url)).path(restApiVersion).build();
 
         result.tango_host = System.getProperty("tango.host");
         Preconditions.checkNotNull(result.tango_host, "tango.host is not defined! Rerun using `mvn test -Dtango.host={TANGO_HOST}`");
@@ -56,7 +56,7 @@ public class Context {
                 throw new IllegalStateException("tango.rest.auth must be either basic or oauth!");
         }
 
-        UriBuilder uriBuilder = UriBuilder.fromUri(result.uri).path(restApiVersion).path("hosts").path(result.tango_host).matrixParam("port", result.tango_port).path("devices");
+        UriBuilder uriBuilder = UriBuilder.fromUri(result.uri).path("hosts").path(result.tango_host).matrixParam("port", result.tango_port).path("devices");
         result.devicesUri = uriBuilder.build();
         result.longScalarWUri = uriBuilder.path(SYS_TG_TEST_1).path("attributes").path("long_scalar_w").build();
         result.uShortImageRO = uriBuilder.path(SYS_TG_TEST_1).path("attributes").path("ushort_image_ro").build();

@@ -71,10 +71,24 @@ public class Rc5Test {
 
     @Test
     public void testDevicesTree(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("devices/tree").queryParam("host","localhost").queryParam("wildcard","sys/tg_test/1");
+        List<org.tango.rest.tree.TangoHost> result = client.target(uriBuilder.build()).request().get(new GenericType<List<org.tango.rest.tree.TangoHost>>(){});
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.get(0).isAlive);
+        assertEquals("aliases",result.get(0).data.get(0).value);
+        assertEquals("sys",result.get(0).data.get(1).value);
+    }
+
+    @Test
+    public void testDevicesTreeForLocalhost(){
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri).path("tree");
         List<org.tango.rest.tree.TangoHost> result = client.target(uriBuilder.build()).request().get(new GenericType<List<org.tango.rest.tree.TangoHost>>(){});
 
         assertFalse(result.isEmpty());
+        assertTrue(result.get(0).isAlive);
+        assertEquals("aliases",result.get(0).data.get(0).value);
+        assertEquals("sys",result.get(0).data.get(1).value);
     }
 
     //TODO tree -- wrong Tango host e.g. port, host
