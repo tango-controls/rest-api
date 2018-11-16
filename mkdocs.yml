@@ -6,5 +6,5 @@ theme: readthedocs
 pages:
 - Home: index.md
 - General: general.md
-- Tango hosts and devices: hosts.md
+- Tango hosts, devices, attributes etc: hosts.md
 - Device: device.md

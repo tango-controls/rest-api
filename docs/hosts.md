@@ -39,10 +39,6 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
 
 __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango_host:tango_port/sys/DatabaseDs/2/DbInfo command via standard Tango API
 
-`GET /tango/rest/rc5/hosts/tree?v=localhost:10000&v=hzgxenvtest:10000&f=sys/tg_test/*`:
-
-
-__IMPLEMENTATION NOTE:__ this responseis based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
 
 ### Devices:
 
@@ -168,6 +164,9 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
   }
 ]
 ```
+
+__IMPLEMENTATION NOTE:__ this response is based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
+
 
 ## Attributes
 
