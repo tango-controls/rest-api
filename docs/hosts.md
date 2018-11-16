@@ -193,7 +193,7 @@ __IMPLEMENTATION NOTE:__ this response is based on sequential execution of Tango
 ]
 ```
 
-### read
+**read**
 
 `GET /attributes/value?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w`
 ```json
@@ -217,7 +217,7 @@ __IMPLEMENTATION NOTE:__ this response is based on sequential execution of Tango
 ]
 ```
 
-### write
+**write**
 
 `PUT /attributes[?async=true]`
 ```json
