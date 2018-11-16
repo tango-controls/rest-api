@@ -4,7 +4,6 @@
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc5/hosts/tree?v={tango_host}:{tango_port}&[f={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
 |`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
   
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
@@ -41,6 +40,79 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
 __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango_host:tango_port/sys/DatabaseDs/2/DbInfo command via standard Tango API
 
 `GET /tango/rest/rc5/hosts/tree?v=localhost:10000&v=hzgxenvtest:10000&f=sys/tg_test/*`:
+
+
+__IMPLEMENTATION NOTE:__ this responseis based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
+
+### Devices:
+
+| URL                                         | Response           | Desc
+|-----------------------------------------|------------|--------------------------
+|`GET /hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+|`GET /hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+
+`GET /hosts/localhost/devices`:
+
+__OR__
+
+`GET /hosts/localhost/devices?wildcard=sys*/*/1`:
+```JSON
+[
+    {
+        "name":"sys/tg_test/1",
+        "alias":"test_device",
+        "href":"<prefix>/devices/sys/tg_test/1"
+    },
+    {
+        "name":"sys/tg_test/2",
+        "alias":null,//maybe skipped
+        "href":"<prefix>/devices/sys/tg_test/2"
+    },
+    ...
+]
+```
+
+__IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/databaseds/2/DbGetDeviceWideList(wildcard) via standard Tango API
+
+## Devices tree 
+
+| URL                                         | Response           | Desc
+|-----------------------------------------|------------|--------------------------
+|`GET /tango/rest/rc5/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
+
+`GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
+  
+```json
+[
+  {
+    "id":"localhost:10000",
+    "$css":"tango_host",
+    "value":"localhost:10000",
+    "data":[
+      {
+        "value":"aliases",
+        "$css":"aliases",
+        "data":[]
+      },
+      {
+        "value":"sys",
+        "data":[
+          {
+            "value":"tg_test",
+            "data":[
+              {"value":"1","$css":"member","isMember":true,"device_name":"sys/tg_test/1","device_id":"localhost:10000/sys/tg_test/1"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+**NOTE**: above is the same as `GET tango/rest/rc5/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
+
+`GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
 
 ```json
 [
@@ -97,44 +169,7 @@ __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango
 ]
 ```
 
-__IMPLEMENTATION NOTE:__ this responseis based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
-
-## Devices:
-
-| URL                                         | Response           | Desc
-|-----------------------------------------|------------|--------------------------
-|`GET /hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
-
-`GET /hosts/localhost/devices`:
-
-__OR__
-
-`GET /hosts/localhost/devices?wildcard=sys*/*/1`:
-```JSON
-[
-    {
-        "name":"sys/tg_test/1",
-        "alias":"test_device",
-        "href":"<prefix>/devices/sys/tg_test/1"
-    },
-    {
-        "name":"sys/tg_test/2",
-        "alias":null,//maybe skipped
-        "href":"<prefix>/devices/sys/tg_test/2"
-    },
-    ...
-]
-```
-
-__IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/databaseds/2/DbGetDeviceWideList(wildcard) via standard Tango API
-
-## Devices tree 
-
-`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}/devices/tree[?f={devices filter}]`  
-  
--- same as `hosts/tree?v={tango_host}:{tango_port}[&f={devices filter}]` by for particular Tango host
-
-# Attributes
+## Attributes
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
@@ -159,7 +194,7 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 ]
 ```
 
-## read
+### read
 
 `GET /attributes/value?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w`
 ```json
@@ -183,7 +218,7 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 ]
 ```
 
-## write
+### write
 
 `PUT /attributes[?async=true]`
 ```json
@@ -206,7 +241,7 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 
 If not _async_ returns array as in [device/attributes write multiple scalar attributes](device.md#write-multiple-scalar-attributes)
 
-# Commands
+## Commands
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
@@ -280,7 +315,7 @@ Response:
 
 If one of the command has failed an error is returned instead of output.
 
-# Pipes
+## Pipes
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
