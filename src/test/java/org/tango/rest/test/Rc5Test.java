@@ -10,6 +10,7 @@ import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
 import org.tango.rest.tree.TangoContainer;
 
+import javax.annotation.Nullable;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -98,8 +99,14 @@ public class Rc5Test {
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("attributes").queryParam("wildcard", "localhost:10000/*/*/*/State");
         List<Attribute> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Attribute>>(){});
 
-        //TODO
-        assertFalse(true);
+        Attribute attribute = Iterables.find(result, new Predicate<Attribute>() {
+            @Override
+            public boolean apply(@Nullable Attribute input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(attribute);
     }
 
     @Test

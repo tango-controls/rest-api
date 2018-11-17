@@ -61,7 +61,65 @@ Assuming _sys/tg_test/1_ has 2 attributes: __string_scalar__ and __long_scalar_w
   "device": "sys/tg_test/1",
   "host": "localhost:10000",
   "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
-  "info":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/info",
+  "info":{
+           "name": "float",
+           "writable": "READ",
+           "data_format": "SCALAR",
+           "data_type": "DevFloat",
+           "max_dim_x": 1,
+           "max_dim_y": 0,
+           "description": "No description",
+           "label": "float",
+           "unit": "No unit",
+           "standard_unit": "No standard unit",
+           "display_unit": "No display unit",
+           "format": "%6.2f",
+           "min_value": "Not specified",
+           "max_value": "Not specified",
+           "min_alarm": "Not specified",
+           "max_alarm": "Not specified",
+           "writable_attr_name": "None",
+           "level": "OPERATOR",
+           "extensions": [],
+           "alarms": {
+             "min_alarm": "Not specified",
+             "max_alarm": "Not specified",
+             "min_warning": "Not specified",
+             "max_warning": "Not specified",
+             "delta_t": "Not specified",
+             "delta_val": "Not specified",
+             "extensions": []
+           },
+           "events": {
+             "ch_event": {
+               "rel_change": "Not specified",
+               "abs_change": "Not specified",
+               "extensions": []
+             },
+             "per_event": {
+               "period": "100",
+               "extensions": [],
+               "tangoObj": {
+                 "period": "100",
+                 "extensions": []
+               }
+             },
+             "arch_event": {
+               "rel_change": "Not specified",
+               "abs_change": "Not specified",
+               "period": "Not specified",
+               "extensions": []
+             }
+           },
+           "sys_extensions": [],
+           "isMemorized": false,
+           "isSetAtInit": true,
+           "memorized": "NOT_MEMORIZED",
+           "root_attr_name": "Not specified",
+           "enum_label": [
+             "Not specified"
+           ]
+         },
   "history":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/history",
   "properties":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/properties"
 }
@@ -194,7 +252,8 @@ Responses with plain value, i.e. no JSON structure:
 ```
 GET /devices/sys/tg_test/1/attributes/long_scalar/value
 Accept: text/plain
-```:
+```
+
 ```JSON
 12345
 ```
@@ -202,7 +261,8 @@ Accept: text/plain
 ```
 GET /devices/sys/tg_test/1/attributes/double_scalar/value
 Accept: text/plain
-```:
+```
+
 ```JSON
 3.14
 ```
@@ -210,7 +270,8 @@ Accept: text/plain
 ```
 GET /devices/sys/tg_test/1/attributes/string_scalar/value
 Accept: text/plain
-```:
+```
+
 ```JSON
 "Hello World!!!"
 ```
@@ -218,7 +279,8 @@ Accept: text/plain
 ```
 GET /devices/sys/tg_test/1/attributes/double_spectrum/value
 Accept: text/plain
-```:
+```
+
 ```JSON
 [3.14, 2.87]
 ```
@@ -230,7 +292,8 @@ For image attributes image value type returns image embedded into response:
 ```
 GET /devices/sys/tg_test/1/attributes/image-attr/value
 Accept: image/jpeg
-```:
+```
+
 ```JSON
 "data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//"
 ```
@@ -240,73 +303,8 @@ Accept: image/jpeg
 
 | URL                                                                                       | Response           | Desc
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
-| `GET /devices/{device.name}/attributes/info?attr={attr1}&attr={attr2}`                 | JSONArray   | – displays attribute infos
-| `GET /devices/{device.name}/attributes/{attribute}/info`                               | JSONObject  | – displays the attribute's info
 | `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
 
-`GET /devices/{device.name}/attributes/{attribute}/info`:
-
-```JSON
-{
-  "name": "float",
-  "writable": "READ",
-  "data_format": "SCALAR",
-  "data_type": "DevFloat",
-  "max_dim_x": 1,
-  "max_dim_y": 0,
-  "description": "No description",
-  "label": "float",
-  "unit": "No unit",
-  "standard_unit": "No standard unit",
-  "display_unit": "No display unit",
-  "format": "%6.2f",
-  "min_value": "Not specified",
-  "max_value": "Not specified",
-  "min_alarm": "Not specified",
-  "max_alarm": "Not specified",
-  "writable_attr_name": "None",
-  "level": "OPERATOR",
-  "extensions": [],
-  "alarms": {
-    "min_alarm": "Not specified",
-    "max_alarm": "Not specified",
-    "min_warning": "Not specified",
-    "max_warning": "Not specified",
-    "delta_t": "Not specified",
-    "delta_val": "Not specified",
-    "extensions": []
-  },
-  "events": {
-    "ch_event": {
-      "rel_change": "Not specified",
-      "abs_change": "Not specified",
-      "extensions": []
-    },
-    "per_event": {
-      "period": "100",
-      "extensions": [],
-      "tangoObj": {
-        "period": "100",
-        "extensions": []
-      }
-    },
-    "arch_event": {
-      "rel_change": "Not specified",
-      "abs_change": "Not specified",
-      "period": "Not specified",
-      "extensions": []
-    }
-  },
-  "sys_extensions": [],
-  "isMemorized": false,
-  "isSetAtInit": true,
-  "memorized": "NOT_MEMORIZED",
-  "root_attr_name": "Not specified",
-  "enum_label": [
-    "Not specified"
-  ]
-}
-```
 
 __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from Tango API 
 

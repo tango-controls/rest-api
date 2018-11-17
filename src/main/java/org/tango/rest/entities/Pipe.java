@@ -7,6 +7,7 @@ import fr.esrf.TangoApi.PipeInfo;
  * @since 17.12.2015
  */
 public class Pipe {
+    public String id;
     public String name;
     public String device;
     public String host;

@@ -8,6 +8,7 @@ import java.net.URI;
  * @since 27.11.2015
  */
 public class Device {
+    public String id;
     public String name;
     public String host;
     public DeviceInfo info;

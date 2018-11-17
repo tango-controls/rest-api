@@ -7,6 +7,7 @@ import java.util.List;
  * @since 11/14/18
  */
 public class TangoHost {
+    public String id;
     public String host;
     public String port;
     public String name;

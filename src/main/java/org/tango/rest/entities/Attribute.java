@@ -5,11 +5,12 @@ package org.tango.rest.entities;
  * @since 17.12.2015
  */
 public class Attribute {
+    public String id;
     public String name;
     public String device;
     public String host;
     public String value;
-    public String info;
+    public AttributeInfo info;
     public String properties;
     public String history;
 }
