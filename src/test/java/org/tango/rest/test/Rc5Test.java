@@ -2,6 +2,8 @@ package org.tango.rest.test;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import fr.esrf.Tango.ErrSeverity;
 import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -108,6 +110,60 @@ public class Rc5Test {
 
         assertNotNull(attribute);
     }
+
+    @Test
+    public void testAttributeValuesRead(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("attributes/value").queryParam("wildcard", "localhost:10000/*/*/*/State");
+        List<AttributeValue> result = client.target(uriBuilder.build()).request().get(new GenericType<List<AttributeValue>>(){});
+
+        AttributeValue attribute = Iterables.find(result, new Predicate<AttributeValue>() {
+            @Override
+            public boolean apply(@Nullable AttributeValue input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertEquals("RUNNING", attribute.value);
+    }
+
+    @Test
+    public void testAttributeValuesWrite(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("attributes/value");
+        List<AttributeValue> result = client.target(uriBuilder.build()).request().put(
+                Entity.entity(Lists.<AttributeValue>newArrayList(
+                    new AttributeValue<>("double_scalar_w","localhost:10000","sys/tg_test/1",3.14D,null,0L)
+                ),MediaType.APPLICATION_JSON_TYPE),
+                new GenericType<List<AttributeValue>>(){});
+
+        AttributeValue attribute = Iterables.find(result, new Predicate<AttributeValue>() {
+            @Override
+            public boolean apply(@Nullable AttributeValue input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertEquals(3.14, attribute.value);
+    }
+
+    @Test
+    public void testAttributeValuesWrite_wrongValueType(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("attributes/value");
+        List<AttributeValue> result = client.target(uriBuilder.build()).request().put(
+                Entity.entity(Lists.<AttributeValue>newArrayList(
+                        new AttributeValue<>("double_scalar_w","localhost:10000","sys/tg_test/1","Hello World!",null,0L)
+                ),MediaType.APPLICATION_JSON_TYPE),
+                new GenericType<List<AttributeValue>>(){});
+
+        AttributeValue attribute = Iterables.find(result, new Predicate<AttributeValue>() {
+            @Override
+            public boolean apply(@Nullable AttributeValue input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertSame(ErrSeverity.PANIC, attribute.errors[0].severity);
+    }
+
 
     @Test
     public void testCommands(){
