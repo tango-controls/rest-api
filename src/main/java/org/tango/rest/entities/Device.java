@@ -21,14 +21,15 @@ public class Device {
     public Device() {
     }
 
-    public Device(String name, String host, DeviceInfo info, String attributes, String commands, String pipes, String properties, final URI href) {
+    public Device(String id, String name, String host, DeviceInfo info, final URI href) {
+        this.id = id;
         this.name = name;
         this.host = host;
         this.info = info;
-        this.attributes = attributes;
-        this.commands = commands;
-        this.pipes = pipes;
-        this.properties = properties;
+        this.attributes = href + "/attributes";
+        this.commands = href + "/commands";
+        this.pipes = href + "/pipes";
+        this.properties = href + "/properties";
         this.state = href + "/state";
     }
 }
