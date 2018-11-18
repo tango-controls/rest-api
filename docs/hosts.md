@@ -286,14 +286,18 @@ If not _async_ returns array as in [device/attributes write multiple scalar attr
 ```json
 [
   {
-    "command":"localhost:10000/sys/tg_test/1/DevString",
+    "id":"localhost:10000/sys/tg_test/1/DevString",
+    "host": "localhost:10000",
+    "device":"sys/tg_test/1",
+    "name":"DevString",
     "input": "Hello World!!!"
   },
   {
-    "command":"localhost:10000/sys/tg_test/2/DevDouble",
+    "host": "localhost:10000",
+    "device":"sys/tg_test/1",
+    "name":"DevDouble",
     "input": 3.14
-  },
-  ...
+  }
 ]
 ```
 
@@ -301,14 +305,13 @@ Response:
 ```json
 [
   {
-    "command":"sys/tg_test/1/DevString",
+    "host":"localhost:10000",
     "output": "Hello World!!!"
   },
   {
     "command":"sys/tg_test/2/DevDouble",
     "output": 3.14
-  },
-  ...
+  }
 ]
 ```
 

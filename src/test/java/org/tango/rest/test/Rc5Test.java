@@ -10,11 +10,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
-import org.tango.rest.tree.TangoContainer;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -186,8 +184,50 @@ public class Rc5Test {
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("commands").queryParam("wildcard", "localhost:10000/*/*/*/init");
         List<Command> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Command>>(){});
 
-        //TODO
-        assertFalse(true);
+        Command command = Iterables.find(result, new Predicate<Command>() {
+            @Override
+            public boolean apply(@Nullable Command input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(command);
+        assertEquals("localhost:10000/sys/tg_test/1/init", command.id);
+        assertEquals("init", command.name);
+        assertEquals("sys/tg_test/1", command.device);
+        assertEquals("localhost:10000", command.host);
+        assertEquals("OPERATOR", command.info.level);
+    }
+
+    @Test
+    public void testCommands_execute(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("commands");
+        List<CommandInOut<?,?>> result = client.target(uriBuilder.build()).request().put(
+                Entity.entity(Lists.<CommandInOut<?,?>>newArrayList(
+                        new CommandInOut<Double,Double>("localhost:10000","sys/tg_test/1","DevDouble",3.14D),
+                        new CommandInOut<String,String>("localhost:10000","sys/tg_test/1","DevString","Hello World!")
+                ),MediaType.APPLICATION_JSON_TYPE)
+                ,new GenericType<List<CommandInOut<?,?>>>(){});
+
+        CommandInOut<?, ?> command = Iterables.find(result, new Predicate<CommandInOut<?, ?>>() {
+            @Override
+            public boolean apply(@Nullable CommandInOut<?, ?> input) {
+                return input.name.equalsIgnoreCase("DevString");
+            }
+        });
+
+        assertNotNull(command);
+        assertEquals("Hello World!", command.output);
+
+        command = Iterables.find(result, new Predicate<CommandInOut<?, ?>>() {
+            @Override
+            public boolean apply(@Nullable CommandInOut<?, ?> input) {
+                return input.name.equalsIgnoreCase("DevDouble");
+            }
+        });
+
+        assertNotNull(command);
+        assertEquals(3.14D, command.output);
     }
 
     @Test
@@ -314,6 +354,10 @@ public class Rc5Test {
                 .request().get(Command.class);
 
 
+        assertEquals("localhost:10000/sys/tg_test/1/DevString", cmd.id);
+        assertEquals("DevString", cmd.name);
+        assertEquals("sys/tg_test/1", cmd.device);
+        assertEquals("localhost:10000", cmd.host);
         assertEquals("OPERATOR", cmd.info.level);
     }
 
@@ -321,14 +365,35 @@ public class Rc5Test {
     public void testExecuteCommand(){
         URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("commands").path("DevString").build();
 
-        CommandResult<String> result = client.target(uri)
+        CommandInOut<String, String> input = new CommandInOut<>();
+        input.input = "Hello World!!!";
+
+        CommandInOut<String,String> result = client.target(uri)
                 .request()
+//                .header("Accept", MediaType.APPLICATION_JSON)
                 .put(
-                        Entity.entity("Hello World!!!", MediaType.TEXT_PLAIN_TYPE),
-                        new GenericType<CommandResult<String>>() {
+                        Entity.entity(input, MediaType.APPLICATION_JSON_TYPE),
+                        new GenericType<CommandInOut<String, String>>() {
                 });
 
         assertEquals("Hello World!!!", result.output);
+    }
+
+//    @Test
+    public void testExecuteCommand_AcceptPlain(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("commands").path("DevString").build();
+
+        CommandInOut<String, String> input = new CommandInOut<>();
+        input.input = "Hello World!!!";
+
+        String result = client.target(uri)
+                .request()
+                .header("Accept", MediaType.TEXT_PLAIN)
+                .put(
+                        Entity.entity(input, MediaType.APPLICATION_JSON_TYPE),
+                        String.class);
+
+        assertEquals("Hello World!!!", result);
     }
 
     //TODO properties

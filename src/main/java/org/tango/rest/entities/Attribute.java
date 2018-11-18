@@ -1,5 +1,8 @@
 package org.tango.rest.entities;
 
+import fr.esrf.Tango.DevError;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.net.URI;
 
 /**
@@ -15,6 +18,8 @@ public class Attribute {
     public String value;
     public String properties;
     public String history;
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    public DevError[] errors;
 
     public Attribute() {
     }
