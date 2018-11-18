@@ -204,7 +204,11 @@ public class Rc5Test {
                 .request().get(Attribute.class);
 
         assertNotNull(attribute);
+        assertEquals("localhost:10000/sys/tg_test/1/long_scalar_w", attribute.id);
+        assertEquals("localhost:10000", attribute.host);
+        assertEquals("sys/tg_test/1", attribute.device);
         assertEquals("long_scalar_w", attribute.name);
+        assertEquals("long_scalar_w", attribute.info.name);
     }
 
     @Test
