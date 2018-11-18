@@ -1,6 +1,6 @@
 package org.tango.rest.entities;
 
-import java.util.List;
+import java.net.URI;
 
 /**
  * @author Igor Khokhriakov <igor.khokhriakov@hzg.de>
@@ -18,12 +18,13 @@ public class TangoHost {
     public TangoHost() {
     }
 
-    public TangoHost(String host, String port, String name, String[] info, String devices, String tree) {
+    public TangoHost(String host, String port, String name, String[] info, URI href) {
+        this.id = host + ":" + port;
         this.host = host;
         this.port = port;
         this.name = name;
         this.info = info;
-        this.devices = devices;
-        this.tree = tree;
+        this.devices = href + ";port=" + port + "/devices";
+        this.tree = href + ";port=" + port + "/devices/tree";
     }
 }

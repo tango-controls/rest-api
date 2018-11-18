@@ -13,6 +13,7 @@ import org.tango.rest.entities.*;
 import org.tango.rest.tree.TangoContainer;
 
 import javax.annotation.Nullable;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -60,8 +61,10 @@ public class Rc5Test {
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("hosts/localhost");
         TangoHost result = client.target(uriBuilder.build()).request().get(TangoHost.class);
 
-        //TODO
-        assertFalse(true);
+        assertEquals("localhost:10000", result.id);
+        assertEquals("localhost", result.host);
+        assertEquals("10000", result.port);
+        assertEquals("sys/database/2", result.name);
     }
 
     @Test
@@ -70,6 +73,19 @@ public class Rc5Test {
         Response result = client.target(uriBuilder.build()).request().get();
 
         org.junit.Assert.assertSame(result.getStatusInfo(), Response.Status.BAD_REQUEST);
+    }
+
+    @Test
+    public void testTangoTestIsPresent(){
+        List<NamedEntity> result = client.target(CONTEXT.devicesUri).request().get(new GenericType<List<NamedEntity>>() {
+        });
+
+        assertTrue(Iterables.tryFind(result, new Predicate<NamedEntity>() {
+            @Override
+            public boolean apply(NamedEntity input) {
+                return input.name.equals(CONTEXT.SYS_TG_TEST_1);
+            }
+        }).isPresent());
     }
 
     @Test
@@ -184,18 +200,7 @@ public class Rc5Test {
     }
 
 
-    @Test
-    public void testTangoTestIsPresent(){
-        List<NamedEntity> result = client.target(CONTEXT.devicesUri).request().get(new GenericType<List<NamedEntity>>() {
-        });
 
-        assertTrue(Iterables.tryFind(result, new Predicate<NamedEntity>() {
-            @Override
-            public boolean apply(NamedEntity input) {
-                return input.name.equals(CONTEXT.SYS_TG_TEST_1);
-            }
-        }).isPresent());
-    }
 
     @Test
     public void testAttribute(){
@@ -276,7 +281,7 @@ public class Rc5Test {
 
                 .request().header("Accept", "image/jpeg").get(String.class);
 
-        assertTrue(value.startsWith("data:/jpeg;base64"));
+        fail();
     }
 
     @Test
@@ -374,7 +379,7 @@ public class Rc5Test {
         assertNotNull(result.value);
     }
 
-    @Test(expected = InternalServerErrorException.class)//HTTP 500
+    @Test(expected = BadRequestException.class)
     public void testNoValue(){
         URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").path("no_value").path("value").build();
 
