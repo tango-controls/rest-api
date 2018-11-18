@@ -269,6 +269,16 @@ public class Rc5Test {
         assertTrue(value.startsWith("data:/jpeg;base64"));
     }
 
+    @Test(expected = javax.ws.rs.BadRequestException.class)
+    public void testAttributeValueImage_nonImageAttribute(){
+        //again if this one does not fail test passes
+        String value = client.target(CONTEXT.longScalarWUri).path("value")
+
+                .request().header("Accept", "image/jpeg").get(String.class);
+
+        assertTrue(value.startsWith("data:/jpeg;base64"));
+    }
+
     @Test
     public void testWriteAttributeAsync(){
         URI uri = UriBuilder.fromUri(CONTEXT.longScalarWUri).path("value").queryParam("v", 123456).queryParam("async", true).build();

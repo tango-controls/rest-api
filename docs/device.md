@@ -294,8 +294,10 @@ GET /devices/sys/tg_test/1/attributes/image-attr/value
 Accept: image/jpeg
 ```
 
-```JSON
-"data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//"
+```
+Content-Disposition: inline
+ 
+data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//
 ```
 
 

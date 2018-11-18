@@ -58,8 +58,8 @@ public class Context {
 
         UriBuilder uriBuilder = UriBuilder.fromUri(result.uri).path("hosts").path(result.tango_host).matrixParam("port", result.tango_port).path("devices");
         result.devicesUri = uriBuilder.build();
-        result.longScalarWUri = uriBuilder.path(SYS_TG_TEST_1).path("attributes").path("long_scalar_w").build();
-        result.uShortImageRO = uriBuilder.path(SYS_TG_TEST_1).path("attributes").path("ushort_image_ro").build();
+        result.longScalarWUri = UriBuilder.fromUri(result.devicesUri).path(SYS_TG_TEST_1).path("attributes").path("long_scalar_w").build();
+        result.uShortImageRO = UriBuilder.fromUri(result.devicesUri).path(SYS_TG_TEST_1).path("attributes").path("ushort_image_ro").build();
 
         return result;
     }
