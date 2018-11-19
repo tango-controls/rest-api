@@ -74,6 +74,14 @@ public class Rc5Test {
     }
 
     @Test
+    public void testTangoHostDevices(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri);
+        List<Device> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Device>>(){});
+
+        assertFalse(result.isEmpty());
+    }
+
+    @Test
     public void testTangoTestIsPresent(){
         List<NamedEntity> result = client.target(CONTEXT.devicesUri).request().get(new GenericType<List<NamedEntity>>() {
         });
@@ -192,8 +200,8 @@ public class Rc5Test {
         });
 
         assertNotNull(command);
-        assertEquals("localhost:10000/sys/tg_test/1/init", command.id);
-        assertEquals("init", command.name);
+        assertEquals("localhost:10000/sys/tg_test/1/Init", command.id);
+        assertEquals("Init", command.name);
         assertEquals("sys/tg_test/1", command.device);
         assertEquals("localhost:10000", command.host);
         assertEquals("OPERATOR", command.info.level);
@@ -232,11 +240,17 @@ public class Rc5Test {
 
     @Test
     public void testPipes(){
-        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("pipes").queryParam("wildcard", "localhost:10000/*/*/*/*");
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("pipes").queryParam("wildcard", "localhost:10000/*/*/*/string_long_short_ro");
         List<Pipe> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Pipe>>(){});
 
-        //TODO
-        assertFalse(true);
+        Pipe pipe = Iterables.find(result, new Predicate<Pipe>() {
+            @Override
+            public boolean apply(@Nullable Pipe input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(pipe);
     }
 
 
@@ -282,6 +296,23 @@ public class Rc5Test {
         assertNotNull(info.version);
         assertEquals("TangoTest/test", info.server);
         assertNotNull(info.hostname);
+    }
+
+    @Test
+    public void testTangoTestAttributes() {
+        //if it does not fail with deserialization exception response confronts API spec
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes");
+        URI uri = uriBuilder.build();
+        List<Attribute> result = client.target(uri).request().get(new GenericType<List<Attribute>>(){});
+
+        Attribute attribute = Iterables.find(result, new Predicate<Attribute>() {
+            @Override
+            public boolean apply(@Nullable Attribute input) {
+                return input.name.equalsIgnoreCase("double_scalar");
+            }
+        });
+
+        assertNotNull(attribute);
     }
 
     @Test
@@ -343,6 +374,17 @@ public class Rc5Test {
                 });
 
         assertArrayEquals(new double[]{3.14,2.87,1.44},result.value, 0.0);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testWriteAttribute_doesNotExists(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").path("XXX").path("value").queryParam("v", "3.14,2.87,1.44").build();//TODO native array does not work
+
+        AttributeValue<double[]> result = client.target(uri)
+                .request().put(null, new GenericType<AttributeValue<double[]>>() {
+                });
+
+        fail();
     }
 
     @Test

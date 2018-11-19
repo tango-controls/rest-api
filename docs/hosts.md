@@ -1,6 +1,6 @@
 [TOC]
 
-## Tango host:port (database)
+## TangoHost
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
@@ -32,7 +32,7 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
             "Object properties defined  = 0 [History lgth = 0]"
         ],
     "devices" : "<prefix>/devices",
-    "tree" : "<prefix>/tree"
+    "tree" : "<prefix>/devices/tree"
 }
 
 ```
@@ -187,7 +187,7 @@ __IMPLEMENTATION NOTE:__ this response is based on sequential execution of Tango
     {
       "name":"double_scalar_w",
       "device": "sys/tg_test/2",
-      "host":"localhost:10000"
+      "host":"hzgxenvtest:10000"
     },
     ...
 ]

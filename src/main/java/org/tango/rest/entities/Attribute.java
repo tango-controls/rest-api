@@ -24,8 +24,8 @@ public class Attribute {
     public Attribute() {
     }
 
-    public Attribute(String id, String name, String device, String host, AttributeInfo info, URI href) {
-        this.id = id;
+    public Attribute(String host, String device, String name, AttributeInfo info, URI href) {
+        this.id = host + "/" + device + "/" + name;
         this.name = name;
         this.device = device;
         this.host = host;
