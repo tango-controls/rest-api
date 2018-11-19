@@ -10,6 +10,7 @@ import java.net.URI;
 public class Device {
     public String id;
     public String name;
+    public String alias;
     public String host;
     public DeviceInfo info;
     public String attributes;
@@ -21,10 +22,11 @@ public class Device {
     public Device() {
     }
 
-    public Device(String id, String name, String host, DeviceInfo info, final URI href) {
+    public Device(String id, String name, String host, String alias, DeviceInfo info, final URI href) {
         this.id = id;
         this.name = name;
         this.host = host;
+        this.alias = alias;
         this.info = info;
         this.attributes = href + "/attributes";
         this.commands = href + "/commands";
