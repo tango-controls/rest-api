@@ -1,6 +1,6 @@
 [TOC]
 
-## API version and Security
+# API version and Security
 
 _api_version_ follows URL prefix and defines which version of this API supports current implementation.
 
@@ -16,20 +16,20 @@ Example:
 
 `GET /tango/rest/non_existing_version` => `HTTP 404`
 
-All resources under _api_version_ must be protected and require an authentication (specification allows non-protected resources but this is strictly not recommended).
+All resources must be protected and require an authentication (specification allows non-protected resources but this is strictly not recommended).
 
 Implementation SHOULD implement some of the standard [WWW-Authenticate](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) types.
 
 For instance, when protected by Basic:
 
-`GET /tango/rest/rc5` =>
+`GET /tango/rest` =>
 ```
 HTTP OK
 WWW-Authenticate: Basic realm="Tango-Controls Realm" 
 ```
 ```JSON
 {
-    "hosts":"/tango/rest/rc5/hosts"
+    "rc5":"http://hzgcttest:8080/tango/rest/rc5"
 }
 ```
 
@@ -38,7 +38,7 @@ and follow the standard Web Basic Authorization mechanism.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
-## Links
+# Links
 
 Implementation SHOULD attach a number of links to a particular response. For instance most of the response types may include _self_ link:
 
@@ -61,7 +61,7 @@ See [Link header](http://tools.ietf.org/html/rfc5988)
 
 Implementation MUST prefer lower case urls in links e.g. `DevString` (command name) -> `devstring`.
 
-## Filters
+# Filters
 
 Any response can be supplied with a filter parameter:
 
@@ -116,7 +116,7 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-## Pages
+# Pages
 
 |  URL           |  Response | Desc
 |----------------|-----------|---------------------------------------------------
@@ -136,7 +136,7 @@ The implementation MUST return corresponding HTTP headers:
         max : maximum number of element per request
     Link: can return several URI to the previous and next range, the first and last range ...
 
-## Errors
+# Errors
 
 Any error MUST return status code __400__ (BadRequest). Except few cases: see below.
 

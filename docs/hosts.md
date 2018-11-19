@@ -1,14 +1,47 @@
 [TOC]
 
-## TangoHost
+# Tango Controls as RESTful resources
+
+Tango REST API provides RESTful view of Tango Controls. Tango Controls entities are mapped to a tree structure:
+
+```
+/hosts/
+   {tango host}/devices
+       {tango device}/attributes
+                     {tango attribute}/properties
+                                      {tango attribute property}
+                                      /history
+                                      /value
+                     /commands
+                     {tango command}/history
+                     /pipes
+                     {tango pipe}/value          
+                     /properties
+                     {tango device property}                     
+```
+
+In addition Tango REST API provides several entry points for bulk operations:
+
+```
+/devices
+/attributes
+/commands
+/pipes
+```
+
+# TangoHost
+
+Tango host resides under _hosts_ collection. Each Tango host is specified by the host name and optionally a port.
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc5/hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
+|`GET /hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
   
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
-`GET /tango/rest/rc5/hosts/hzgxenvtest`:
+```http request
+GET /tango/rest/rc5/hosts/hzgxenvtest
+```
 ```json
 
 {
@@ -40,18 +73,21 @@ _tango_host_ and _tango_port_ are not known in advance, as user may ask for an a
 __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango_host:tango_port/sys/DatabaseDs/2/DbInfo command via standard Tango API
 
 
-### Devices:
+### Tango host devices
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
 |`GET /hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
-|`GET /hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 
-`GET /hosts/localhost/devices`:
+```http request
+GET /hosts/localhost/devices
+```
 
 __OR__
 
-`GET /hosts/localhost/devices?wildcard=sys*/*/1`:
+```http request
+GET /hosts/localhost/devices?wildcard=sys*/*/1
+```
 ```JSON
 [
     {
@@ -60,55 +96,133 @@ __OR__
         "href":"<prefix>/devices/sys/tg_test/1"
     },
     {
-        "name":"sys/tg_test/2",
+        "name":"sys/access_control/1",
         "alias":null,//maybe skipped
-        "href":"<prefix>/devices/sys/tg_test/2"
-    },
-    ...
+        "href":"<prefix>/devices/sys/access_control/1"
+    }
 ]
 ```
 
 __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/databaseds/2/DbGetDeviceWideList(wildcard) via standard Tango API
 
-## Devices tree 
+### Tango host devices tree
+
+| URL                                         | Response           | Desc
+|-----------------------------------------|------------|--------------------------
+|`GET /hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+
+```http request
+GET /hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*
+```
+
+```json
+[
+  {
+    "id": "localhost:10000",
+    "value": "localhost:10000",
+    "$css": "tango_host",
+    "data": [
+      {
+        "value": "aliases",
+        "$css": "aliases",
+        "data": []
+      },
+      {
+        "value": "sys",
+        "$css": "tango_domain",
+        "data": [
+          {
+            "value": "tg_test",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/sys/tg_test/1",
+                "value": "1",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "sys/tg_test/1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "value": "test2",
+        "$css": "tango_domain",
+        "data": [
+          {
+            "value": "debian8",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/test2/debian8/20",
+                "value": "20",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "test2/debian8/20"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "isAlive": true
+  }
+]
+```
+
+# Devices tree 
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
 |`GET /tango/rest/rc5/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
 
-`GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
+```http request
+GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*
+```  
   
 ```json
 [
   {
-    "id":"localhost:10000",
-    "$css":"tango_host",
-    "value":"localhost:10000",
-    "data":[
+    "id": "localhost:10000",
+    "value": "localhost:10000",
+    "$css": "tango_host",
+    "data": [
       {
-        "value":"aliases",
-        "$css":"aliases",
-        "data":[]
+        "value": "aliases",
+        "$css": "aliases",
+        "data": []
       },
       {
-        "value":"sys",
-        "data":[
+        "value": "sys",
+        "$css": "tango_domain",
+        "data": [
           {
-            "value":"tg_test",
-            "data":[
-              {"value":"1","$css":"member","isMember":true,"device_name":"sys/tg_test/1","device_id":"localhost:10000/sys/tg_test/1"}
+            "value": "tg_test",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/sys/tg_test/1",
+                "value": "1",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "sys/tg_test/1"
+              }
             ]
           }
         ]
       }
-    ]
+    ],
+    "isAlive": true
   }
 ]
 ```
 
 **NOTE**: above is the same as `GET tango/rest/rc5/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
 
-`GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
+```http request
+GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*
+```
 
 ```json
 [
@@ -168,59 +282,117 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 __IMPLEMENTATION NOTE:__ this response is based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
 
 
-## Attributes
+# Attributes
+
+Attributes resource allows bulk listing, reading and writing of tango attributes
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
-| `GET /attributes?wildcard=*[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
+| `GET /attributes?wildcard={tango_host}[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
 
-`GET /attributes?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w` 
+```http request
+GET /attributes?wildcard=localhost/sys/tg_test/*/State
+``` 
 
 
 ```json
 [
-    {
-      "name":"long_scalar_w",
-      "device": "sys/tg_test/1",
-      "host": "localhost:10000"
+  {
+    "id": "localhost:10000/sys/tg_test/1/State",
+    "name": "State",
+    "device": "sys/tg_test/1",
+    "host": "localhost:10000",
+    "info": {
+      "name": "State",
+      "writable": "READ",
+      "data_format": "SCALAR",
+      "data_type": "State",
+      "max_dim_x": 1,
+      "max_dim_y": 0,
+      "description": "No description",
+      "label": "State",
+      "unit": "No unit",
+      "standard_unit": "No standard unit",
+      "display_unit": "No display unit",
+      "format": "%6.2f",
+      "min_value": "Not specified",
+      "max_value": "Not specified",
+      "min_alarm": "Not specified",
+      "max_alarm": "Not specified",
+      "writable_attr_name": "None",
+      "level": "OPERATOR",
+      "alarms": {
+        "min_alarm": "Not specified",
+        "max_alarm": "Not specified",
+        "min_warning": "Not specified",
+        "max_warning": "Not specified",
+        "delta_t": "Not specified",
+        "delta_val": "Not specified",
+        "extensions": []
+      },
+      "events": {
+        "ch_event": {
+          "rel_change": "Not specified",
+          "abs_change": "Not specified",
+          "extensions": []
+        },
+        "per_event": {
+          "period": "1000",
+          "extensions": []
+        },
+        "arch_event": {
+          "rel_change": "Not specified",
+          "abs_change": "Not specified",
+          "period": "Not specified",
+          "extensions": []
+        }
+      },
+      "extensions": [],
+      "sys_extensions": [],
+      "isMemorized": false,
+      "isSetAtInit": false,
+      "memorized": "UNKNOWN",
+      "root_attr_name": "Not specified",
+      "enum_label": null
     },
-    {
-      "name":"double_scalar_w",
-      "device": "sys/tg_test/2",
-      "host":"hzgxenvtest:10000"
-    },
-    ...
+    "value": "http://localhost:10001/tango/rest/rc5/hosts/localhost;port=10000/devices/sys/tg_test/1/attributes/State/value",
+    "properties": "http://localhost:10001/tango/rest/rc5/hosts/localhost;port=10000/devices/sys/tg_test/1/attributes/State/properties",
+    "history": "http://localhost:10001/tango/rest/rc5/hosts/localhost;port=10000/devices/sys/tg_test/1/attributes/State/history"
+  }
 ]
 ```
 
 **read**
 
-`GET /attributes/value?wildcard=localhost/sys/*/1/long_scalar_w&wildcard=hzgxenvtest/sys/*/2/double_scalar_w`
+```http request
+GET /attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/sys/database/*/State
+```
 ```json
 [
-    {
-        "name": "long_scalar_w",
-        "device": "sys/tg_test/1",
-        "host":"localhost:10000",
-        "value": 12345,
-        "quality": "ATTR_VALID",
-        "timestamp": 123456789
-    },
-    {
-        "name": "double_scalar_w",
-        "device": "sys/tg_test/2",
-        "host":"hzgxenvtest:10000",
-        "value": 3.14,
-        "quality": "ATTR_VALID",
-        "timestamp": 123456789
-    }
+  {
+    "name": "State",
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "value": "RUNNING",
+    "quality": "ATTR_VALID",
+    "timestamp": 1542635644117
+  },
+  {
+    "name": "State",
+    "host": "localhost:10000",
+    "device": "sys/database/2",
+    "value": "ON",
+    "quality": "ATTR_VALID",
+    "timestamp": 1542635644131
+  }
 ]
 ```
 
 **write**
 
-`PUT /attributes[?async=true]`
-```json
+```http request
+PUT /attributes
+
 [
   {
     "name":"long_scalar_w",
@@ -233,60 +405,126 @@ __IMPLEMENTATION NOTE:__ this response is based on sequential execution of Tango
     "device": "sys/tg_test/2",
     "host":"hzgxenvtest:10000",
     "value":3.14
-  },
-  ...
+  }
 ]
 ```
-
-If not _async_ returns array as in [device/attributes write multiple scalar attributes](device.md#write-multiple-scalar-attributes)
-
-## Commands
-
-| URL                                     | Response   | Desc
-|-----------------------------------------|------------|--------------------------
-| `GET /commands?wildcard=*[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
-
-`GET /commands?wildcard=localhost/sys/*/*/Dev*`
 
 ```json
 [
-    {
-      "name":"DevString",
-      "device":"sys/tg_test/1",
-      "host": "localhost:10000",
-      "history":"<prefix>/devices/sys/tg_test/1/commands/devstring/history",
-      "info":{
-        "level":"OPERATOR",
-        "cmd_tag":0,
-        "in_type":"DevString",
-        "out_type":"DevString",
-        "in_type_desc":"-",
-        "out_type_desc":"-"
-      }
-    },
-    {
-      "name":"DevDouble",
-      "device":"sys/tg_test/1",
-      "host": "localhost:10000",
-      "history":"<prefix>/devices/sys/tg_test/1/commands/devdouble/history",
-      "info":{
-        "level":"OPERATOR",
-        "cmd_tag":0,
-        "in_type":"DevDouble",
-        "out_type":"DevDouble",
-        "in_type_desc":"-",
-        "out_type_desc":"-"
-      }
-    },
-    ...
+  {
+    "name": "long_scalar_w",
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "value": 1234,
+    "quality": "ATTR_VALID",
+    "timestamp": 1542635799983
+  },
+  {
+    "name": "double_scalar_w",
+    "host": "hzgxenvtest:10000",
+    "device": "sys/tg_test/2",
+    "value": 3.14,
+    "quality": "ATTR_VALID",
+    "timestamp": 1542635800004
+  }
 ]
 ```
+
+```http request
+PUT /attributes?async=true
+
+[
+  {
+    "name":"long_scalar_w",
+    "device": "sys/tg_test/1",
+    "host":"localhost:10000",
+    "value":1234
+  },
+  {
+    "name":"double_scalar_w",
+    "device": "sys/tg_test/2",
+    "host":"hzgxenvtest:10000",
+    "value":3.14
+  }
+]
+```
+
+```
+HTTP/1.1 204 
+
+<Response body is empty>
+```
+
+**error**
+
+```http request
+GET /attributes/value?wildcard=localhost/sys/tg_test/*/ampli&wildcard=localhost/sys/tg_test/*/throw_exception
+```
+
+```json
+[
+  {
+    "name": "ampli",
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "value": 0.0,
+    "quality": "ATTR_VALID",
+    "timestamp": 1542637586634
+  },
+  {
+    "errors": [
+      {
+        "reason": "exception test",
+        "description": "here is the exception you requested",
+        "severity": "ERR",
+        "origin": "TangoTest::read_throw_exception"
+      }
+    ],
+    "quality": "FAILURE",
+    "timestamp": 1542637586657
+  }
+]
+```
+
+# Commands
+
+Commands resource allows bulk listing and execution of tango commands
+
+| URL                                     | Response   | Desc
+|-----------------------------------------|------------|--------------------------
+| `GET /commands?wildcard={host}[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
+
+```http request
+GET /commands?wildcard=localhost/sys/*/*/DevDouble
+```
+
+```json
+[
+  {
+    "id": "localhost:10000/sys/tg_test/1/DevDouble",
+    "name": "DevDouble",
+    "device": "sys/tg_test/1",
+    "host": "localhost:10000",
+    "info": {
+      "cmd_name": "DevDouble",
+      "level": "OPERATOR",
+      "cmd_tag": 0,
+      "in_type": "DevDouble",
+      "out_type": "DevDouble",
+      "in_type_desc": "Any DevDouble value",
+      "out_type_desc": "Echo of the argin value"
+    },
+    "history": "http://localhost:10001/tango/rest/rc5/hosts/localhost;port=10000/devices/sys/tg_test/1/commands/DevDouble/history"
+  }
+]
+```
+
+**execute**
 
 `PUT /commands`
 ```json
 [
   {
-    "id":"localhost:10000/sys/tg_test/1/DevString",
     "host": "localhost:10000",
     "device":"sys/tg_test/1",
     "name":"DevString",
@@ -297,6 +535,11 @@ If not _async_ returns array as in [device/attributes write multiple scalar attr
     "device":"sys/tg_test/1",
     "name":"DevDouble",
     "input": 3.14
+  },
+  {
+    "host": "localhost:10000",
+    "device":"sys/tg_test/1",
+    "name":"CrashFromDeveloperThread"
   }
 ]
 ```
@@ -305,19 +548,36 @@ Response:
 ```json
 [
   {
-    "host":"localhost:10000",
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "name": "DevString",
+    "input": "Hello World!!!",
     "output": "Hello World!!!"
   },
   {
-    "command":"sys/tg_test/2/DevDouble",
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "name": "DevDouble",
+    "input": 3.14,
     "output": 3.14
+  },
+  {
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
+    "name": "CrashFromDeveloperThread",
+    "errors": [
+      {
+        "reason": "API_CommandNotFound",
+        "severity": "ERR",
+        "desc": "Command CrashFromDeveloperThread not found",
+        "origin": "Device_2Impl::command_query_2"
+      }
+    ]
   }
 ]
 ```
 
-If one of the command has failed an error is returned instead of output.
-
-## Pipes
+# Pipes
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
