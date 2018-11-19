@@ -56,7 +56,7 @@ public class Rc5Test {
 
     @Test
     public void testHost(){
-        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("hosts/localhost");
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("hosts/localhost;port=10000");
         TangoHost result = client.target(uriBuilder.build()).request().get(TangoHost.class);
 
         assertEquals("localhost:10000", result.id);
@@ -74,11 +74,35 @@ public class Rc5Test {
     }
 
     @Test
-    public void testTangoHostDevices(){
+    public void testTangoHostDevicesWith(){
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri);
-        List<Device> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Device>>(){});
+        List<NamedEntity> result = client.target(uriBuilder.build()).request().get(new GenericType<List<NamedEntity>>(){});
 
         assertFalse(result.isEmpty());
+        NamedEntity entity = Iterables.find(result, new Predicate<NamedEntity>() {
+            @Override
+            public boolean apply(@Nullable NamedEntity input) {
+                return input.name.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(entity);
+    }
+
+    @Test
+    public void testTangoHostDevicesWithWildCard(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.devicesUri).queryParam("wildcard","sys/tg_test/1");
+        List<NamedEntity> result = client.target(uriBuilder.build()).request().get(new GenericType<List<NamedEntity>>(){});
+
+        assertFalse(result.isEmpty());
+        NamedEntity entity = Iterables.find(result, new Predicate<NamedEntity>() {
+            @Override
+            public boolean apply(@Nullable NamedEntity input) {
+                return input.name.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(entity);
     }
 
     @Test
