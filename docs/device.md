@@ -637,23 +637,33 @@ When serving async request with no body HTTP 204 must be returned.
 `GET /devices/sys/tg_test/1/pipes`:
 ```json
 [
-    {   
-        "name": "DevPipe",
-        "device":"sys/tg_test/1",
-        "host":"localhost:10000",
-        "value":"<prefix>/DevPipe/value",
-        "info":{
-            "description" : "",
-            "label": "",
-            "DispLevel": "level",
-            "PipeWriteType": "writeType",
-            "extensions":[]
-        }
-    }
+  {
+    "name": "string_long_short_ro",
+    "href": "<prefix>/devices/sys/tg_test/1/pipes/string_long_short_ro"
+  }
 ]
 ```
 
-`GET /devices/sys_tg/test/1/pipes/DevPipe/value`:
+`GET /devices/sys_tg/test/1/pipes/string_long_short_ro`
+```json
+{
+  "id": "localhost:10000/sys/tg_test/1/string_long_short_ro",
+  "name": "string_long_short_ro",
+  "device": "sys/tg_test/1",
+  "host": "localhost:10000",
+  "info": {
+    "name": "string_long_short_ro",
+    "description": "Pipe example",
+    "label": "string_long_short_ro",
+    "level": "OPERATOR",
+    "writeType": "PIPE_READ",
+    "writable": false
+  },
+  "value": "<prefix>/devices/sys/tg_test/1/pipes/string_long_short_ro/value"
+}
+```
+
+`GET /devices/sys_tg/test/1/pipes/string_long_short_ro/value`:
 ```JSON
 {
     "name":"DevPipeBlob",

@@ -1,7 +1,6 @@
-package org.tango.rest.entities;
+package org.tango.rest.entities.pipe;
 
 import fr.esrf.Tango.DevError;
-import fr.esrf.TangoApi.PipeInfo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.net.URI;

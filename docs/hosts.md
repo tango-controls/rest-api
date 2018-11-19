@@ -39,9 +39,7 @@ Tango host resides under _hosts_ collection. Each Tango host is specified by the
   
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
-```http request
-GET /tango/rest/rc5/hosts/hzgxenvtest
-```
+`GET /tango/rest/rc5/hosts/hzgxenvtest`
 ```json
 
 {
@@ -85,9 +83,7 @@ GET /hosts/localhost/devices
 
 __OR__
 
-```http request
-GET /hosts/localhost/devices?wildcard=sys*/*/1
-```
+`GET /hosts/localhost/devices?wildcard=sys*/*/1`
 ```JSON
 [
     {
@@ -111,9 +107,7 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 |-----------------------------------------|------------|--------------------------
 |`GET /hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 
-```http request
-GET /hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*
-```
+`GET /hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*`
 
 ```json
 [
@@ -177,9 +171,7 @@ GET /hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*
 |-----------------------------------------|------------|--------------------------
 |`GET /tango/rest/rc5/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
 
-```http request
-GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*
-```  
+`GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
   
 ```json
 [
@@ -220,9 +212,7 @@ GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*
 
 **NOTE**: above is the same as `GET tango/rest/rc5/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
 
-```http request
-GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*
-```
+`GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
 
 ```json
 [
@@ -290,9 +280,7 @@ Attributes resource allows bulk listing, reading and writing of tango attributes
 |-----------------------------------------|------------|--------------------------
 | `GET /attributes?wildcard={tango_host}[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
 
-```http request
-GET /attributes?wildcard=localhost/sys/tg_test/*/State
-``` 
+`GET /attributes?wildcard=localhost/sys/tg_test/*/State` 
 
 
 ```json
@@ -364,9 +352,7 @@ GET /attributes?wildcard=localhost/sys/tg_test/*/State
 
 **read**
 
-```http request
-GET /attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/sys/database/*/State
-```
+`GET /attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/sys/database/*/State`
 ```json
 [
   {
@@ -390,7 +376,7 @@ GET /attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/
 
 **write**
 
-```http request
+```
 PUT /attributes
 
 [
@@ -430,7 +416,7 @@ PUT /attributes
 ]
 ```
 
-```http request
+```
 PUT /attributes?async=true
 
 [
@@ -457,9 +443,7 @@ HTTP/1.1 204
 
 **error**
 
-```http request
-GET /attributes/value?wildcard=localhost/sys/tg_test/*/ampli&wildcard=localhost/sys/tg_test/*/throw_exception
-```
+`GET /attributes/value?wildcard=localhost/sys/tg_test/*/ampli&wildcard=localhost/sys/tg_test/*/throw_exception`
 
 ```json
 [
@@ -494,9 +478,7 @@ Commands resource allows bulk listing and execution of tango commands
 |-----------------------------------------|------------|--------------------------
 | `GET /commands?wildcard={host}[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
 
-```http request
-GET /commands?wildcard=localhost/sys/*/*/DevDouble
-```
+`GET /commands?wildcard=localhost/sys/*/*/DevDouble`
 
 ```json
 [
@@ -583,4 +565,7 @@ Response:
 |-----------------------------------------|------------|--------------------------
 | `GET /pipes?wildcard=*[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
 
-Same as for attributes or commands
+
+```json
+
+```

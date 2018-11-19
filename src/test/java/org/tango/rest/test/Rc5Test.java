@@ -10,14 +10,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
+import org.tango.rest.entities.pipe.Pipe;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.HashMap;
@@ -65,12 +66,20 @@ public class Rc5Test {
         assertEquals("sys/database/2", result.name);
     }
 
-    @Test
+    @Test(expected = BadRequestException.class)
     public void testHost_wrongPort(){
         UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("hosts/localhost;port=12345");
-        Response result = client.target(uriBuilder.build()).request().get();
+        TangoHost result = client.target(uriBuilder.build()).request().get(TangoHost.class);
 
-        org.junit.Assert.assertSame(result.getStatusInfo(), Response.Status.BAD_REQUEST);
+        fail();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testHost_nonExistingHost(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("hosts/XXXX");
+        TangoHost result = client.target(uriBuilder.build()).request().get(TangoHost.class);
+
+        fail();
     }
 
     @Test
@@ -116,6 +125,13 @@ public class Rc5Test {
                 return input.name.equals(CONTEXT.SYS_TG_TEST_1);
             }
         }).isPresent());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testTangoDeviceNotDefinedInDb(){
+        Device result = client.target(UriBuilder.fromUri(CONTEXT.devicesUri).path("X/Y/Z").build()).request().get(Device.class);
+
+        fail();
     }
 
     @Test
@@ -294,6 +310,16 @@ public class Rc5Test {
         assertEquals("long_scalar_w", attribute.info.name);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void testAttribute_notFound(){
+        //again if this one does not fail test passes
+        Attribute attribute = client.target(UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1)).path("attributes/XXXX")
+                .request().get(Attribute.class);
+
+        fail();
+    }
+
+
     @Test
     public void testTangoTestInfo() {
         //if it does not fail with deserialization exception response confronts API spec
@@ -400,7 +426,7 @@ public class Rc5Test {
         assertArrayEquals(new double[]{3.14,2.87,1.44},result.value, 0.0);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test(expected = NotFoundException.class)
     public void testWriteAttribute_doesNotExists(){
         URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").path("XXX").path("value").queryParam("v", "3.14,2.87,1.44").build();//TODO native array does not work
 
@@ -425,6 +451,18 @@ public class Rc5Test {
         assertEquals("sys/tg_test/1", cmd.device);
         assertEquals("localhost:10000", cmd.host);
         assertEquals("OPERATOR", cmd.info.level);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testCommand_NotFound(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("commands").path("XXXX").build();
+
+        //if parsed w/o exception consider test has passed
+        Command cmd = client.target(uri)
+                .request().get(Command.class);
+
+
+        fail();
     }
 
     @Test
@@ -496,7 +534,9 @@ public class Rc5Test {
         assertNotNull(result);
         assertEquals("long_scalar_w", result.name);
         assertNull(result.value);
-        assertNull(result.info);
+        assertNotNull(result.info);
+        assertEquals("long_scalar_w", result.info.name);
+        assertNull(result.info.label);
     }
 
     @Test
