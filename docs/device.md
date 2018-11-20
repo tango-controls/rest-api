@@ -666,54 +666,59 @@ When serving async request with no body HTTP 204 must be returned.
 `GET /devices/sys_tg/test/1/pipes/string_long_short_ro/value`:
 ```JSON
 {
-    "name":"DevPipeBlob",
-    "size":12,
-    "timestamp":123456789,    
-    "data":[
-            {
-                "name":"DevPipeBlobValue1",                
-                "value":["Hello Tango!"]
-            },
-            {
-                "name":"DevPipeBlobValue2",
-                "value":[123]
-            },
-            {
-                "name":"DevPipeBlobValue3",
-                "value":[{
-                        "name":"DevPipeBlobValueInnerBlob",
-                        "data":[...]
-                    }]
-            }
-        ]
+  "host": "hzgxenvtest:10000",
+  "device": "sys/tg_test/1",
+  "name": "string_long_short_ro",
+  "timestamp": 1542705769023,
+  "data": [
+    {
+      "name": "FirstDE",
+      "value": [
+        "The string"
+      ]
+    },
+    {
+      "name": "SecondDE",
+      "value": [
+        666
+      ]
+    },
+    {
+      "name": "ThirdDE",
+      "value": [
+        12
+      ]
+    }
+  ]
 }
 ```
 
-For writing type information is required for each PipeBlobDataElement:
+For writing __type__ information is required for each PipeBlobDataElement:
 
-`PUT /devices/sys_tg/test/1/pipes/DevPipe/value`
+`PUT /devices/sys_tg/test/1/pipes/string_long_short_ro/value`
 ```json
 {
-    "name":"DevPipeBlob",
-    "data":[
-            {
-                "name":"DevPipeBlobValue1",                
-                "type": "DevString",
-                "value":["Hello Tango!"]
-            },
-            {
-                "name":"DevPipeBlobValue2",
-                "type":"DevUShort",
-                "value":[123]
-            },
-            {
-                "name":"DevPipeBlobValue3",
-                "type":"DevPipeBlob",
-                "value":[{
-                        "name":"DevPipeBlobValueInnerBlob",
-                        "data":[...]
-                    }]
-            }
-        ]
+  "name":"string_long_short_ro",
+  "data": [
+    {
+      "name": "FirstDE",
+      "type":"DevString",
+      "value": [
+        "The string"
+      ]
+    }, {
+      "name": "SecondDE",
+      "type":"DevLong",
+      "value": [
+        666
+      ]
+    }, {
+      "name": "ThirdDE",
+      "type":"DevShort",
+      "value": [
+        12
+      ]
+    }
+  ]
 }
 ```

@@ -3,7 +3,12 @@ package org.tango.rest.test;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 import fr.esrf.Tango.ErrSeverity;
+import fr.esrf.TangoApi.PipeBlob;
+import fr.esrf.TangoApi.PipeBlobBuilder;
 import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,6 +16,7 @@ import org.junit.Test;
 import org.tango.rest.ClientHelper;
 import org.tango.rest.entities.*;
 import org.tango.rest.entities.pipe.Pipe;
+import org.tango.rest.entities.pipe.PipeValue;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.BadRequestException;
@@ -502,7 +508,76 @@ public class Rc5Test {
 
     //TODO properties
 
-    //TODO pipes
+    @Test
+    public void testDevicePipes(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("pipes").build();
+
+        List<NamedEntity> result = client.target(uri)
+                .request()
+//                .header("Accept", MediaType.APPLICATION_JSON)
+                .get(
+                        new GenericType<List<NamedEntity>>() {
+                        });
+
+        NamedEntity pipe = Iterables.find(result, new Predicate<NamedEntity>() {
+            @Override
+            public boolean apply(@Nullable NamedEntity input) {
+                return input.name.equalsIgnoreCase("string_long_short_ro");
+            }
+        });
+
+        assertNotNull(pipe);
+    }
+
+    @Test
+    public void testDevicePipe(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("pipes/string_long_short_ro").build();
+
+        Pipe result = client.target(uri)
+                .request()
+//                .header("Accept", MediaType.APPLICATION_JSON)
+                .get(Pipe.class);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testDevicePipeValueRead(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("pipes/string_long_short_ro/value").build();
+
+        PipeValue result = client.target(uri)
+                .request()
+//                .header("Accept", MediaType.APPLICATION_JSON)
+                .get(PipeValue.class);
+
+        assertNotNull(result);
+        assertEquals(CONTEXT.tango_host + ":" + CONTEXT.tango_port, result.host);
+        assertEquals("sys/tg_test/1", result.device);
+        assertEquals("string_long_short_ro", result.name);
+        assertNotNull(result.data);
+        assertEquals("FirstDE", result.data.get(0).name);
+        assertArrayEquals(new String[]{"The string"}, result.data.get(0).value.toArray());
+        assertEquals("SecondDE", result.data.get(1).name);
+        assertArrayEquals(new int[]{666}, Ints.toArray((List<Integer>)result.data.get(1).value));
+        assertEquals("ThirdDE", result.data.get(2).name);
+        assertArrayEquals(new int[]{12}, Ints.toArray((List<Integer>)result.data.get(2).value));
+    }
+
+    //TODO writable Pipe in TangoTest
+    @Test(expected = BadRequestException.class)
+    public void testDevicePipeValueWrite(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("pipes/string_long_short_ro/value").build();
+
+        PipeValue result = client.target(uri)
+                .request()
+//                .header("Accept", MediaType.APPLICATION_JSON)
+                .put(Entity.entity(
+                        new PipeBlobBuilder("blob1").add("FirstDE", "Hello World!").build()
+                        ,MediaType.APPLICATION_JSON),PipeValue.class);
+
+        assertNotNull(result);
+    }
+
 
     //TODO events
 
