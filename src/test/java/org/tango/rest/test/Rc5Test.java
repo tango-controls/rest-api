@@ -20,6 +20,7 @@ import org.tango.rest.entities.pipe.PipeValue;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -596,20 +597,23 @@ public class Rc5Test {
     //TODO events
 
     @Test
-    public void testPartiotioning(){
-        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").queryParam("range", "5-10").build();
+    public void testPartitioning(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").build();
 
-        List<Map<String, Object>> result = client.target(uri).request().get(new GenericType<List<Map<String, Object>>>() {
+        List<Attribute> result = client.target(uri).request().header("Range", "5-10").get(new GenericType<List<Attribute>>() {
         });
 
-        assertTrue(result.size() == 6);
-        assertTrue(Iterables.tryFind(result, new Predicate<Map<String,Object>>() {
-            @Override
-            public boolean apply(Map<String,Object> input) {
-                return input.containsKey("name") && input.get("name").equals("partial_content");
-            }
-        }).isPresent());
+        assertTrue(result.size() == 5);
+    }
 
+    @Test(expected = ClientErrorException.class)
+    public void testPartitioning_wrongRange(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").build();
+
+        List<Attribute> result = client.target(uri).request().header("Range", "XXX").get(new GenericType<List<Attribute>>() {
+        });
+
+        fail();
     }
 
     @Test
