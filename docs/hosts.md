@@ -563,9 +563,61 @@ Response:
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
-| `GET /pipes?wildcard=*[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `GET /pipes?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `GET /pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `PUT /pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
 
+`GET /pipes?wildcard=hzgxenvtest/sys/tg_test/1/*`
 
 ```json
+[
+  {
+    "id": "hzgxenvtest:10000/sys/tg_test/1/string_long_short_ro",
+    "name": "string_long_short_ro",
+    "device": "sys/tg_test/1",
+    "host": "hzgxenvtest:10000",
+    "info": {
+      "name": "string_long_short_ro",
+      "description": "Pipe example",
+      "label": "string_long_short_ro",
+      "level": "OPERATOR",
+      "writeType": "PIPE_READ",
+      "writable": false
+    },
+    "value": "http://localhost:10001/tango/rest/rc5/hosts/hzgxenvtest;port=10000/devices/sys/tg_test/1/pipes/string_long_short_ro/value"
+  }
+]
+```
 
+
+`GET /pipes/value?wildcard=hzgxenvtest/sys/tg_test/1/*`
+```json
+[
+  {
+    "host": "hzgxenvtest:10000",
+    "device": "sys/tg_test/1",
+    "name": "string_long_short_ro",
+    "timestamp": 1542710007862,
+    "data": [
+      {
+        "name": "FirstDE",
+        "value": [
+          "The string"
+        ]
+      },
+      {
+        "name": "SecondDE",
+        "value": [
+          666
+        ]
+      },
+      {
+        "name": "ThirdDE",
+        "value": [
+          12
+        ]
+      }
+    ]
+  }
+]
 ```

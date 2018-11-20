@@ -286,7 +286,7 @@ public class Rc5Test {
 
     @Test
     public void testPipes(){
-        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("pipes").queryParam("wildcard", "localhost:10000/*/*/*/string_long_short_ro");
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("pipes").queryParam("wildcard", CONTEXT.tango_host + ":" +CONTEXT.tango_port + "/*/*/*/string_long_short_ro");
         List<Pipe> result = client.target(uriBuilder.build()).request().get(new GenericType<List<Pipe>>(){});
 
         Pipe pipe = Iterables.find(result, new Predicate<Pipe>() {
@@ -299,6 +299,20 @@ public class Rc5Test {
         assertNotNull(pipe);
     }
 
+    @Test
+    public void testPipesValue(){
+        UriBuilder uriBuilder = new ResteasyUriBuilder().uri(CONTEXT.uri).path("pipes/value").queryParam("wildcard", CONTEXT.tango_host + ":" +CONTEXT.tango_port + "/*/*/*/string_long_short_ro");
+        List<PipeValue> result = client.target(uriBuilder.build()).request().get(new GenericType<List<PipeValue>>(){});
+
+        PipeValue pipe = Iterables.find(result, new Predicate<PipeValue>() {
+            @Override
+            public boolean apply(@Nullable PipeValue input) {
+                return input.device.equalsIgnoreCase("sys/tg_test/1");
+            }
+        });
+
+        assertNotNull(pipe);
+    }
 
 
 
@@ -599,7 +613,7 @@ public class Rc5Test {
     }
 
     @Test
-    public void testFiltering(){
+    public void testFilteringAttribute(){
         URI uri = UriBuilder.fromUri(CONTEXT.longScalarWUri).queryParam("filter", "name").build();
 
         Attribute result = client.target(uri)
@@ -612,6 +626,19 @@ public class Rc5Test {
         assertNotNull(result.info);
         assertEquals("long_scalar_w", result.info.name);
         assertNull(result.info.label);
+    }
+
+    @Test
+    public void testFilteringPipeValue(){
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("pipes/string_long_short_ro/value").queryParam("filter","name").build();
+
+        PipeValue result = client.target(uri)
+                .request().get(PipeValue.class);
+
+
+        assertNotNull(result);
+        assertEquals("string_long_short_ro", result.name);
+        assertNull(result.data);
     }
 
     @Test

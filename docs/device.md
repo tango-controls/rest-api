@@ -697,9 +697,7 @@ For writing __type__ information is required for each PipeBlobDataElement:
 
 `PUT /devices/sys_tg/test/1/pipes/string_long_short_ro/value`
 ```json
-{
-  "name":"string_long_short_ro",
-  "data": [
+[
     {
       "name": "FirstDE",
       "type":"DevString",
@@ -719,6 +717,5 @@ For writing __type__ information is required for each PipeBlobDataElement:
         12
       ]
     }
-  ]
-}
+]
 ```
