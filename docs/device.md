@@ -696,7 +696,7 @@ When serving async request with no body HTTP 204 must be returned.
 For writing __type__ information is required for each PipeBlobDataElement:
 
 ```
-PUT /devices/sys_tg/test/1/pipes/string_long_short_ro/value`
+PUT /devices/sys_tg/test/1/pipes/string_long_short_ro/value
 Content-Type: application/json
 
 [

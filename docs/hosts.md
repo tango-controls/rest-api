@@ -589,6 +589,7 @@ Response:
 ]
 ```
 
+**reading**
 
 `GET /pipes/value?wildcard=hzgxenvtest/sys/tg_test/1/*`
 ```json
@@ -629,11 +630,11 @@ PUT /pipes/value
 Content-Type: application/json
 
 [
-{
-  "host":"hzgxenvtest:10000",
-  "device":"sys/tg_test/1",
-  "name":"string_long_short_ro",
-  "data":[
+  {
+    "host":"hzgxenvtest:10000",
+    "device":"sys/tg_test/1",
+    "name":"string_long_short_ro",
+    "data":[
          {
            "name": "FirstDE",
            "type" : "DevString",
