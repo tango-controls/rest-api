@@ -565,7 +565,7 @@ Response:
 |-----------------------------------------|------------|--------------------------
 | `GET /pipes?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
 | `GET /pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
-| `PUT /pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `PUT /pipes/value[?async=true]` | JSONArray/NULL  | same as for [attributes](#attributes)
 
 `GET /pipes?wildcard=hzgxenvtest/sys/tg_test/1/*`
 
@@ -621,3 +621,44 @@ Response:
   }
 ]
 ```
+
+**writing**
+
+```
+PUT /pipes/value
+Content-Type: application/json
+
+[
+{
+  "host":"hzgxenvtest:10000",
+  "device":"sys/tg_test/1",
+  "name":"string_long_short_ro",
+  "data":[
+         {
+           "name": "FirstDE",
+           "type" : "DevString",
+           "value": [
+             "The string"
+           ]
+         },
+         {
+           "name": "SecondDE",
+           "type" : "DevLong",
+           "value": [
+             666
+           ]
+         },
+         {
+           "name": "ThirdDE",
+           "type" : "DevShort",
+           "value": [
+             12
+           ]
+         }
+       ]
+     }
+   ]
+]
+```
+
+Response: same as for read or NULL if async
