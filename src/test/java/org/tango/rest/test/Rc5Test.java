@@ -598,9 +598,9 @@ public class Rc5Test {
 
     @Test
     public void testPartitioning(){
-        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").build();
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").queryParam("range", "5-10").build();
 
-        List<Attribute> result = client.target(uri).request().header("Range", "5-10").get(new GenericType<List<Attribute>>() {
+        List<Attribute> result = client.target(uri).request().get(new GenericType<List<Attribute>>() {
         });
 
         assertTrue(result.size() == 5);
@@ -608,9 +608,9 @@ public class Rc5Test {
 
     @Test(expected = ClientErrorException.class)
     public void testPartitioning_wrongRange(){
-        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").build();
+        URI uri = UriBuilder.fromUri(CONTEXT.devicesUri).path(CONTEXT.SYS_TG_TEST_1).path("attributes").queryParam("range", "XXX").build();
 
-        List<Attribute> result = client.target(uri).request().header("Range", "XXX").get(new GenericType<List<Attribute>>() {
+        List<Attribute> result = client.target(uri).request().get(new GenericType<List<Attribute>>() {
         });
 
         fail();

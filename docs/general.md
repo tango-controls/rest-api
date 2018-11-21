@@ -129,6 +129,11 @@ This one shows everything except _info_ and _properties_ fields:
 
 # Range
 
+URL                |   Response  | Desc
+------------------- | ----------- | ---------------------------------------------------
+`GET /{any collection}?range={start}-{end}` | JSONArray | - responses with sub-collection extracted from the original
+
+
 Implementation MUST include "Accept-Ranges: items" for collection like resources e.g. devices list. Also it MUST include "X-size" response header to indicate how many items are in the collection.
 
 ```
@@ -142,11 +147,12 @@ X-size:26
 [...]
 ```
 
+**NOTE**: we can not use standard _Content-Length_ header here because it is strictly bound to bytes i.e. client may shrink incoming response hence partial JSON and JSONParse exception.
+
 Client includes "Range" header into request to specify the desired range of the collection, while implementation MUST include "Content-Range" header:
 
 ```
-GET /hosts/localhost/devices
-Range: 10-20
+GET /hosts/localhost/devices?range=10-20
 ```
 
 ```
@@ -158,8 +164,7 @@ Content-Range: items 10-20/26
 
 For instance, 
 ```
-GET /hosts/localhost/devices
-Range: 0-25
+GET /hosts/localhost/devices?range=0-25
 ``` 
 
 will display only the first 25 devices of a particular Tango host
