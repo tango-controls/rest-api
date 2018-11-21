@@ -171,6 +171,39 @@ will display only the first 25 devices of a particular Tango host
 
 Implementation MUST respond with **416** in case _Range_ is not satisfiable.
 
+# Cache
+
+Implementation MUST provide _Cache-Control_ headers for Tango resources. Implementation MUST add _max-age-millis_ Cache-Control extension to specify cache delay in millis.
+
+Implementation SHOULD distinguish between fast changing and slow changing values. For instance a list of available devices may be considered as slow changing value and cached for a longer time. Also slow changing values may be cached publicly.
+
+Implementation SHOULD export configuration parameters for cache delays and etc  
+
+`GET /hosts/localhost/devices`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=300, max-age-millis="300000"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+`GET /hosts/localhost/devices/sys/tg_test/1/attributes/double_scalar_ro`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=0, max-age-millis="200"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+
 # Errors
 
 Any error MUST return status code __400__ (BadRequest). Except few cases: see below.
