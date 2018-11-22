@@ -49,7 +49,7 @@ __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that ea
 Implementation SHOULD attach a number of links to a particular response. For instance most of the response types may include _self_ link:
 
 ```
-HTTP response
+HTTP 200
 
 Link: <link>; rel="self"
 ```
@@ -58,9 +58,20 @@ as well as external relationship links:
 
 `GET /tango/rest/rc6/hosts/localhost`
 ```
-HTTP response
+HTTP 200
 
 Link: </tango/rest/rc6/hosts>; rel="parent"
+```
+
+Or pagination related links:
+
+```
+HTTP 206
+
+Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="first"; range="0-10"
+Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="last"; range="31-35"
+Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="prev"; range="0-10"
+Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="next"; range="21-30"
 ```
 
 See [Link header](http://tools.ietf.org/html/rfc5988)
@@ -122,27 +133,84 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-## Pages
+## Range
 
-|  URL           |  Response | Desc
-|----------------|-----------|---------------------------------------------------
-| `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
+URL                |   Response  | Desc
+------------------- | ----------- | ---------------------------------------------------
+`GET /{any collection}?range={start}-{end}` | JSONArray | - responses with sub-collection extracted from the original
 
-For instance, `GET /devices?range=0-25` will display only the first 25 devices of a particular Tango host
 
-The implementation MUST return corresponding HTTP headers:
+Implementation MUST include "Accept-Ranges: items" for collection like resources e.g. devices list. Also it MUST include "X-size" response header to indicate how many items are in the collection.
 
-    HTTP 206 OK
-    Content-Range: offset – limit / count
-        offset: index of the first element
-        limit : index of the last element
-        count : total number of elements from the collection
-    Accept-Range: resource and max
-        resource : type of the element
-        max : maximum number of element per request
-    Link: can return several URI to the previous and next range, the first and last range ...
+```
+GET /hosts/localhost/devices
+```
 
-## Errors
+```
+Accept-Ranges: items
+X-size:26
+
+[...]
+```
+
+**NOTE**: we can not use standard _Content-Length_ header here because it is strictly bound to bytes i.e. client may shrink incoming response hence partial JSON and JSONParse exception.
+
+Client includes "Range" header into request to specify the desired range of the collection, while implementation MUST include "Content-Range" header:
+
+```
+GET /hosts/localhost/devices?range=10-20
+```
+
+```
+HTTP 206
+Content-Range: items 10-20/26
+
+[...]
+```
+
+For instance, 
+```
+GET /hosts/localhost/devices?range=0-25
+``` 
+
+will display only the first 25 devices of a particular Tango host
+
+Implementation MUST respond with **416** in case _Range_ is not satisfiable.
+
+# Cache
+
+Implementation MUST provide _Cache-Control_ headers for Tango resources. Implementation MUST add _max-age-millis_ Cache-Control extension to specify cache delay in millis.
+
+Implementation SHOULD distinguish between fast changing and slow changing values. For instance a list of available devices may be considered as slow changing value and cached for a longer time. Also slow changing values may be cached publicly.
+
+Implementation SHOULD export configuration parameters for cache delays and etc  
+
+`GET /hosts/localhost/devices`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=300, max-age-millis="300000"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+`GET /hosts/localhost/devices/sys/tg_test/1/attributes/double_scalar_ro`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=0, max-age-millis="200"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+
+# Errors
 
 Any error MUST return status code __400__ (BadRequest). Except few cases: see below.
 
