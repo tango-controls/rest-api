@@ -7,9 +7,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>rc4</module>
-        <module>rc5</module>
-        <module>rc6</module>
+        <module>api-java</module>
     </modules>
 
     <scm>
