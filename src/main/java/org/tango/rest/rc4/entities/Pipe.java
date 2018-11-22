@@ -1,4 +1,4 @@
-package org.tango.rest.entities;
+package org.tango.rest.rc4.entities;
 
 /**
  * @author Igor Khokhriakov <igor.khokhriakov@hzg.de>

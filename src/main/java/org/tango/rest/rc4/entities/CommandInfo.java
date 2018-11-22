@@ -1,4 +1,4 @@
-package org.tango.rest.entities;
+package org.tango.rest.rc4.entities;
 
 /**
  * Mirrors {@link fr.esrf.TangoApi.CommandInfo}
