@@ -13,7 +13,7 @@ Please read about Tango REST API in the Tango documentation: [link](http://tango
 Specification defines RESTful view on Tango Controls in terms of REST resources. Each version defines allowed requests and corresponding responses to/from Tango REST API implementation. Also each version defines expected behaviour of the implementation in a given situation/feature.
 
 Version  | Link
-----------|-------------|---------
+----------|-------------
 v1.0      | [rest-api-v1.0](https://tango-rest-api.readthedocs.io/en/v1.0/)
 rc4       | [rest-api-rc4](https://tango-rest-api.readthedocs.io/en/rc4_a/)
 rc3       | [rest-api-rc3](https://tango-rest-api.readthedocs.io/en/rc3/)
