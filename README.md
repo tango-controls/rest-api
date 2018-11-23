@@ -21,7 +21,7 @@ rc2       | [rest-api-rc2](https://github.com/tango-controls/rest-api/blob/rc2/H
 rc1       | [rest-api-rc1](https://github.com/tango-controls/rest-api/blob/rc1/Home.md)
 
 
-# Reference implementations
+# Reference client implementations
 
 Reference implementations provide request/response entities definition:
 
@@ -30,7 +30,7 @@ Platform  | Link        | Compatibility
 Java      | [rest-api-java](https://github.com/tango-controls/rest-api-java) | rc4, v1.0
 
 
-# Known implementations
+# Known server implementations
 
 Listed implementations provide REST server capabilities for a given platform.  
 
