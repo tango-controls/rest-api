@@ -23,7 +23,7 @@ Listed implementations provide REST server capabilities for a given platform.
 
 Platform  | Link        | Compatibility
 ----------|-------------|---------
-Java      | [rest-server](https://github.com/tango-controls/rest-server) | rc4, v1.0
+Java      | [rest-server](https://github.com/tango-controls/rest-server) | rc4 + subscriptions, v1.0
 C++       | [RestDS](http://tangodevel.jinr.ru/git/tango/web/RestDS) | rc4 (partial) 
 Python    | [mtango-py](https://github.com/MaxIV-KitsControls/mtango-py) | rc3 (partial)
 
