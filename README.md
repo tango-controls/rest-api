@@ -8,7 +8,7 @@ REST API is requested by the community and discussed in [this forum thread](http
 
 Please read about Tango REST API in the Tango documentation: [link](http://tango-controls.readthedocs.io/en/latest/development/advanced/rest-api.html)
 
-# REST API specification
+# Tango REST API specification
 
 Specification defines RESTful view on Tango Controls in terms of REST resources. Each version defines allowed requests and corresponding responses to/from Tango REST API implementation. Also each version defines expected behaviour of the implementation in a given situation/feature.
 
