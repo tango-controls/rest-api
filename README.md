@@ -33,4 +33,4 @@ Test suites provide integration tests for implementations to verify their compat
 
 Platform  | Link        | Compatibility
 ----------|-------------|---------
-Java      | [rest-test-suite](https://github.com/tango-controls/rest-test-suite) | rc4, v1.0
+Java      | [rest-test-suite](https://github.com/tango-controls/rest-test-suite) | rc4 (partial), v1.0
