@@ -17,6 +17,8 @@ Version  | Link
 v1.0      | [rest-api-v1.0](https://tango-rest-api.readthedocs.io/en/v1.0/)
 rc4       | [rest-api-rc4](https://tango-rest-api.readthedocs.io/en/rc4_a/)
 rc3       | [rest-api-rc3](https://tango-rest-api.readthedocs.io/en/rc3/)
+rc2       | [rest-api-rc2](https://github.com/tango-controls/rest-api/blob/rc2/Home.md)
+rc1       | [rest-api-rc1](https://github.com/tango-controls/rest-api/blob/rc1/Home.md)
 
 
 # Reference implementations
