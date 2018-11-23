@@ -2,7 +2,7 @@
 
 # Tango Controls as RESTful resources
 
-Tango REST API provides RESTful view of Tango Controls. Tango Controls entities are mapped to a tree structure:
+Tango REST API provides RESTful view on Tango Controls. Tango Controls entities are mapped to a tree structure:
 
 ```
 /hosts/
@@ -35,11 +35,11 @@ Tango host resides under _hosts_ collection. Each Tango host is specified by the
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
+|`GET /tango/rest/v1.0/hosts/{tango_host};port={tango_port}`  |   JSONObject   |  -- corresponding Tango database info. Tango port is 10000 by default
   
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
-`GET /tango/rest/rc5/hosts/hzgxenvtest`
+`GET /tango/rest/v1.0/hosts/hzgxenvtest`
 ```json
 
 {
@@ -75,15 +75,13 @@ __IMPLEMENTATION NOTE:__ this response's info is the same as output of the tango
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+|`GET /tango/rest/v1.0/hosts/{host}[;{port}]/devices[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 
-```http request
-GET /hosts/localhost/devices
-```
+`GET /tango/rest/v1.0/hosts/localhost/devices`
 
 __OR__
 
-`GET /hosts/localhost/devices?wildcard=sys*/*/1`
+`GET /tango/rest/v1.0/hosts/localhost/devices?wildcard=sys*/*/1`
 ```JSON
 [
     {
@@ -105,9 +103,9 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+|`GET /tango/rest/v1.0/hosts/{host}[;{port}]/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
 
-`GET /hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*`
+`GET /tango/rest/v1.0/hosts/localhost/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*`
 
 ```json
 [
@@ -169,9 +167,9 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 
 | URL                                         | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc5/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
+|`GET /tango/rest/v1.0/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
 
-`GET /tango/rest/rc5/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
+`GET /tango/rest/v1.0/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
   
 ```json
 [
@@ -278,9 +276,9 @@ Attributes resource allows bulk listing, reading and writing of tango attributes
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
-| `GET /attributes?wildcard={tango_host}[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
+| `GET /tango/rest/v1.0/attributes?wildcard={tango_host}[:{port}]/*/*/*/*`   | JSONArray  | -- returns an array of attributes filtered by wildcard(s) 
 
-`GET /attributes?wildcard=localhost/sys/tg_test/*/State` 
+`GET /tango/rest/v1.0/attributes?wildcard=localhost/sys/tg_test/*/State` 
 
 
 ```json
@@ -352,7 +350,7 @@ Attributes resource allows bulk listing, reading and writing of tango attributes
 
 **read**
 
-`GET /attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/sys/database/*/State`
+`GET /tango/rest/v1.0/attributes/value?wildcard=localhost/sys/tg_test/*/State&wildcard=localhost/sys/database/*/State`
 ```json
 [
   {
@@ -377,7 +375,7 @@ Attributes resource allows bulk listing, reading and writing of tango attributes
 **write**
 
 ```
-PUT /attributes
+PUT /tango/rest/v1.0/attributes
 
 [
   {
@@ -417,7 +415,7 @@ PUT /attributes
 ```
 
 ```
-PUT /attributes?async=true
+PUT /tango/rest/v1.0/attributes?async=true
 
 [
   {
@@ -443,7 +441,7 @@ HTTP/1.1 204
 
 **error**
 
-`GET /attributes/value?wildcard=localhost/sys/tg_test/*/ampli&wildcard=localhost/sys/tg_test/*/throw_exception`
+`GET /tango/rest/v1.0/attributes/value?wildcard=localhost/sys/tg_test/*/ampli&wildcard=localhost/sys/tg_test/*/throw_exception`
 
 ```json
 [
@@ -476,9 +474,9 @@ Commands resource allows bulk listing and execution of tango commands
 
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
-| `GET /commands?wildcard={host}[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
+| `GET /tango/rest/v1.0/commands?wildcard={host}[:{port}]/*/*/*/*`    | JSONArray | same as for [attributes](#attributes)
 
-`GET /commands?wildcard=localhost/sys/*/*/DevDouble`
+`GET /tango/rest/v1.0/commands?wildcard=localhost/sys/*/*/DevDouble`
 
 ```json
 [
@@ -503,7 +501,7 @@ Commands resource allows bulk listing and execution of tango commands
 
 **execute**
 
-`PUT /commands`
+`PUT /tango/rest/v1.0/commands`
 ```json
 [
   {
@@ -561,13 +559,15 @@ Response:
 
 # Pipes
 
+Pipes resource provides bulk read/write API for Tango pipes
+
 | URL                                     | Response   | Desc
 |-----------------------------------------|------------|--------------------------
-| `GET /pipes?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
-| `GET /pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
-| `PUT /pipes/value[?async=true]` | JSONArray/NULL  | same as for [attributes](#attributes)
+| `GET /tango/rest/v1.0/pipes?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `GET /tango/rest/v1.0/pipes/value?wildcard={tango_host}[:{port}]/*/*/*/*`| JSONArray  | same as for [attributes](#attributes)
+| `PUT /tango/rest/v1.0/pipes/value[?async=true]` | JSONArray/NULL  | same as for [attributes](#attributes)
 
-`GET /pipes?wildcard=hzgxenvtest/sys/tg_test/1/*`
+`GET /tango/rest/v1.0/pipes?wildcard=hzgxenvtest/sys/tg_test/1/*`
 
 ```json
 [
@@ -591,7 +591,7 @@ Response:
 
 **reading**
 
-`GET /pipes/value?wildcard=hzgxenvtest/sys/tg_test/1/*`
+`GET /tango/rest/v1.0/pipes/value?wildcard=hzgxenvtest/sys/tg_test/1/*`
 ```json
 [
   {
@@ -626,7 +626,7 @@ Response:
 **writing**
 
 ```
-PUT /pipes/value
+PUT /tango/rest/v1.0/pipes/value
 Content-Type: application/json
 
 [

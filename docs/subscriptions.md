@@ -6,11 +6,11 @@ Provides an entry point for subscriptions (Tango Controls event system)
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`POST /tango/rest/rc6/subscriptions`             | JSONObject | – creates a new subscription  
+|`POST /tango/rest/v1.0/subscriptions`             | JSONObject | – creates a new subscription  
 
 **Create a new subscription**
 
-`POST /tango/rest/rc6/subscriptions`
+`POST /tango/rest/v1.0/subscriptions`
 
 
 ```json
@@ -23,9 +23,9 @@ Provides an entry point for subscriptions (Tango Controls event system)
 
 **Create a new subscription with events**
 
-`POST /tango/rest/rc6/subscriptions`
+```
+POST /tango/rest/v1.0/subscriptions
 
-```json
 [
   {
      "host":"hzgxenvtest:10000",
@@ -61,14 +61,14 @@ Represents single subscription
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc6/subscriptions/{id}`              | JSONObject  | – this subscription as JSON 
-|`PUT /tango/rest/rc6/subscriptions/{id}`              | JSONObject  | – this subscription as JSON
-|`GET /tango/rest/rc6/subscriptions/{id}/event-stream` | text/event-stream  | – events stream
-|`DELETE /tango/rest/rc6/subscriptions/{id}`           | NULL  | – closes events stream and cancels subscription
+|`GET /tango/rest/v1.0/subscriptions/{id}`              | JSONObject  | – this subscription as JSON 
+|`PUT /tango/rest/v1.0/subscriptions/{id}`              | JSONObject  | – this subscription as JSON
+|`GET /tango/rest/v1.0/subscriptions/{id}/event-stream` | text/event-stream  | – events stream
+|`DELETE /tango/rest/v1.0/subscriptions/{id}`           | NULL  | – closes events stream and cancels subscription
 
 **Get subscription**
 
-`GET /tango/rest/rc6/subscriptions/0`
+`GET /tango/rest/v1.0/subscriptions/0`
 
 ```json
 {
@@ -92,7 +92,7 @@ Represents single subscription
 
 **Add new event to subscription**
 
-`PUT /tango/rest/rc6/subscriptions/0`
+`PUT /tango/rest/v1.0/subscriptions/0`
 
 ```json
 [

@@ -2,7 +2,7 @@
 
 # HTTP/2.0
 
-Since rc6 implementation must provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support only https scheme and MAY support http (HTTP/1.1).
+Since v1.0 implementation MUST provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support only https scheme and MAY support http (HTTP/1.1).
 
 For proper https support implementation MUST be supplied with a valid SSL certificate (OpenSSL). For development a self-signed certificate will do the trick, but for production implementation SHOULD be supplied with properly signed certificate.
 
@@ -16,7 +16,7 @@ Example:
 `GET /tango/rest` =>
 ```JSON
 {
-    "rc6":"http://hzgcttest:8080/tango/rest/rc6"
+    "v1.0":"http://hzgcttest:8080/tango/rest/v1.0"
 }
 ```
 
@@ -28,14 +28,13 @@ Implementation SHOULD implement some of the standard [WWW-Authenticate](https://
 
 For instance, when protected by Basic:
 
-`GET /tango/rest/rc6` =>
+`GET /tango/rest/v1.0` =>
 ```
 HTTP OK
 WWW-Authenticate: Basic realm="Tango-Controls Realm" 
-```
-```JSON
+
 {
-    "hosts":"/tango/rest/rc6/hosts"
+    "hosts":"/tango/rest/v1.0/hosts"
 }
 ```
 
@@ -56,11 +55,11 @@ Link: <link>; rel="self"
 
 as well as external relationship links:
 
-`GET /tango/rest/rc6/hosts/localhost`
+`GET /tango/rest/v1.0/hosts/localhost`
 ```
 HTTP 200
 
-Link: </tango/rest/rc6/hosts>; rel="parent"
+Link: </tango/rest/v1.0/hosts>; rel="parent"
 ```
 
 Or pagination related links:
@@ -68,15 +67,15 @@ Or pagination related links:
 ```
 HTTP 206
 
-Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="first"; range="0-10"
-Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="last"; range="31-35"
-Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="prev"; range="0-10"
-Link: <http://localhost:10001/tango/rest/rc5/hosts/localhost/devices>; rel="next"; range="21-30"
+Link: <http://localhost:10001/tango/rest/v1.0/hosts/localhost/devices>; rel="first"; range="0-10"
+Link: <http://localhost:10001/tango/rest/v1.0/hosts/localhost/devices>; rel="last"; range="31-35"
+Link: <http://localhost:10001/tango/rest/v1.0/hosts/localhost/devices>; rel="prev"; range="0-10"
+Link: <http://localhost:10001/tango/rest/v1.0/hosts/localhost/devices>; rel="next"; range="21-30"
 ```
 
 See [Link header](http://tools.ietf.org/html/rfc5988)
 
-Implementation MUST prefer lower case urls in links e.g. `DevString` (command name) -> `devstring`.
+Implementation MUST prefer lower case urls in links e.g. `DevString` (Tango command name) -> `devstring`.
 
 # Filters
 

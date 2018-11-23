@@ -11,9 +11,7 @@ URL                                                                     | Respon
 
 Examples:
 
-```http request
-GET /devices/sys/tg_test/1
-```
+`GET /devices/sys/tg_test/1`
 ```JSON
 {
   "id": "hzgxenvtest:10000/sys/tg_test/1",
@@ -136,9 +134,7 @@ GET /devices/sys/tg_test/1/attributes/long_scalar_w
 
 The following returns an array of objects defined above for all device's attributes:
 
-```http request
-GET /devices/sys/tg_test/1/attributes
-```
+`GET /devices/sys/tg_test/1/attributes`
 
 #### value
 
@@ -151,9 +147,7 @@ GET /devices/sys/tg_test/1/attributes
 
 ##### Scalar:
 
-```http request
-GET /devices/sys/tg_test/1/attributes/long_scalar/value
-```
+`GET /devices/sys/tg_test/1/attributes/long_scalar/value`
 ```JSON
 {
   "name": "long_scalar",
@@ -167,9 +161,7 @@ GET /devices/sys/tg_test/1/attributes/long_scalar/value
 
 ##### Spectrum:
 
-```http request
-GET /devices/sys/tg_test/1/attributes/double_spectrum_ro/value
-```
+`GET /devices/sys/tg_test/1/attributes/double_spectrum_ro/value`
 ```JSON
 {
   "name": "double_spectrum_ro",
@@ -186,9 +178,7 @@ GET /devices/sys/tg_test/1/attributes/double_spectrum_ro/value
 
 ##### Enum:
 
-```http request
-GET /devices/sys/tg_test/1/attributes/enum/value
-```
+`GET /devices/sys/tg_test/1/attributes/enum/value`
 ```JSON
 {
     "host": "hzgxenvtest:10000",
@@ -202,9 +192,7 @@ GET /devices/sys/tg_test/1/attributes/enum/value
 
 ##### Image:
 
-```http request
-GET /devices/sys/tg_test/1/attributes/ushort_image_ro/value
-```
+`GET /devices/sys/tg_test/1/attributes/ushort_image_ro/value`
 ```JSON
 {
     "name": "ushort_image_ro",
@@ -226,9 +214,7 @@ GET /devices/sys/tg_test/1/attributes/ushort_image_ro/value
 
 #### Read multiple attributes:
 
-```http request
-GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar
-```
+`GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scalar`
 ```json
 [
   {
@@ -248,9 +234,7 @@ GET /devices/sys/tg_test/1/attributes/value?attr=long_scalar_w&attr=string_scala
 
 #### Write scalar attribute:
 
-```http request
-PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42
-```
+`PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42`
 
 ```JSON
 {
@@ -265,9 +249,7 @@ PUT /devices/sys/tg_test/1/attributes/long_scalar_w/value?v=42
 
 #### Write multiple scalar attributes:
 
-```http request
-PUT /devices/sys/tg_test/1/attributes/value?long_scalar_w=42&string_scalar=Hi!
-```
+`PUT /devices/sys/tg_test/1/attributes/value?long_scalar_w=42&string_scalar=Hi!`
 ```JSON
 [
   {
@@ -293,7 +275,7 @@ Depending on the provided HTTP request [Accept header](https://developer.mozilla
 
 Responses with plain value, i.e. no JSON structure:
 
-```http request
+```
 GET /devices/sys/tg_test/1/attributes/long_scalar/value
 Accept: text/plain
 ```
@@ -302,7 +284,7 @@ Accept: text/plain
 12345
 ```
 
-```http request
+```
 GET /devices/sys/tg_test/1/attributes/double_scalar/value
 Accept: text/plain
 ```
@@ -311,7 +293,7 @@ Accept: text/plain
 3.14
 ```
 
-```http request
+```
 GET /devices/sys/tg_test/1/attributes/string_scalar/value
 Accept: text/plain
 ```
@@ -351,7 +333,7 @@ data:/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD...AKKKKACiiigAooooA//
 |----------------------------------------------------------------------------------------|------------|---------------------------------------------------------------------------------------------
 | `PUT /devices/{device.name}/attributes/{attribute}/info[?async=true]`                  | JSONObject/NULL | – updates writable elements of the info
 
-```http request
+```
 PUT /devices/sys/tg_test/1/attributes/ushort_image_ro/info
 Content-Type: application/json
 
@@ -511,8 +493,8 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 }
 ```
 
-`PUT /devices/sys/tg_test/1/commands/DevString`:
 ```
+PUT /devices/sys/tg_test/1/commands/DevString
 "Hi!"
 ```
 ```JSON
@@ -566,8 +548,7 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
         ],   
         "quality": "FAILURE",
         "timestamp": 123456789
-    },
-    ...
+    }
 ]
 ```
 

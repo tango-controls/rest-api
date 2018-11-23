@@ -14,7 +14,7 @@ Reference implementations provide request/response entities definition:
 
 Platform  | Link        | Compatibility
 ----------|-------------|---------
-Java      | [rest-api-java](https://github.com/tango-controls/rest-api-java) | rc4, 1.0
+Java      | [rest-api-java](https://github.com/tango-controls/rest-api-java) | rc4, v1.0
 
 
 # Known implementations
@@ -23,7 +23,7 @@ Listed implementations provide REST server capabilities for a given platform.
 
 Platform  | Link        | Compatibility
 ----------|-------------|---------
-Java      | [rest-server](https://github.com/tango-controls/rest-server) | rc4, 1.0
+Java      | [rest-server](https://github.com/tango-controls/rest-server) | rc4, v1.0
 C++       | [RestDS](http://tangodevel.jinr.ru/git/tango/web/RestDS) | rc4 (partial) 
 Python    | [mtango-py](https://github.com/MaxIV-KitsControls/mtango-py) | rc3 (partial)
 
@@ -33,4 +33,4 @@ Test suites provide integration tests for implementations to verify their compat
 
 Platform  | Link        | Compatibility
 ----------|-------------|---------
-Java      | [rest-test-suite](https://github.com/tango-controls/rest-test-suite) | rc4, 1.0
+Java      | [rest-test-suite](https://github.com/tango-controls/rest-test-suite) | rc4, v1.0
