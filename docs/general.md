@@ -1,12 +1,12 @@
 [TOC]
 
-## HTTP/2.0
+# HTTP/2.0
 
 Since rc6 implementation must provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support only https scheme and MAY support http (HTTP/1.1).
 
 For proper https support implementation MUST be supplied with a valid SSL certificate (OpenSSL). For development a self-signed certificate will do the trick, but for production implementation SHOULD be supplied with properly signed certificate.
 
-## API version and Security
+# API version and Security
 
 _api_version_ follows URL prefix and defines which version of this API supports current implementation.
 
@@ -78,7 +78,7 @@ See [Link header](http://tools.ietf.org/html/rfc5988)
 
 Implementation MUST prefer lower case urls in links e.g. `DevString` (command name) -> `devstring`.
 
-## Filters
+# Filters
 
 Any response can be supplied with a filter parameter:
 
@@ -133,7 +133,7 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-## Range
+# Range
 
 URL                |   Response  | Desc
 ------------------- | ----------- | ---------------------------------------------------
