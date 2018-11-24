@@ -242,6 +242,10 @@ Unauthorized request -- client has failed to provide valid credentials
 
 Resource does not exist e.g. `GET devices/x/y/z` should return status code 404 if `x/y/z` is not defined in th Tango db.
 
+### 416
+
+In case _range_ is not satisfiable or _range_ is invalid e.g. "5-1"
+
 ### 500
 
 Tango REST server crashes - indicates bug in the REST server
