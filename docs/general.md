@@ -2,7 +2,7 @@
 
 # HTTP/2.0
 
-Implementation SHOULD provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support https scheme in addition to simple http (HTTP/1.1).
+Implementation SHOULD provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation SHOULD support https scheme in addition to simple http (HTTP/1.1).
 
 For proper https support implementation MUST be supplied with a valid SSL certificate (OpenSSL). For development a self-signed certificate will do the trick, but for production implementation SHOULD be supplied with properly signed certificate.
 
