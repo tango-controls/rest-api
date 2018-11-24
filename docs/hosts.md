@@ -4,12 +4,12 @@
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/rc3/hosts`     | JSONArray  | – tango hosts available through this API 
-|`GET /tango/rest/rc3/hosts/{tango_host}/{tango_port}`  |   JSONObject   |  -- corresponding Tango database info  
+|`GET /tango/rest/rc4/hosts`     | JSONArray  | – tango hosts available through this API 
+|`GET /tango/rest/rc4/hosts/{tango_host}/{tango_port}`  |   JSONObject   |  -- corresponding Tango database info  
 
 _tango_host_ and _tango_port_ are not known in advance, as user may ask for an arbitrary Tango database. By default implementation tries to connect to TANGO_HOST=localhost:10000, i.e. to the database deployed on the same host. _localhost_ can be replaced with host name, e.g. _hzgxenvtest_. 
 
-`GET /tango/rest/rc3/hosts/hzgxenvtest/10000`:
+`GET /tango/rest/rc4/hosts/hzgxenvtest/10000`:
 ```json
 
 {

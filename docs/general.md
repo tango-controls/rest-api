@@ -1,6 +1,12 @@
 [TOC]
 
-## API version and Security
+# HTTP/2.0
+
+Implementation SHOULD provide upgrade to h2 protocol (HTTP/2.0). Practically this means that implementation MUST support https scheme in addition to simple http (HTTP/1.1).
+
+For proper https support implementation MUST be supplied with a valid SSL certificate (OpenSSL). For development a self-signed certificate will do the trick, but for production implementation SHOULD be supplied with properly signed certificate.
+
+# API version and Security
 
 _api_version_ follows URL prefix and defines which version of this API supports current implementation.
 
@@ -10,9 +16,7 @@ Example:
 `http://hzgcttest:8080/tango/rest` =>
 ```JSON
 {
-    "rc4":"http://hzgcttest:8080/tango/rest/rc4",
-    "mtango-1.0.1":"http://hzgcttest:8080/tango/rest/mtango-1.0.1",
-    "mtango-1.0.2":"http://hzgcttest:8080/tango/rest/mtango-1.0.2"
+    "rc4":"http://hzgcttest:8080/tango/rest/rc4"
 }
 ```
 
@@ -27,10 +31,10 @@ API implementation must support 2 authentication methods:
 
 When protected by Basic:
 
-`http://hzgcttest:8080/tango/rest/rc3` =>
+`http://hzgcttest:8080/tango/rest/rc4` =>
 ```JSON
 {
-    "hosts":"/tango/rest/rc3/hosts",
+    "hosts":"/tango/rest/rc4/hosts",
     "x-auth-method":"basic"
 }
 ```
@@ -43,7 +47,7 @@ and follow the standard Web Basic Authorization mechanism.
 In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
 ```JSON
 {
-    "hosts":"/tango/rest/rc3/hosts",
+    "hosts":"/tango/rest/rc4/hosts",
     "x-auth-method":"oauth2",
     "x-auth-resource":"https://hzgcttest:8080/hzgcttest/oauth2/authorize"
 }
@@ -51,13 +55,13 @@ In case of _oauth2_ response must provide OAuth2 authorisation resource as well:
 
 Client uses _x-auth-resource_ to get access_token following the standard OAuth2 authentication procedure. This token is then provided
 with each request to the protected resources either in Authentication request header:`Authorization: token access_token` or as a parameter:
-`GET /tango/rest/rc3/hosts?token={access_token}`.
+`GET /tango/rest/rc4/hosts?token={access_token}`.
 
 _x-auth-method_ = _none_ is not recommended but allowed.
 
 __IMPLEMENTATION NOTE:__ consider integration with TangoAccessControl so that each request is validated against it.
 
-## Filters
+# Filters
 
 Any response can be supplied with a filter parameter:
 
@@ -105,7 +109,7 @@ This one shows everything except _info_ and _properties_ fields:
 ```JSON
 [
     {
-        "name": "long_scalar_w"
+        "name": "long_scalar_w",
         "value":"<prefix>/devices/sys/tg_test/1/attributes/long_scalar_w/value",
         "_links":{
             "_device":"<prefix>/devices/sys/tg_test/1"
@@ -114,7 +118,7 @@ This one shows everything except _info_ and _properties_ fields:
         }
     },
     {
-        "name": "string_scalar"
+        "name": "string_scalar",
         "value":"<prefix>/devices/sys/tg_test/1/attributes/string_scalar/value",
          "_links":{
             "_device":"<prefix>/devices/sys/tg_test/1"
@@ -126,7 +130,7 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-## Pages
+# Pages
 
   URL           |  Response | Desc
 ----------------|-----------|---------------------------------------------------
@@ -170,22 +174,54 @@ Here *_prev* in *_links* is __null__ because the first range were returned.
 
 If the entire collection fits into range response is the same as there is no _range_ parameter (HTTP 200 - OK; no additional info in response's header; no special element in the collections)
 
-## Failure
+# Cache
 
-```JSON
+Implementation MUST provide _Cache-Control_ headers for Tango resources. Implementation MUST add _max-age-millis_ Cache-Control extension to specify cache delay in millis.
+
+Implementation SHOULD distinguish between fast changing and slow changing values. For instance a list of available devices may be considered as slow changing value and cached for a longer time. Also slow changing values may be cached publicly.
+
+Implementation SHOULD export configuration parameters for cache delays and etc  
+
+`GET /hosts/localhost/devices`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=300, max-age-millis="300000"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+`GET /hosts/localhost/devices/sys/tg_test/1/attributes/double_scalar_ro`
+
+```
+HTTP 200
+
+Cache-Control: no-transform, max-age=0, max-age-millis="200"
+Expires: Wed, 21 Nov 2018 11:06:11 GMT
+ETag: AC6CB07B377F93434998D8556D60A575
+
+[...]
+```
+
+# Errors
+
+Most of the errors that happen inside implementation usually indicate invalid request e.g. request of a non-existent attribute or writing a value of a wrong type. Hence implementation MUST respond with HTTP 400:
+
+`GET /devices/sys/tg_test/1/attributes/throw_exception`
+
+```
+HTTP 400
+
 {
     "errors":[
         {       
             "reason":"TangoProxyException",
             "description":"sys/tg_test/1 proxy has throw an exception",
             "severity":"ERR",
-            "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
-        },
-        {       
-            "reason":"",
-            "description":"",
-            "severity":"PANIC",
-            "origin":""
+            "origin":"DeviceProxy#readAttribute sys/tg_test/1/throw_exception"
         }
     ],   
     "quality": "FAILURE",
@@ -194,3 +230,21 @@ If the entire collection fits into range response is the same as there is no _ra
 ```
 
 __IMPLEMENTATION NOTE:__ any exception that can be handled on the server side must be handled, i.e. a proper JSONObject must be returned.
+
+### 401
+
+Unauthorized request -- client has failed to provide valid credentials
+
+### 404
+
+Resource does not exist e.g. `GET devices/x/y/z` should return status code 404 if `x/y/z` is not defined in th Tango db.
+
+### 500
+
+Tango REST server crashes - indicates bug in the REST server
+
+### 503
+
+In case of REST server receives CORBA timeout it returns 503 if upstream server does not respond within the specified timeout. In case of event subscription may indicate that there is no event though i.e. is not a failure.
+
+__IMPLEMENTATION NOTE:__ server should not log any error except 500 when it is a server's failure.
