@@ -211,22 +211,20 @@ ETag: AC6CB07B377F93434998D8556D60A575
 
 # Errors
 
-Any error MUST return status code __400__ (BadRequest). Except few cases: see below.
+Most of the errors that happen inside implementation usually indicate invalid request e.g. request of a non-existent attribute or writing a value of a wrong type. Hence implementation MUST respond with HTTP 400:
 
-```JSON
+`GET /devices/sys/tg_test/1/attributes/throw_exception`
+
+```
+HTTP 400
+
 {
     "errors":[
         {       
             "reason":"TangoProxyException",
             "description":"sys/tg_test/1 proxy has throw an exception",
             "severity":"ERR",
-            "origin":"DeviceProxy#readAttribute sys/tg_test/1/throwException"
-        },
-        {       
-            "reason":"",
-            "description":"",
-            "severity":"PANIC",
-            "origin":""
+            "origin":"DeviceProxy#readAttribute sys/tg_test/1/throw_exception"
         }
     ],   
     "quality": "FAILURE",
@@ -236,13 +234,13 @@ Any error MUST return status code __400__ (BadRequest). Except few cases: see be
 
 __IMPLEMENTATION NOTE:__ any exception that can be handled on the server side must be handled, i.e. a proper JSONObject must be returned.
 
+### 401
+
+Unauthorized request -- client has failed to provide valid credentials
+
 ### 404
 
 Resource does not exist e.g. `GET devices/x/y/z` should return status code 404 if `x/y/z` is not defined in th Tango db.
-
-### 408
-
-In case tango request failed with CORBA.TIMEOUT exception
 
 ### 500
 
@@ -250,6 +248,6 @@ Tango REST server crashes - indicates bug in the REST server
 
 ### 503
 
-In case of event subscription REST server returns 503 if upstream server does not respond within specified timeout. May indicate that there is no event though i.e. is not a failure.
+In case of REST server receives CORBA timeout it returns 503 if upstream server does not respond within the specified timeout. In case of event subscription may indicate that there is no event though i.e. is not a failure.
 
-__IMPLEMENTATION NOTE:__ server should not log any error except 500 when it is a server's failure. 
+__IMPLEMENTATION NOTE:__ server should not log any error except 500 when it is a server's failure.
