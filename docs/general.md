@@ -130,25 +130,40 @@ This one shows everything except _info_ and _properties_ fields:
 ```
 
 
-# Pages
+# Range
 
-  URL           |  Response | Desc
-----------------|-----------|---------------------------------------------------
- `GET /{any_collection}?range={range}` | JSONArray | - response contains only required number of resources
+URL                |   Response  | Desc
+------------------- | ----------- | ---------------------------------------------------
+`GET /{any collection}?range={start}-{end}` | JSONArray | - responses with sub-collection extracted from the original
 
-For instance, `GET /device?range=0-25` will display only the first 25 devices
 
-The HTTP answer is 206 - Partial Content.
-The HTTP header should return some useful information:
+Implementation MUST include "Accept-Ranges: items" for collection like resources e.g. devices list. Also it MUST include "X-size" response header to indicate how many items are in the collection.
 
-    Content-Range: offset – limit / count
-        offset: index of the first element
-        limit : index of the last element
-        count : total number of elements from the collection
-    Accept-Range: resource and max
-        resource : type of the element
-        max : maximum number of element per request
-    Link: can return several URI to the previous and next range, the first and last range ...
+```
+GET /hosts/localhost/devices
+```
+
+```
+Accept-Ranges: items
+X-size:26
+
+[...]
+```
+
+**NOTE**: we can not use standard _Content-Length_ header here because it is strictly bound to bytes i.e. client may shrink incoming response hence partial JSON and JSONParse exception.
+
+Client includes "Range" header into request to specify the desired range of the collection, while implementation MUST include "Content-Range" header:
+
+```
+GET /hosts/localhost/devices?range=10-20
+```
+
+```
+HTTP 206
+Content-Range: items 10-20/26
+
+[...]
+```
 
 This information is also available in a dedicated item in the collection:
 
@@ -169,6 +184,13 @@ This information is also available in a dedicated item in the collection:
     }
 ]
 ```
+
+For instance, 
+```
+GET /hosts/localhost/devices?range=0-25
+``` 
+
+will display only the first 25 devices of a particular Tango host plus special _partial_content_ item.
 
 Here *_prev* in *_links* is __null__ because the first range were returned.
 
@@ -238,6 +260,10 @@ Unauthorized request -- client has failed to provide valid credentials
 ### 404
 
 Resource does not exist e.g. `GET devices/x/y/z` should return status code 404 if `x/y/z` is not defined in th Tango db.
+
+### 416
+
+In case _range_ is not satisfiable or _range_ is invalid e.g. "5-1"
 
 ### 500
 
