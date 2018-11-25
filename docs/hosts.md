@@ -67,3 +67,173 @@ __OR__
 ```
 
 __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/databaseds/2/DbGetDeviceWideList(wildcard) via standard Tango API
+
+### Tango host devices tree
+
+| URL                                         | Response           | Desc
+|-----------------------------------------|------------|--------------------------
+|`GET /tango/rest/rc4/hosts/{host}/{port}/devices/tree[?wildcard={wildcard}]`     | JSONArray  | – lists all devices visible through this API
+
+`GET /tango/rest/rc4/hosts/localhost/10000/devices/tree?wildcard=sys/tg_test/*&wildcard=test2/*/*`
+
+```json
+[
+  {
+    "id": "localhost:10000",
+    "value": "localhost:10000",
+    "$css": "tango_host",
+    "data": [
+      {
+        "value": "aliases",
+        "$css": "aliases",
+        "data": []
+      },
+      {
+        "value": "sys",
+        "$css": "tango_domain",
+        "data": [
+          {
+            "value": "tg_test",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/sys/tg_test/1",
+                "value": "1",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "sys/tg_test/1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "value": "test2",
+        "$css": "tango_domain",
+        "data": [
+          {
+            "value": "debian8",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/test2/debian8/20",
+                "value": "20",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "test2/debian8/20"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "isAlive": true
+  }
+]
+```
+
+# Devices tree 
+
+| URL                                         | Response           | Desc
+|-----------------------------------------|------------|--------------------------
+|`GET /tango/rest/rc4/devices/tree?host={tango_host}[:{tango_port}]&[wildcard={devices filter}]`         | JSONArray  | – Tango host(s) tree, devcice filter(s) - wildcard e.g. `sys/*/*`
+
+`GET /tango/rest/rc4/devices/tree?host=localhost&wildcard=sys/tg_test/*`  
+  
+```json
+[
+  {
+    "id": "localhost:10000",
+    "value": "localhost:10000",
+    "$css": "tango_host",
+    "data": [
+      {
+        "value": "aliases",
+        "$css": "aliases",
+        "data": []
+      },
+      {
+        "value": "sys",
+        "$css": "tango_domain",
+        "data": [
+          {
+            "value": "tg_test",
+            "$css": "tango_family",
+            "data": [
+              {
+                "id": "localhost:10000/sys/tg_test/1",
+                "value": "1",
+                "$css": "member",
+                "isMember": true,
+                "device_name": "sys/tg_test/1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "isAlive": true
+  }
+]
+```
+
+**NOTE**: above is the same as `GET tango/rest/rc4/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
+
+`GET /tango/rest/rc4/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
+
+```json
+[
+  {
+    "id":"localhost:10000",
+    "$css":"tango_host",
+    "value":"localhost:10000",
+    "data":[
+      {
+        "value":"aliases",
+        "$css":"aliases",
+        "data":[]
+      },
+      {
+        "value":"sys",
+        "data":[
+          {
+            "value":"tg_test",
+            "data":[
+              {"value":"1","$css":"member","isMember":true,"device_name":"sys/tg_test/1","device_id":"localhost:10000/sys/tg_test/1"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id":"hzgxenvtest:10000",
+    "$css":"tango_host",
+    "value":"hzgxenvtest:10000",
+    "data":[
+      {
+        "value":"aliases",
+        "$css":"aliases",
+        "data":[
+          {
+            "value":"my_test_device","$css":"member","isAlias":true,"device_name":"sys/tg_test/1"
+          }
+        ]
+      },
+      {
+        "value":"sys",
+        "data":[
+          {
+            "value":"tg_test",
+            "data":[
+              {"value":"0","$css":"member","isMember":true,"device_name":"sys/tg_test/0","device_id":"hzgxenvtest:10000/sys/tg_test/0"},{"value":"1","$css":"member","isMember":true,"device_name":"sys/tg_test/1","device_id":"hzgxenvtest:10000/sys/tg_test/1"},{"value":"2","$css":"member","isMember":true,"device_name":"sys/tg_test/2","device_id":"hzgxenvtest:10000/sys/tg_test/2"},{"value":"3","$css":"member","isMember":true,"device_name":"sys/tg_test/3","device_id":"hzgxenvtest:10000/sys/tg_test/3"},{"value":"4","$css":"member","isMember":true,"device_name":"sys/tg_test/4","device_id":"hzgxenvtest:10000/sys/tg_test/4"},{"value":"6","$css":"member","isMember":true,"device_name":"sys/tg_test/6","device_id":"hzgxenvtest:10000/sys/tg_test/6"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+__IMPLEMENTATION NOTE:__ this response is based on sequential execution of TangoDatabase.DbGetDeviceDomain[Family|Member|Alias]List commands
