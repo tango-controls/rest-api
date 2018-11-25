@@ -208,9 +208,9 @@ __IMPLEMENTATION NOTE:__ this response is the same as when execute command: sys/
 ]
 ```
 
-**NOTE**: above is the same as `GET tango/rest/rc6/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
+**NOTE**: above is the same as `GET tango/rest/v1.0/hosts/localhost/devices/tree?wildcard=sys/tg_test/*]`
 
-`GET /tango/rest/rc5/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
+`GET /tango/rest/v1.0/devices/tree?host=localhost&host=hzgxenvtest&wildcard=sys/tg_test/*`
 
 ```json
 [
