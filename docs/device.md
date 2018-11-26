@@ -145,6 +145,19 @@ The following returns an array of objects defined above for all device's attribu
 | `PUT /devices/{device.name}/attributes/value?{attr1}={value}&{attr2}={value}[&async=true]`         | JSONArray/NULL  | – updates specified attributes. NULL = HTTP 204
 | `GET /devices/{device.name}/attributes/value?attr={attr1}&attr={attr2}`         | JSONArray  | – reads specified attributes.
 
+If client adds _If-Modified-Since_ header implementation MUST respond with **304** in case attribute's value has not been changed:
+
+```
+GET /devices/sys/tg_test/1/attributes/ampli
+If-Modified-Since: Mon, 27 Nov 2018 13:46:07 GMT
+```
+
+```
+HTTP 304
+
+<Response body is empty>
+```
+
 ##### Scalar:
 
 `GET /devices/sys/tg_test/1/attributes/long_scalar/value`
