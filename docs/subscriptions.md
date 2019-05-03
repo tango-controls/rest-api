@@ -128,7 +128,7 @@ Implementation MUST multiplex all events into a single subscription stream:
 ```
 id: <upstream event time>
 event: <event id> 
-data: <upstream event data as plain text e.g. 3.14>
+data: <upstream event data as json text e.g. 3.14>
 ```
 
 In case of an upstream error:
