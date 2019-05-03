@@ -6,11 +6,11 @@ Provides an entry point for subscriptions (Tango Controls event system)
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`POST /tango/rest/v1.0/subscriptions`             | JSONObject | – creates a new subscription  
+|`POST /tango/subscriptions`             | JSONObject | – creates a new subscription  
 
 **Create a new subscription**
 
-`POST /tango/rest/v1.0/subscriptions`
+`POST /tango/subscriptions`
 
 
 ```json
@@ -24,7 +24,7 @@ Provides an entry point for subscriptions (Tango Controls event system)
 **Create a new subscription with events**
 
 ```
-POST /tango/rest/v1.0/subscriptions
+POST /tango/subscriptions
 
 [
   {
@@ -61,14 +61,14 @@ Represents single subscription
 
 | URL                                        | Response           | Desc
 |-----------------------------------------|------------|--------------------------
-|`GET /tango/rest/v1.0/subscriptions/{id}`              | JSONObject  | – this subscription as JSON 
-|`PUT /tango/rest/v1.0/subscriptions/{id}`              | JSONObject  | – this subscription as JSON
-|`GET /tango/rest/v1.0/subscriptions/{id}/event-stream` | text/event-stream  | – events stream
-|`DELETE /tango/rest/v1.0/subscriptions/{id}`           | NULL  | – closes events stream and cancels subscription
+|`GET /tango/subscriptions/{id}`              | JSONObject  | – this subscription as JSON 
+|`PUT /tango/subscriptions/{id}`              | JSONArray   | – an array with successfully subscribed events 
+|`GET /tango/subscriptions/{id}/event-stream` | text/event-stream  | – events stream
+|`DELETE /tango/subscriptions/{id}`           | NULL  | – closes events stream and cancels subscription
 
 **Get subscription**
 
-`GET /tango/rest/v1.0/subscriptions/0`
+`GET /tango/subscriptions/0`
 
 ```json
 {
@@ -92,7 +92,7 @@ Represents single subscription
 
 **Add new event to subscription**
 
-`PUT /tango/rest/v1.0/subscriptions/0`
+`PUT /tango/subscriptions/0`
 
 ```json
 [
