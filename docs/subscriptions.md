@@ -106,30 +106,15 @@ Represents single subscription
 ```
 
 ```json
-{
-  "id": 0,
-  "events": [
-    {
-      "id": 1,
-      "target": {
-        "host": "hzgxenvtest:10000",
-        "device": "sys/tg_test/1",
-        "attribute": "double_scalar",
-        "type": "change"
-      }
-    },
-    {
-      "id": 2,
-      "target": {
-        "host": "hzgxenvtest:10000",
-        "device": "sys/tg_test/1",
-        "attribute": "long_scalar",
-        "type": "periodic"
-      }
-    }
-  ],
-  "failures": []
-}
+[
+  {
+    "id": 1,
+    "host":"hzgxenvtest:10000",
+    "device":"sys/tg_test/1",
+    "attribute":"long_scalar",
+    "type":"periodic"
+  }
+]
 ```
 
 #### fallback_to_polling
