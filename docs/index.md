@@ -2,6 +2,9 @@
 
 # Tango REST API v1.1
 
+> In this version Subscriptions API is exported via root entry point i.e. `/tango/subscriptions` 
+
+
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
 
