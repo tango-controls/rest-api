@@ -1,6 +1,6 @@
 [TOC]
 
-# Tango REST API v1.0
+# Tango REST API v1.1
 
 There are three parts in this proposal: URL specification; Implementation remarks; Implementation recommendations. The first one names valid URLs that must be handled by the implementation. 
 Each URL is presented following this format:
@@ -32,7 +32,7 @@ POST returns the URI and the id of the newly created instance.
 
 All URLs in this section omit protocol//host:port part: `http://host:port`. An implementation may or may not add this to the hrefs. 
 
-For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/v1.0`, or omit it completely. If not specified otherwise `<prefix>` includes `hosts/localhost` as well i.e. `/tango/rest/v1.0/hosts/localhost`. So `<prefix>/hosts/localhost/devices/sys/tg_test/1/attributes` (or `<prefix>/devices/sys/tg_test/1/attributes` or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/v1.0/hosts/localhost/devices/sys/tg_test/1/attributes`.
+For shortness all URLs use `<prefix>` for an API entry point: `/tango/rest/v11`, or omit it completely. If not specified otherwise `<prefix>` includes `hosts/localhost` as well i.e. `/tango/rest/v1.0/hosts/localhost`. So `<prefix>/hosts/localhost/devices/sys/tg_test/1/attributes` (or `<prefix>/devices/sys/tg_test/1/attributes` or `/devices/sys/tg_test/1/attributes`) actually means `/tango/rest/v1.0/hosts/localhost/devices/sys/tg_test/1/attributes`.
 
 Examples are typically follow this pattern:
 
