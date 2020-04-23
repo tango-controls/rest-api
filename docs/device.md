@@ -499,20 +499,35 @@ __IMPLEMENTATION NOTE:__ attribute info in REST API returns AttributeInfoEx from
 
 *) Assuming _sys/tg_test/1_ has 2 commands: __DevString__ and __DevLong__
 
-`PUT /devices/sys/tg_test/1/commands/DevVoid`:
-```JSON
+```
+PUT /devices/sys/tg_test/1/commands/DevVoid
+
 {
+  "name":"DevVoid"
+}
+```
+```JSON
+{        
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
     "name":"DevVoid"
 }
 ```
 
 ```
-PUT /devices/sys/tg_test/1/commands/DevString
-"Hi!"
+PUT /devices/sys/tg_test/1/commands/DevString 
+
+{         
+  "name":"DevString",
+  "input":"Hi!"
+}
 ```
 ```JSON
 {
+    "host": "localhost:10000",
+    "device": "sys/tg_test/1",
     "name":"DevString",
+    "input": "Hi!",
     "output":"Hi!"
 }
 ```
